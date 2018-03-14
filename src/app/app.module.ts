@@ -4,11 +4,24 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { Routes, RouterModule } from '@angular/router';
+import { AcessguardService } from './services/acessguard.service';
+import { AuthService } from './services/auth.service';
+import { WebservicesService } from './services/webservices.service';
 
 const routes: Routes = [
-  { path: 'layoutmanager', loadChildren: './layoutmanager/layoutmanager.module#LayoutmanagerModule' },
-  { path: 'demo', loadChildren: './demo/demo.module#DemoModule' },
-  { path: '**', redirectTo: 'layoutmanager' },
+  /*{
+    path: '',
+    loadChildren: './layoutmanager/layoutmanager.module#LayoutmanagerModule' ,
+    data: { requiresLogin: true },
+    canActivate: [ AcessguardService ]
+  },*/
+  { 
+    path: '', 
+    loadChildren: './usertasks/usertasks.module#UsertasksModule' 
+  },
+  { path: '**', 
+    redirectTo: 'login' 
+  }
 ];
 
 @NgModule({
@@ -20,7 +33,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [ AcessguardService, AuthService, WebservicesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

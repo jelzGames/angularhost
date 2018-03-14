@@ -8,6 +8,8 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { MaterialModule } from '../shared/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
 
 const routes: Routes = [
   { path: '', component: LayoutmanagerAppComponent,
@@ -23,6 +25,7 @@ const routes: Routes = [
     CommonModule,
     MaterialModule,
     FlexLayoutModule,
+    HttpClientModule,
     FormsModule,
     RouterModule.forChild(routes)
   ],

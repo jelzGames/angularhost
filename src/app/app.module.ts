@@ -9,14 +9,14 @@ import { AuthService } from './services/auth.service';
 import { WebservicesService } from './services/webservices.service';
 
 const routes: Routes = [
-  /*{
+  {
     path: '',
     loadChildren: './layoutmanager/layoutmanager.module#LayoutmanagerModule' ,
     data: { requiresLogin: true },
     canActivate: [ AcessguardService ]
-  },*/
+  },
   { 
-    path: '', 
+    path: 'login', 
     loadChildren: './usertasks/usertasks.module#UsertasksModule' 
   },
   { path: '**', 

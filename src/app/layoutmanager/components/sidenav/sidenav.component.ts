@@ -1,6 +1,7 @@
 import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material';
+import { AuthService } from '../../../services/auth.service';
 
 const SMALL_WIDTH_BREAKPOINT = 720;
 
@@ -29,7 +30,7 @@ export class SidenavComponent implements OnInit {
     }
   ];
 
-  constructor(zone: NgZone, private router: Router) { 
+  constructor(zone: NgZone, private router: Router, private auth: AuthService) { 
     this.mediaMatcher.addListener(mql => 
       zone.run(() => this.mediaMatcher = mql));
   }

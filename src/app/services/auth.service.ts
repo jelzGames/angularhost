@@ -8,7 +8,7 @@ export class AuthService {
   constructor(private webService: WebservicesService, private router : Router) {}
 
     async login(model) {
-        //await this.webService.postAuth(model);
+        await this.webService.postAuth(model);
     }
 
     logout() {

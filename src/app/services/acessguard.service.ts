@@ -14,9 +14,9 @@ export class AcessguardService implements CanActivate {
     if (requiresLogin) {
        let flag = this.auth.isAuthenticated;
        if (!flag) {
-          //this.auth.logout();  
+          this.auth.logout();  
        }
-       //return flag; 
+       return flag; 
     }
 
     return true;

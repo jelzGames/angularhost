@@ -16,8 +16,7 @@ const routes: Routes = [
     children: [
       { path: '', component: MainContentComponent }
     ]
-  },
-  { path: '**', redirectTo: '' },
+  }
 ];
 
 @NgModule({

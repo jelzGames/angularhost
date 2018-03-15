@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class WebservicesService {
 
   BASE_URL = 'http://localhost:14799/';
+
+  constructor(private router: Router) {}
+
+  async postAuth(model) {
+        localStorage.setItem("TokenInfo", 'data.access_token');
+        this.router.navigate(['/']);
+    
+ 
+  }
   
   /*
   constructor(private http: Http, private dialog: MdDialog, private router: Router, private snackBar: MdSnackBar) {}

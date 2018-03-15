@@ -1,6 +1,16 @@
 .login-container {
-    display: flex;
     height: 100%;
+    position: fixed;
+    width: 100%;
+}
+
+.login-card {
+    display: flex;
     flex-direction: column;
+    width: 300px;
 }
   
+.login-buttons {
+    text-align: right;
+}
+

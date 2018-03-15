@@ -1,11 +1,13 @@
-<div class="">
-<mat-card class="login-container">
-    <mat-form-field>
-        <input matInput  [(ngModel)]="loginData.email" placeholder="Correo" type="email">
-    </mat-form-field>
-    <mat-form-field>
-        <input matInput [(ngModel)]="loginData.password" placeholder="Contraseña" type="password">
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="auth.login(loginData)">Login</button>
-</mat-card> 
+<div fxLayout="row" fxLayoutAlign="center center" class="login-container">
+    <mat-card class="login-card">
+        <mat-form-field>
+            <input matInput [(ngModel)]="loginData.email" placeholder="Correo" type="email">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [(ngModel)]="loginData.password" placeholder="Contraseña" type="password">
+        </mat-form-field>
+        <div class="login-buttons">
+            <button mat-raised-button color="primary" (click)="auth.login(loginData)" >Login</button>
+        </div>
+    </mat-card> 
 </div>

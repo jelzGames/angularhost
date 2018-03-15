@@ -8,6 +8,7 @@ import { AcessguardService } from './services/acessguard.service';
 import { AuthService } from './services/auth.service';
 import { WebservicesService } from './services/webservices.service';
 
+
 const routes: Routes = [
   {
     path: '',
@@ -19,8 +20,12 @@ const routes: Routes = [
     path: 'login', 
     loadChildren: './usertasks/usertasks.module#UsertasksModule' 
   },
+  { 
+    path: 'notfound', 
+    loadChildren: './info/info.module#InfoModule' 
+  },
   { path: '**', 
-    redirectTo: 'login' 
+    redirectTo: 'notfound' 
   }
 ];
 

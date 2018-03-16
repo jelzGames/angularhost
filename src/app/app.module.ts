@@ -7,6 +7,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { AcessguardService } from './services/acessguard.service';
 import { AuthService } from './services/auth.service';
 import { WebservicesService } from './services/webservices.service';
+import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material';
 
 
 const routes: Routes = [
@@ -36,6 +38,8 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
+    MatSnackBarModule,
     RouterModule.forRoot(routes)
   ],
   providers: [ AcessguardService, AuthService, WebservicesService],

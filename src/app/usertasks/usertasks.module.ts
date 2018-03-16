@@ -6,6 +6,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MaterialModule } from '../shared/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
+import { ModalspinnerComponent } from '../info/components/modalspinner/modalspinner.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     UsertasksRoutingModule
   ],
-  declarations: [LoginComponent]
+  declarations: [LoginComponent, ModalspinnerComponent],
+  entryComponents: [ ModalspinnerComponent ]
 })
 export class UsertasksModule { }

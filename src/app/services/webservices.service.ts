@@ -1,20 +1,74 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpParams, HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class WebservicesService {
 
-  BASE_URL = 'http://localhost:14799/';
+    BASE_URL = 'http://localhost:30270/';
 
-  constructor(private router: Router) {}
+    constructor(private router: Router, private http : HttpClient, private snackBar: MatSnackBar) {}
 
-  async postAuth(model) {
-        localStorage.setItem("TokenInfo", 'data.access_token');
-        this.router.navigate(['/']);
+    async postAuth(model) {
+        const options = {
+            params: new HttpParams()
+        };
+          
+        options.params.set('Content-Type', 'application/x-www-form-urlencoded');
+        
+        let urlSearchParams = new URLSearchParams();
+        urlSearchParams.append('grant_type', "password");
+        urlSearchParams.append('username',  model.email);
+        urlSearchParams.append('password', model.password);
+        let body = urlSearchParams.toString()
+
+        return await this.http.post(this.BASE_URL + 'token', body, options).toPromise()
+        .then ( response => {
+            var data = response as any;
+            if (data != undefined && data.access_token != null) {
+                return data.access_token;
+            }
+            else {
+                this.handleError("no esta autorizado");
+                return "";
+            }
+        })
+        .catch ( error => {
+            this.handleError(error);
+            return "";
     
- 
-  }
+        } )
+    }
   
+    private handleError(error) {
+        var errorMessage;
+        if (error.status == "404") {
+            errorMessage = "Webservice no encotrado";
+        }
+        else if (error.status == "401") {
+            this.router.navigate(['/login']);
+        }
+        else if (error.status != "0") {
+            if (error.error != undefined && error.error.error == "invalid_grant") {
+                errorMessage = "Correo o contraseña es incorrecto";
+            }
+            else if (error.Message != undefined) {
+                errorMessage = error.Message;
+            }
+            else if (error.message != undefined) {
+                errorMessage = error.message;
+            }
+            else {
+                errorMessage = error.error.error_description;
+            } 
+        }
+        else {
+            errorMessage = "No es posible conectar al servidor";
+        }
+        this.snackBar.open(errorMessage , 'Close', {duration: 5000});
+    }
+
   /*
   constructor(private http: Http, private dialog: MdDialog, private router: Router, private snackBar: MdSnackBar) {}
 

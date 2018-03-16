@@ -4,6 +4,12 @@ body {
     margin: 0;
 }
 
+/*---- Modal spinner ------*/
+.spinner-dialog .mat-dialog-container {
+  box-shadow: none;
+  background: transparent; 
+}
+
 /*---- Loader ----*/
 
 .loader {

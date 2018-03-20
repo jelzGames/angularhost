@@ -11,10 +11,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 
+
 const routes: Routes = [
   { path: '', component: LayoutmanagerAppComponent,
     children: [
-      { path: '', component: MainContentComponent }
+      { path: '', component: MainContentComponent },
+      { 
+        path: 'Configuracion', 
+        loadChildren: '../configuracion/configuracion.module#ConfiguracionModule' 
+      }
     ]
   }
 ];

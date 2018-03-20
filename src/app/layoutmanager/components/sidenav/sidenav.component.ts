@@ -18,15 +18,26 @@ export class SidenavComponent implements OnInit {
   links = [
     { 
       'avatar' : 'Catalogos',
-      'link' : 'Catalogos',
+      'link' : 'Configuracion',
+      'sublink' : [
+        {
+          'avatar' : 'Catalogos',
+          'link' : 'Reglas',
+          'path' : 'Configuracion/Reglas'
+        }
+      ]
     },
     { 
       'avatar' : 'Catalogos',
       'link' : 'Transacciones',
+      'sublink' : [
+      ]
     },
     { 
       'avatar' : 'Catalogos',
       'link' : 'Reportes',
+      'sublink' : [
+      ]
     }
   ];
 

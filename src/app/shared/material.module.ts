@@ -32,6 +32,8 @@ import {
   MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
+import { ModalspinnerComponent } from './modalspinner/modalspinner.component';
+
 
 @NgModule({
   imports: [
@@ -65,7 +67,7 @@ import {
     MatSortModule,
     MatTableModule,
     MatTabsModule,
-    MatToolbarModule
+    MatToolbarModule,
   ],
   exports: [
     MatAutocompleteModule,
@@ -98,8 +100,10 @@ import {
     MatSortModule,
     MatTableModule,
     MatTabsModule,
-    MatToolbarModule
+    MatToolbarModule,
+    ModalspinnerComponent
   ],
-  declarations: []
+  declarations: [ ModalspinnerComponent ],
+  entryComponents: [ ModalspinnerComponent ]
 })
 export class MaterialModule { }

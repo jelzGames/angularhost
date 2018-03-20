@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { MatDialog } from '@angular/material';
-import { ModalspinnerComponent } from '../../../info/components/modalspinner/modalspinner.component';
+import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 
 @Component({
   selector: 'app-login',
@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
     });
     
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       //this.animal = result;
     });
 

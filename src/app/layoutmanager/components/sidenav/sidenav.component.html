@@ -13,13 +13,24 @@
             </button>
         </mat-toolbar>
         <mat-nav-list>
-            <mat-list-item *ngFor="let link of links">
-                <a matLine href="#">
-                    <mat-icon svgIcon="{{ link.avatar }}"></mat-icon>
-                    {{ link.link }}
-                </a>
-            </mat-list-item>
-          </mat-nav-list>
+            <mat-accordion>
+                <mat-expansion-panel *ngFor="let link of links">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <mat-icon svgIcon="{{ link.avatar }}"></mat-icon>
+                            {{ link.link }}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                
+                    <mat-list-item *ngFor="let sublink of link.sublink">
+                        <a matLine routerLink="/{{ sublink.path }}">
+                            <mat-icon svgIcon="{{ sublink.avatar }}"></mat-icon>
+                            {{ sublink.link }}     
+                        </a>
+                    </mat-list-item>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-nav-list>
     </mat-sidenav>
     
     <div class="app-sidenav-content">

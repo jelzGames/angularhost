@@ -6,7 +6,7 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { MaterialModule } from '../shared/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
-import { ModalspinnerComponent } from './components/modalspinner/modalspinner.component';
+
 
 
 @NgModule({
@@ -17,6 +17,6 @@ import { ModalspinnerComponent } from './components/modalspinner/modalspinner.co
     FormsModule,
     InfoRoutingModule
   ],
-  declarations: [NotfoundComponent, ModalspinnerComponent]
+  declarations: [NotfoundComponent ]
 })
 export class InfoModule { }

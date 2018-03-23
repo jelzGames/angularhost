@@ -123,3 +123,33 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/*--- Forms ---*/
+.pb-1 {
+  padding-bottom: 1rem !important;
+}
+
+.pr-1 {
+  padding-right: 1rem !important;
+}
+
+.mr-1 {
+  margin-right: 1rem !important;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.pull-right {
+  float: right;
+}
+
+.mat-expansion-panel-body-mat {
+  text-align: right !important;
+}
+
+.bottom-margin-2x-mat {
+  margin-bottom: 0px !important; 
+  display: inline-block !important;
+}

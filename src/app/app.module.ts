@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material';
 
 
+
 const routes: Routes = [
   {
     path: '',
@@ -33,7 +34,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent    
   ],
   imports: [
     BrowserModule,

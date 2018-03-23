@@ -15,6 +15,7 @@ export class AuthService {
             if (data != "") {
                 this.email = model.email;
                 this.token = data;
+                this.webService.TokenInfo = this.token;
                 this.router.navigate(['/']);
             }
         });
@@ -22,6 +23,7 @@ export class AuthService {
 
     logout() {
         this.token = "";
+        this.webService.TokenInfo = this.token;
         this.router.navigate(['/login']);
     }
  

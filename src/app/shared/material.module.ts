@@ -30,7 +30,8 @@ import {
   MatSortModule,
   MatTableModule,
   MatTabsModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatDividerModule
 } from '@angular/material';
 import { ModalspinnerComponent } from './modalspinner/modalspinner.component';
 
@@ -68,6 +69,7 @@ import { ModalspinnerComponent } from './modalspinner/modalspinner.component';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
+    MatDividerModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -101,7 +103,8 @@ import { ModalspinnerComponent } from './modalspinner/modalspinner.component';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    ModalspinnerComponent
+    ModalspinnerComponent,
+    MatDividerModule
   ],
   declarations: [ ModalspinnerComponent ],
   entryComponents: [ ModalspinnerComponent ]

@@ -1,9 +1,9 @@
-<mat-card class="p-1">
+<mat-card class="p-1" *ngIf="search">
   <mat-card-title>
       <div class="card-title-text">{{title}}</div>
       <mat-divider></mat-divider>
   </mat-card-title>
-  <mat-card-content>
+  <mat-card-content >
       <form [formGroup]="basicForm">
           <div fxLayout="row" fxLayoutWrap="wrap">
               <div fxFlex="100" fxFlex.gt-xs="100" class="pr-1">
@@ -16,20 +16,25 @@
                       <button type="button" mat-mini-fab color="primary" class="mr-1 pull-right" (click)="doSearch()">
                           <mat-icon>search</mat-icon>
                       </button>
-                      <button *ngIf="agregar" type="button" mat-mini-fab color="warn" class="mr-1 pull-right" (click)='nuevoSugerido()'>
+                      <button type="button" mat-mini-fab color="warn" class="mr-1 pull-right" (click)='doNuevo()'>
                       <mat-icon>add</mat-icon>
                       </button>
+                      <!--
                       <button type="button" mat-mini-fab color="accent" class="mr-1 pull-right" (click)='toggleFiltro()'>
                       <mat-icon>filter_list</mat-icon>
-                      </button>
+                      </button>-->
                   </div>
               </div>
           </div>
       </form>
   </mat-card-content>
 </mat-card>
+<app-reglas-result *ngIf="search" [resultLst]="resultLst" ></app-reglas-result>
+<app-reglas-edit *ngIf="edit" (onSearch)="onSearch($event)"></app-reglas-edit>
 
-<app-reglas-result [resultLst]="resultLst" ></app-reglas-result>
+
+
+
 
   
 

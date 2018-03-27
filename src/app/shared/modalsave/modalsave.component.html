@@ -1,0 +1,8 @@
+<div mat-dialog-content>
+  <p>¿Estas seguro que deseas guardar?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="accent" (click)="onNoClick()">No Gracias</button>
+  <button mat-button color="primary" [mat-dialog-close]="ok" cdkFocusInitial>Guardar</button>
+</div>
+

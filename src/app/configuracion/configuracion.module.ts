@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ConfiguracionRoutingModule } from './configuracion-routing.module';
-import { ReglasComponent } from './reglas/reglas.component';
+import { ReglasComponent } from './reglas/reglas/reglas.component';
 import { MaterialModule } from '../shared/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ReglasResultComponent } from './reglas-result/reglas-result.component';
+import { ReglasResultComponent } from './reglas/reglas-result/reglas-result.component';
+import { ReglasEditComponent } from './reglas/reglas-edit/reglas-edit.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,6 @@ import { ReglasResultComponent } from './reglas-result/reglas-result.component';
     ReactiveFormsModule,
     ConfiguracionRoutingModule
   ],
-  declarations: [ReglasComponent, ReglasResultComponent]
+  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent]
 })
 export class ConfiguracionModule { }

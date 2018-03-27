@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ReglasComponent } from './reglas/reglas.component';
+import { ReglasComponent } from './reglas/reglas/reglas.component';
 
 const routes: Routes = [
   { path: 'Reglas', component: ReglasComponent }

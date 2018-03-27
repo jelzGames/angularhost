@@ -34,6 +34,7 @@ import {
   MatDividerModule
 } from '@angular/material';
 import { ModalspinnerComponent } from './modalspinner/modalspinner.component';
+import { ModalsaveComponent } from './modalsave/modalsave.component';
 
 
 @NgModule({
@@ -106,7 +107,7 @@ import { ModalspinnerComponent } from './modalspinner/modalspinner.component';
     ModalspinnerComponent,
     MatDividerModule
   ],
-  declarations: [ ModalspinnerComponent ],
-  entryComponents: [ ModalspinnerComponent ]
+  declarations: [ ModalspinnerComponent, ModalsaveComponent ],
+  entryComponents: [ ModalspinnerComponent, ModalsaveComponent ]
 })
 export class MaterialModule { }

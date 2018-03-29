@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { CharacterLimit } from '../../../helpers/text-helpers';
 import { MatDialog, MatSnackBar } from '@angular/material';
@@ -9,13 +9,16 @@ import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.componen
 @Component({
   selector: 'app-reglas-edit',
   templateUrl: './reglas-edit.component.html',
-  styleUrls: ['./reglas-edit.component.scss']
+  styleUrls: ['./reglas-edit.component.scss'],
 })
-export class ReglasEditComponent implements OnInit {
+export class ReglasEditComponent implements OnInit, AfterViewInit {
+ 
   newRoleForm;
   title = "Nuevo";
-
+  readonly = true;
+  
   @Input('id') id: string;
+  @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<void>();
 
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
@@ -25,21 +28,59 @@ export class ReglasEditComponent implements OnInit {
       role : new FormControl('', [ Validators.required, CharacterLimit('shortname', 256)  ] ),
       menu : new FormControl('',  [ Validators.required, CharacterLimit('shortname', 256)  ] ),
     });
+    if (this.id == "0") {
+      this.readonly = false;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.id != "0") {
+      setTimeout(()=>{   
+        this.getById();
+       },10);
+    }
   }
 
   isValid(control) {
     return this.newRoleForm.controls[control].invalid && this.newRoleForm.controls[control].touched;
   }
 
-  guardar() {
-
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
-    });
+  getById() {
+    let dialogRef = this.createSpinner();
     
+    var model = {
+        id : this.id,
+    }
+        
+    this.webservices.postMessage("api/Configuration/RoleById", model)
+    .then( data => {
+      if (data != null ) {
+        if (data.role != undefined) {
+          this.newRoleForm.controls['role'].setValue(data.role);
+          this.newRoleForm.controls['menu'].setValue(data.menu);
+          if (this.editQuery == 0) {
+            this.newRoleForm.controls['role'].disable();
+            this.newRoleForm.controls['menu'].disable();
+            this.readonly = true;
+          }
+          else { 
+            this.readonly = false;
+          }
+        }
+        else {
+          this.readonly = true;
+        }
+      }
+      dialogRef.close();
+      
+    }).catch( err => {
+      dialogRef.close();
+    });
+  }
+
+  doNew() {
+    let dialogRef = this.createSpinner();
+   
     var model = {};
     var path = "api/Configuration/NewRole";
     if (this.id != "0") {
@@ -50,15 +91,44 @@ export class ReglasEditComponent implements OnInit {
     }
     model['role'] =  this.newRoleForm.get('role').value;
     model['menu'] =  this.newRoleForm.get('menu').value;
+
+    this.runWebservices(path, model, dialogRef);
+  }
+
+  doUpdate() {
+    let dialogRef = this.createSpinner();
+   
+    var model = {
+      id : this.id,
+      role : this.newRoleForm.get('role').value,
+      menu : this.newRoleForm.get('menu').value   
+    };
+    var path = "api/Configuration/UpdateRole";
     
+    this.runWebservices(path, model, dialogRef);
+  }
+
+  createSpinner() {
+    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
+      width: '250px',
+      disableClose: true,
+      panelClass: 'spinner-dialog'
+      //data: { name: this.name, animal: this.animal }
+    });
+    return dialogRef;
+  }
+  
+  runWebservices(path, model, dialogRef) {
     this.webservices.postMessage(path, model)
     .then( data => {
+      if (data == null ) {
+        this.doConsulta();
+      }
       dialogRef.close();
-      this.doConsulta();
+      
     }).catch( err => {
       dialogRef.close();
     });
-   
   }
 
   riseError(control) {
@@ -86,7 +156,12 @@ export class ReglasEditComponent implements OnInit {
       });
       
       dialogRef.afterClosed().subscribe(result => {
-        this.guardar();
+        if (this.id == '0') {
+           this.doNew();
+        }
+        else {
+          this.doUpdate();
+        }
       });
 
     }

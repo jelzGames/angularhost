@@ -23,7 +23,7 @@ export class WebservicesService {
         })
         .catch ( error => {
             this.handleError(error);
-            return "";
+            return { error : true };
         } )
     }
 

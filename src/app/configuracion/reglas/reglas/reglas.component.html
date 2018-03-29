@@ -29,8 +29,9 @@
       </form>
   </mat-card-content>
 </mat-card>
-<app-reglas-result *ngIf="search" [resultLst]="resultLst" ></app-reglas-result>
-<app-reglas-edit *ngIf="edit" (onSearch)="onSearch($event)"></app-reglas-edit>
+<br/>
+<app-reglas-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)"></app-reglas-result>
+<app-reglas-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery"></app-reglas-edit>
 
 
 

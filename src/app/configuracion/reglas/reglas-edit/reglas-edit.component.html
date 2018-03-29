@@ -37,14 +37,6 @@
       </div>
   </form>
 </mat-card>
-  
-<mat-card class="p-1" *ngIf="saveNow">
-  <mat-card-content>
-    <p>¿Estas seguro que deseas guardar?</p>
-    <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
-    <button mat-raised-button color="accent" (click)="cancel()" class="pull-right">Cancelar</button>
-  </mat-card-content>
-</mat-card>
 
 <div class="floatButton" *ngIf="!readonly">
   <button type="button" mat-mini-fab color="primary" style="bottom: 35px;" class="mr-1 floatButton" (click)='showConfirmacion()'>

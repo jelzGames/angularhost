@@ -11,13 +11,13 @@
                       {{res.role}}
                   </mat-panel-title>
               </mat-expansion-panel-header>
-              <div class="bottom-margin-2x-mat" *ngIf="!consulta">
-                  <button type="button" mat-mini-fab color="warn" (click)="edicionConsultaProducto(res.idpreciocosto, 1);" class="pull-right">
+              <div class="bottom-margin-2x-mat">
+                  <button type="button" mat-mini-fab color="warn" (click)="edicionConsulta(res.id, 1);" class="pull-right">
                       <mat-icon>edit</mat-icon>
                   </button>
               </div>
-              <div class="bottom-margin-2x-mat" *ngIf="consulta">
-                  <button type="button" mat-mini-fab color="primary" (click)="edicionConsultaProducto(res.idpreciocosto, 0)" class="pull-right">
+              <div class="bottom-margin-2x-mat">
+                  <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 0)" class="pull-right">
                       <mat-icon>assessment</mat-icon>
                   </button>
               </div>

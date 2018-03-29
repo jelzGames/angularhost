@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-reglas-result',
@@ -7,10 +7,14 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ReglasResultComponent implements OnInit {
   @Input('resultLst') resultLst: string;
+  @Output() onEditQuery = new EventEmitter<any>();
   
   constructor() { }
 
   ngOnInit() {
   }
 
+  edicionConsulta(idValue, typeValue) {
+    this.onEditQuery.emit({ id : idValue, editQuery : typeValue});
+  }
 }

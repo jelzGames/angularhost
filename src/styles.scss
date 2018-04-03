@@ -125,6 +125,18 @@ body {
 }
 
 /*--- Forms ---*/
+.pb-header {
+  box-shadow: none !important;
+  padding: 0px !important;
+}
+
+.pb-header-inside {
+  padding: 10px;
+  padding-left: 15px;
+  background: lightblue;
+  font-size: 1.5em;
+}
+
 .pb-1 {
   padding-bottom: 1rem !important;
 }

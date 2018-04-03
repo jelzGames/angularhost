@@ -1,5 +1,3 @@
-
-
 <mat-sidenav-container class="app-sidenav-container">
     
     <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" 
@@ -23,7 +21,7 @@
                     </mat-expansion-panel-header>
                 
                     <mat-list-item *ngFor="let sublink of link.sublink">
-                        <a matLine routerLink="/{{ sublink.path }}">
+                        <a matLine routerLink="/{{ sublink.path }}" (click)='doSubLink(sublink.path)'>
                             <mat-icon svgIcon="{{ sublink.avatar }}"></mat-icon>
                             {{ sublink.link }}     
                         </a>
@@ -36,7 +34,8 @@
     <div class="app-sidenav-content">
         <app-toolbar (toggleSidenav)="sidenav.toggle()"></app-toolbar>
         <div>
-            hola
+            <app-breadcum [breadcum]="breadcum"></app-breadcum>
+            <!--<ng-template app-breadcum></ng-template>-->
             <div class="wrapper">
                 <router-outlet></router-outlet>
             </div>

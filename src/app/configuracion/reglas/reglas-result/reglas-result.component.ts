@@ -9,6 +9,8 @@ export class ReglasResultComponent implements OnInit {
   @Input('resultLst') resultLst: string;
   @Output() onEditQuery = new EventEmitter<any>();
   
+  isDelete = false;
+
   constructor() { }
 
   ngOnInit() {
@@ -16,5 +18,13 @@ export class ReglasResultComponent implements OnInit {
 
   edicionConsulta(idValue, typeValue) {
     this.onEditQuery.emit({ id : idValue, editQuery : typeValue});
+  }
+
+  isGotoDelete(id) {
+    this.isDelete = true;
+  }
+
+  undo() {
+    this.isDelete = false;
   }
 }

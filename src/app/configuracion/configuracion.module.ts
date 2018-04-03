@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReglasResultComponent } from './reglas/reglas-result/reglas-result.component';
 import { ReglasEditComponent } from './reglas/reglas-edit/reglas-edit.component';
+import { GroupsComponent } from './groups/groups/groups.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import { ReglasEditComponent } from './reglas/reglas-edit/reglas-edit.component'
     ReactiveFormsModule,
     ConfiguracionRoutingModule
   ],
-  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent]
+  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent]
 })
 export class ConfiguracionModule { }

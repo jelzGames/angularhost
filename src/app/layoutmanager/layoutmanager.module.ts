@@ -9,6 +9,8 @@ import { MaterialModule } from '../shared/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { BreadcumComponent } from './components/breadcum/breadcum.component';
+import { BreadcumDirective } from './components/sidenav/breadcum.directive';
 
 
 
@@ -33,6 +35,8 @@ const routes: Routes = [
     FormsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [LayoutmanagerAppComponent, ToolbarComponent, MainContentComponent, SidenavComponent]
+  declarations: [LayoutmanagerAppComponent, ToolbarComponent, MainContentComponent, SidenavComponent, BreadcumComponent,
+  BreadcumDirective],
+  entryComponents: [BreadcumComponent]
 })
 export class LayoutmanagerModule { }

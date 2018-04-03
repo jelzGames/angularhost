@@ -31,6 +31,12 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
     if (this.id == "0") {
       this.readonly = false;
     }
+    else if (this.editQuery == 1) {
+      this.title = "Editar";
+    }
+    else {
+      this.title = "Consulta";
+    }
   }
 
   ngAfterViewInit(): void {

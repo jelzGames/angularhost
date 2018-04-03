@@ -1,4 +1,4 @@
-<mat-card class="pb-1" *ngIf="search">
+<mat-card class="p-1" *ngIf="search">
   <mat-card-title>
       <div class="card-title-text">{{title}}</div>
       <mat-divider></mat-divider>
@@ -29,12 +29,6 @@
       </form>
   </mat-card-content>
 </mat-card>
+<br/>
 <app-reglas-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)"></app-reglas-result>
 <app-reglas-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery"></app-reglas-edit>
-
-
-
-
-
-  
-

@@ -6,20 +6,35 @@
   <mat-card-content>
       <mat-accordion>
           <mat-expansion-panel *ngFor="let res of resultLst" class="mat-expansion-panel-body-mat">
-              <mat-expansion-panel-header>
-                  <mat-panel-title>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
                       {{res.role}}
-                  </mat-panel-title>
-              </mat-expansion-panel-header>
-              <div class="bottom-margin-2x-mat">
-                  <button type="button" mat-mini-fab color="warn" (click)="edicionConsulta(res.id, 1);" class="pull-right">
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
+                    <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" class="mr-1 pull-right">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
+                    <button type="button" mat-mini-fab color="accent" (click)="edicionConsulta(res.id, 1);" class="mr-1 pull-right">
                       <mat-icon>edit</mat-icon>
-                  </button>
-              </div>
-              <div class="bottom-margin-2x-mat">
-                  <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 0)" class="pull-right">
+                    </button>
+                </div>
+                <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
+                    <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 0)" class="mr-1 pull-right">
                       <mat-icon>assessment</mat-icon>
-                  </button>
+                    </button>
+                </div>
+                <div class="bottom-margin-2x-mat" *ngIf="isDelete">
+                    <button type="button" mat-mini-fab color="primary" (click)="undo()" class="mr-1 pull-right">
+                        <mat-icon>undo</mat-icon>
+                    </button>
+                </div>
+                <div class="bottom-margin-2x-mat" *ngIf="isDelete">
+                    <button type="button" mat-mini-fab color="warn" (click)="delete(res.id)" class="mr-1 pull-right">
+                        <mat-icon>delete_forever</mat-icon>
+                    </button>
               </div>
           </mat-expansion-panel>
       </mat-accordion>

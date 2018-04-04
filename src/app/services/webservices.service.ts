@@ -60,14 +60,14 @@ export class WebservicesService {
   
     private handleError(error) {
         var errorMessage;
-        if (error.status == "404") {
+        if (error.status == "404" ) {
             errorMessage = "Webservice no encotrado";
         }
         else if (error.status == "401") {
             errorMessage = "No autorizado";
             this.router.navigate(['/login']);
         }
-        else if (error.status != "0") {
+        else if (error.status != "0" && error.status != "400") {
             if (error.error != undefined && error.error.error == "invalid_grant") {
                 errorMessage = "Correo o contraseña es incorrecto";
             }

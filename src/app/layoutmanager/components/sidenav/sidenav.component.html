@@ -12,18 +12,18 @@
         </mat-toolbar>
         <mat-nav-list>
             <mat-accordion>
-                <mat-expansion-panel *ngFor="let link of links">
+                <mat-expansion-panel *ngFor="let menuItem of menuItems">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <mat-icon svgIcon="{{ link.avatar }}"></mat-icon>
-                            {{ link.link }}
+                            <mat-icon svgIcon="{{ menuItem.avatar }}"></mat-icon>
+                            {{ menuItem.menuItem }}
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                 
-                    <mat-list-item *ngFor="let sublink of link.sublink">
-                        <a matLine routerLink="/{{ sublink.path }}" (click)='doSubLink(sublink.path)'>
-                            <mat-icon svgIcon="{{ sublink.avatar }}"></mat-icon>
-                            {{ sublink.link }}     
+                    <mat-list-item *ngFor="let subMenuitem of menuItem.subMenuitems">
+                        <a matLine routerLink="/{{ subMenuitem.route }}" (click)='doLink(subMenuitem.menuItem)'>
+                            <mat-icon svgIcon="{{ subMenuitem.avatar }}"></mat-icon>
+                            {{ subMenuitem.menuItem }}     
                         </a>
                     </mat-list-item>
                 </mat-expansion-panel>

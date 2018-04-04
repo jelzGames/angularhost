@@ -20,28 +20,38 @@ export class SidenavComponent implements OnInit {
   
   private mediaMatcher: MediaQueryList = matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`);
 
-  links = [
+  menuItems = [
     { 
       'avatar' : 'Catalogos',
-      'link' : 'Configuracion',
-      'sublink' : [
+      'menuItem' : 'Configuracion',
+      'subMenuitems' : [
         {
           'avatar' : 'Catalogos',
-          'link' : 'Reglas',
-          'path' : 'Configuracion/Reglas'
+          'menuItem' : 'Reglas',
+          'route' : 'Configuracion/Reglas'
+        },
+        {
+          'avatar' : 'Catalogos',
+          'menuItem' : 'Grupos',
+          'route' : 'Configuracion/Grupos'
+        },
+        {
+          'avatar' : 'Catalogos',
+          'menuItem' : 'Usuarios',
+          'route' : 'Configuracion/Usuarios'
         }
       ]
     },
     { 
       'avatar' : 'Catalogos',
-      'link' : 'Transacciones',
-      'sublink' : [
+      'menuItem' : 'Transacciones',
+      'subMenuitems' : [
       ]
     },
     { 
       'avatar' : 'Catalogos',
-      'link' : 'Reportes',
-      'sublink' : [
+      'menuItem' : 'Reportes',
+      'subMenuitems' : [
       ]
     }
   ];
@@ -65,10 +75,8 @@ export class SidenavComponent implements OnInit {
     return this.mediaMatcher.matches;
   }
 
-  doSubLink(path) {
-    var index = path.indexOf('/');
-    path = path.substring(index + 1, path.length);
-    this.breadcum = path;
+  doLink(menuItem) {
+    this.breadcum = menuItem;
    
     //this.loadComponent(true, path)
   }

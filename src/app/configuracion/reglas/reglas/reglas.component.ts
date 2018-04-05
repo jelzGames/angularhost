@@ -20,10 +20,13 @@ export class ReglasComponent implements OnInit {
   title = "Búsqueda";
 
   filter = "";
+  status = 1;
   resultLst = [];
 
   search = true;
   edit = false;
+  viewFilter = false;
+
   id = '0';
   editQuery = 0;
   
@@ -56,7 +59,8 @@ export class ReglasComponent implements OnInit {
     });
     
     var model = {
-      filter : this.basicForm.get('filter').value
+      filter : this.basicForm.get('filter').value,
+      status : this.status
     }
     
     this.webservices.postMessage("api/Configuration/SearchRoles", model)
@@ -88,4 +92,19 @@ export class ReglasComponent implements OnInit {
     this.edit = true;
   }
 
+  onGoSearch(status) {
+    this.onToggleFiltro();
+    this.status = status;
+    this.doSearch();
+  }
+
+  toggleFiltro() {
+    this.search = false;
+    this.viewFilter = true;
+  }
+
+  onToggleFiltro() {
+    this.search = true;
+    this.viewFilter = false;
+  }
 }

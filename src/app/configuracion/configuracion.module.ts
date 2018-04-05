@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReglasResultComponent } from './reglas/reglas-result/reglas-result.component';
 import { ReglasEditComponent } from './reglas/reglas-edit/reglas-edit.component';
 import { GroupsComponent } from './groups/groups/groups.component';
+import { ReglasFiltroComponent } from './reglas/reglas-filtro/reglas-filtro.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import { GroupsComponent } from './groups/groups/groups.component';
     ReactiveFormsModule,
     ConfiguracionRoutingModule
   ],
-  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent]
+  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent]
 })
 export class ConfiguracionModule { }

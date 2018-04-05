@@ -11,7 +11,6 @@ export class BreadcumComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.breadcum);
       
   }
 

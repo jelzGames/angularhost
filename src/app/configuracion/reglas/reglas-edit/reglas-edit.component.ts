@@ -63,7 +63,9 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
       if (data != null ) {
         if (data.role != undefined) {
           this.newRoleForm.controls['role'].setValue(data.role);
-          this.newRoleForm.controls['menu'].setValue(data.menu);
+          if (data.menu != null) {
+            this.newRoleForm.controls['menu'].setValue(data.menu);
+          }
           if (this.editQuery == 0) {
             this.newRoleForm.controls['role'].disable();
             this.newRoleForm.controls['menu'].disable();

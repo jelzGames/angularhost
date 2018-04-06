@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { CharacterLimit } from '../../../helpers/text-helpers';
+import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { WebservicesService } from '../../../services/webservices.service';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
@@ -16,10 +16,11 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   newRoleForm;
   title = "Nuevo";
   readonly = true;
+  typeOperation = 0;
   
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
-  @Output() onSearch = new EventEmitter<void>();
+  @Output() onSearch = new EventEmitter<any>();
 
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
 
@@ -33,9 +34,11 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
     }
     else if (this.editQuery == 1) {
       this.title = "Editar";
+      this.typeOperation = 1;
     }
     else {
       this.title = "Consulta";
+      this.typeOperation = 2;
     }
   }
 
@@ -88,17 +91,14 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
 
   doNew() {
     let dialogRef = this.createSpinner();
-   
-    var model = {};
+    
+    var id = fuuidv4();
     var path = "api/Configuration/NewRole";
-    if (this.id != "0") {
-      path = "api/Configuration/EditRole"; 
-      model = {
-        id : this.id,
-      }
+    var model = {
+      id : id,
+      role : this.newRoleForm.get('role').value,
+      menu : this.newRoleForm.get('menu').value,
     }
-    model['role'] =  this.newRoleForm.get('role').value;
-    model['menu'] =  this.newRoleForm.get('menu').value;
 
     this.runWebservices(path, model, dialogRef);
   }
@@ -130,7 +130,7 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
     this.webservices.postMessage(path, model)
     .then( data => {
       if (data == null ) {
-        this.doConsulta();
+        this.doConsulta(model.id);
       }
       dialogRef.close();
       
@@ -176,7 +176,12 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   }
 
 
-  doConsulta() {
-    this.onSearch.emit();
+  doConsulta(id) {
+    var model = {
+      id : id,
+      role : this.newRoleForm.get('role').value,
+      typeOperation : this.typeOperation
+    }
+    this.onSearch.emit(model);
   }
 }

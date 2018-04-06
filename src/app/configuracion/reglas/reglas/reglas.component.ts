@@ -83,7 +83,23 @@ export class ReglasComponent implements OnInit {
   }
 
 
-  onSearch() {
+  onSearch(model) {
+    if (model.typeOperation == 0) {
+      var tmpmodel = {
+        id : model.id,
+        role : model.role,
+        status : 1
+      }  
+      this.resultLst.splice(0, 0, tmpmodel);
+    }   
+    else if (model.typeOperation == 1) {
+      for (var x = 0; x < this.resultLst.length; x++) {
+        var tmp = this.resultLst[x] as any;
+        if (tmp.id == model.id) {
+            this.resultLst[x].role = model.role;
+        } 
+      }  
+    }
     this.edit = false;
     this.search = true;
   }

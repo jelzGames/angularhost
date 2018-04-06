@@ -65,7 +65,10 @@ export class ReglasComponent implements OnInit {
     
     this.webservices.postMessage("api/Configuration/SearchRoles", model)
     .then( data => {
-      this.resultLst = data;
+      if (data.error == null) {
+        this.resultLst = data;
+      }
+      
       dialogRef.close();
     }).catch( err => {
       dialogRef.close();

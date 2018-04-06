@@ -11,8 +11,10 @@ import { MatDialog } from '@angular/material';
 export class ReglasResultComponent implements OnInit {
   @Input('resultLst') resultLst: any;
   @Output() onEditQuery = new EventEmitter<any>();
+  @Input('status') status: number;
   
   isDelete = false;
+  isUnLock = false;
 
   constructor(private webservices: WebservicesService, public dialog: MatDialog) { }
 
@@ -28,13 +30,17 @@ export class ReglasResultComponent implements OnInit {
   }
 
   delete(id) {
+    this.lockUnlock(id, 0);
+  }
+
+  lockUnlock(id, status) {
     let dialogRef = this.createSpinner();
-    var model = {
-      id : id,
-      status : 0
-    };
-    var path = "api/Configuration/UpdateIsActiveRole";
-    this.runWebservices(path, model, dialogRef);
+      var model = {
+        id : id,
+        status : status
+      };
+      var path = "api/Configuration/UpdateIsActiveRole";
+      this.runWebservices(path, model, dialogRef);
   }
 
   createSpinner() {
@@ -50,11 +56,18 @@ export class ReglasResultComponent implements OnInit {
   runWebservices(path, model, dialogRef) {
     this.webservices.postMessage(path, model)
     .then( data => {
-      if (data == null ) {
+      if (data == null) {
         for (var x = 0; x < this.resultLst.length; x++) {
           var tmp = this.resultLst[x] as any;
           if (tmp.id == model.id) {
-            this.resultLst.splice(x, 1);
+            if (this.status != 2) {
+              this.resultLst.splice(x, 1);
+            } 
+            else {
+              this.resultLst[x].status = model.status;
+              this.isUnLock = false;
+  
+            }  
             break;
           } 
         }
@@ -70,4 +83,19 @@ export class ReglasResultComponent implements OnInit {
   undo() {
     this.isDelete = false;
   }
+
+  undoUnlock() {
+    this.isUnLock = false;
+  }
+
+  unlock(id) {
+    if (!this.isUnLock) {
+      this.isUnLock = true;
+    }
+    else {
+      this.lockUnlock(id, 1)
+    }
+  }
+
+  
 }

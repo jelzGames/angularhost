@@ -11,6 +11,10 @@ import { ReglasResultComponent } from './reglas/reglas-result/reglas-result.comp
 import { ReglasEditComponent } from './reglas/reglas-edit/reglas-edit.component';
 import { GroupsComponent } from './groups/groups/groups.component';
 import { ReglasFiltroComponent } from './reglas/reglas-filtro/reglas-filtro.component';
+import { MenuComponent } from './menu/menu/menu.component';
+import { MenuEditComponent } from './menu/menu-edit/menu-edit.component';
+import { MenuFiltroComponent } from './menu/menu-filtro/menu-filtro.component';
+import { MenuResultComponent } from './menu/menu-result/menu-result.component';
 
 @NgModule({
   imports: [
@@ -22,6 +26,6 @@ import { ReglasFiltroComponent } from './reglas/reglas-filtro/reglas-filtro.comp
     ReactiveFormsModule,
     ConfiguracionRoutingModule
   ],
-  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent]
+  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent, MenuComponent, MenuEditComponent, MenuFiltroComponent, MenuResultComponent]
 })
 export class ConfiguracionModule { }

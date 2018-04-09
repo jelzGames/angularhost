@@ -1,19 +1,18 @@
-import { Component, OnInit, Output, EventEmitter, Input, AfterViewInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { WebservicesService } from '../../../services/webservices.service';
+import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
 
 @Component({
-  selector: 'app-reglas-edit',
-  templateUrl: './reglas-edit.component.html',
-  styleUrls: ['./reglas-edit.component.scss'],
+  selector: 'app-menu-edit',
+  templateUrl: './menu-edit.component.html',
+  styleUrls: ['./menu-edit.component.scss']
 })
-export class ReglasEditComponent implements OnInit, AfterViewInit {
- 
-  newRoleForm;
+export class MenuEditComponent implements OnInit {
+  newMenuForm;
   title = "Nuevo";
   readonly = true;
   typeOperation = 0;
@@ -25,8 +24,8 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
 
   ngOnInit() {
-    this.newRoleForm = this.fb.group ({
-      role : new FormControl('', [ Validators.required, CharacterLimit('shortname', 256)  ] ),
+    this.newMenuForm = this.fb.group ({
+      menu : new FormControl('', [ Validators.required, CharacterLimit('shortname', 256)  ] ),
     });
     if (this.id == "0") {
       this.readonly = false;
@@ -50,7 +49,7 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   }
 
   isValid(control) {
-    return this.newRoleForm.controls[control].invalid && this.newRoleForm.controls[control].touched;
+    return this.newMenuForm.controls[control].invalid && this.newMenuForm.controls[control].touched;
   }
 
   getById() {
@@ -60,13 +59,13 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
         id : this.id,
     }
         
-    this.webservices.postMessage("api/Configuration/RolesById", model)
+    this.webservices.postMessage("api/Configuration/MenuById", model)
     .then( data => {
       if (data != null ) {
-        if (data.role != undefined) {
-          this.newRoleForm.controls['role'].setValue(data.role);
+        if (data.menu != undefined) {
+          this.newMenuForm.controls['menu'].setValue(data.menu);
           if (this.editQuery == 0) {
-            this.newRoleForm.controls['role'].disable();
+            this.newMenuForm.controls['menu'].disable();
             this.readonly = true;
           }
           else { 
@@ -88,10 +87,10 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
     let dialogRef = this.createSpinner();
     
     var id = fuuidv4();
-    var path = "api/Configuration/RolesNew";
+    var path = "api/Configuration/MenuNew";
     var model = {
       id : id,
-      role : this.newRoleForm.get('role').value,
+      menu : this.newMenuForm.get('menu').value,
     }
 
     this.runWebservices(path, model, dialogRef);
@@ -102,9 +101,9 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
    
     var model = {
       id : this.id,
-      role : this.newRoleForm.get('role').value,
+      menu : this.newMenuForm.get('menu').value,
     };
-    var path = "api/Configuration/RolesUpdate";
+    var path = "api/Configuration/MenuUpdate";
     
     this.runWebservices(path, model, dialogRef);
   }
@@ -123,6 +122,7 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
     this.webservices.postMessage(path, model)
     .then( data => {
       if (data == null ) {
+        this.snack.open("Registro ha sido gurdado con exito ", "Aceptar", { duration: 2000 });
         this.doConsulta(model.id);
       }
       dialogRef.close();
@@ -133,7 +133,7 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   }
 
   riseError(control) {
-    if (this.newRoleForm.controls[control].invalid) {
+    if (this.newMenuForm.controls[control].invalid) {
         this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
         return true;
     }
@@ -141,8 +141,8 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   }
 
   showConfirmacion() {
-    if (!this.newRoleForm.valid) {
-        for (var control in  this.newRoleForm.controls) {
+    if (!this.newMenuForm.valid) {
+        for (var control in  this.newMenuForm.controls) {
             if (this.riseError(control)) {
                 break;
             }
@@ -151,10 +151,10 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
     else  {
       let dialogRef = this.dialog.open(ModalsaveComponent,  {
         width: '250px',
-        data: { answer: true }
         //disableClose: true,
         //panelClass: 'spinner-dialog'
-        //data: { name: this.name, animal: this.animal }
+        //data: { name: 'this.name', animal: 'this.animal' }
+        data: { answer: true }
       });
       
       dialogRef.afterClosed().subscribe(result => {
@@ -174,14 +174,13 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   doConsulta(id) {
     if (id == undefined) {
       this.typeOperation = -1;
     }
     var model = {
       id : id,
-      role : this.newRoleForm.get('role').value,
+      menu : this.newMenuForm.get('menu').value,
       typeOperation : this.typeOperation
     }
     this.onSearch.emit(model);

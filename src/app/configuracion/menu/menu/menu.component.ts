@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { WebservicesService } from '../../../services/webservices.service';
-import { ReglasEditComponent } from '../reglas-edit/reglas-edit.component';
+import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
+import { MenuEditComponent } from '../menu-edit/menu-edit.component';
 
 @Component({
-  selector: 'app-reglas',
-  templateUrl: './reglas.component.html',
-  styleUrls: ['./reglas.component.scss'],
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.scss']
 })
-export class ReglasComponent implements OnInit {
-  @ViewChild(ReglasEditComponent)
-     private editQueryChild: ReglasEditComponent;
+export class MenuComponent implements OnInit {
+  @ViewChild(MenuEditComponent)
+  private editQueryChild: MenuEditComponent;
 
 
   basicForm;
@@ -29,25 +29,25 @@ export class ReglasComponent implements OnInit {
 
   id = '0';
   editQuery = 0;
-  
+
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService) { 
-    this.basicForm = fb.group ({
-      filter: ["",[] ],
-    });
+  this.basicForm = fb.group ({
+    filter: ["",[] ],
+  });
   }
 
   ngOnInit() {
-    
-  }
   
+  }
+
   /*
   onChanges(): void {
-    this.basicForm.get('filter').valueChanges.subscribe(val => {
-      this.filter = val;
-    });
+  this.basicForm.get('filter').valueChanges.subscribe(val => {
+    this.filter = val;
+  });
   }
   */
-  
+
   doSearch() {
     this.resultLst = [];
 
@@ -63,7 +63,7 @@ export class ReglasComponent implements OnInit {
       status : this.status
     }
     
-    this.webservices.postMessage("api/Configuration/RolesSearchQuery", model)
+    this.webservices.postMessage("api/Configuration/MenuSearchQuery", model)
     .then( data => {
       if (data.error == null) {
         this.resultLst = data;
@@ -73,7 +73,7 @@ export class ReglasComponent implements OnInit {
     }).catch( err => {
       dialogRef.close();
     });
-    
+  
   }
 
   doNuevo() {
@@ -87,7 +87,7 @@ export class ReglasComponent implements OnInit {
     if (model.typeOperation == 0) {
       var tmpmodel = {
         id : model.id,
-        role : model.role,
+        menu : model.menu,
         status : 1
       }  
       this.resultLst.splice(0, 0, tmpmodel);
@@ -96,7 +96,7 @@ export class ReglasComponent implements OnInit {
       for (var x = 0; x < this.resultLst.length; x++) {
         var tmp = this.resultLst[x] as any;
         if (tmp.id == model.id) {
-            this.resultLst[x].role = model.role;
+            this.resultLst[x].menu = model.menu;
         } 
       }  
     }
@@ -126,4 +126,5 @@ export class ReglasComponent implements OnInit {
     this.search = true;
     this.viewFilter = false;
   }
+
 }

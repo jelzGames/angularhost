@@ -39,7 +39,7 @@ export class MenuResultComponent implements OnInit {
         id : id,
         status : status
       };
-      var path = "api/Configuration/MenuUpdateIsActive";
+      var path = "api/Menu/UpdateIsActive";
       this.runWebservices(path, model, dialogRef);
   }
 

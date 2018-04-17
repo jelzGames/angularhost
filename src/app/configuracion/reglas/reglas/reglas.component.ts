@@ -63,7 +63,7 @@ export class ReglasComponent implements OnInit {
       status : this.status
     }
     
-    this.webservices.postMessage("api/Configuration/RolesSearchQuery", model)
+    this.webservices.postMessage("api/Roles/SearchQuery", model)
     .then( data => {
       if (data.error == null) {
         this.resultLst = data;

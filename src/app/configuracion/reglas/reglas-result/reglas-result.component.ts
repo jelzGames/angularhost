@@ -39,7 +39,7 @@ export class ReglasResultComponent implements OnInit {
         id : id,
         status : status
       };
-      var path = "api/Configuration/UpdateIsActiveRole";
+      var path = "api/Roles/UpdateIsActive";
       this.runWebservices(path, model, dialogRef);
   }
 

@@ -26,7 +26,7 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.newRoleForm = this.fb.group ({
-      role : new FormControl('', [ Validators.required, CharacterLimit('shortname', 256)  ] ),
+      role : new FormControl('', [ Validators.required, CharacterLimit('role', 256)  ] ),
       descripcion : new FormControl('', [ Validators.required ] ),
     });
     if (this.id == "0") {
@@ -61,7 +61,7 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
         id : this.id,
     }
         
-    this.webservices.postMessage("api/Configuration/RolesById", model)
+    this.webservices.postMessage("api/Roles/ById", model)
     .then( data => {
       if (data != null ) {
         if (data.role != undefined) {
@@ -90,14 +90,14 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   doNew() {
     let dialogRef = this.createSpinner();
     var model = this.CreateUpdateModel(fuuidv4());
-    var path = "api/Configuration/RolesNew";
+    var path = "api/Roles/New";
     this.runWebservices(path, model, dialogRef);
   }
 
   doUpdate() {
     let dialogRef = this.createSpinner();
     var model = this.CreateUpdateModel(this.id);
-    var path = "api/Configuration/RolesUpdate";
+    var path = "api/Roles/Update";
     this.runWebservices(path, model, dialogRef);
   }
 

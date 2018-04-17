@@ -63,7 +63,7 @@ export class MenuComponent implements OnInit {
       status : this.status
     }
     
-    this.webservices.postMessage("api/Configuration/MenuSearchQuery", model)
+    this.webservices.postMessage("api/Menu/SearchQuery", model)
     .then( data => {
       if (data.error == null) {
         this.resultLst = data;

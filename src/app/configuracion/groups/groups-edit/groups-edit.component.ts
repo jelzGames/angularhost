@@ -1,18 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { WebservicesService } from '../../../services/webservices.service';
-import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
+import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
+import { fuuidv4, CharacterLimit } from '../../../helpers/text-helpers';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { WebservicesService } from '../../../services/webservices.service';
+import { MatSnackBar, MatDialog } from '@angular/material';
 
 @Component({
-  selector: 'app-menu-edit',
-  templateUrl: './menu-edit.component.html',
-  styleUrls: ['./menu-edit.component.scss']
+  selector: 'app-groups-edit',
+  templateUrl: './groups-edit.component.html',
+  styleUrls: ['./groups-edit.component.scss']
 })
-export class MenuEditComponent implements OnInit {
-  newMenuForm;
+export class GroupsEditComponent implements OnInit {
+
+  newRoleForm;
   title = "Nuevo";
   readonly = true;
   typeOperation = 0;
@@ -24,9 +25,8 @@ export class MenuEditComponent implements OnInit {
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
 
   ngOnInit() {
-    this.newMenuForm = this.fb.group ({
-      menu : new FormControl('', [ Validators.required, CharacterLimit('menu', 256)  ] ),
-      descripcion : new FormControl('', [ Validators.required ] ),
+    this.newRoleForm = this.fb.group ({
+      name : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
     });
     if (this.id == "0") {
       this.readonly = false;
@@ -50,7 +50,7 @@ export class MenuEditComponent implements OnInit {
   }
 
   isValid(control) {
-    return this.newMenuForm.controls[control].invalid && this.newMenuForm.controls[control].touched;
+    return this.newRoleForm.controls[control].invalid && this.newRoleForm.controls[control].touched;
   }
 
   getById() {
@@ -60,15 +60,13 @@ export class MenuEditComponent implements OnInit {
         id : this.id,
     }
         
-    this.webservices.postMessage("api/Menu/ById", model)
+    this.webservices.postMessage("api/Configuration/GroupsById", model)
     .then( data => {
       if (data != null ) {
-        if (data.menu != undefined) {
-          this.newMenuForm.controls['menu'].setValue(data.menu);
-          this.newMenuForm.controls['descripcion'].setValue(data.descripcion);
+        if (data.role != undefined) {
+          this.newRoleForm.controls['name'].setValue(data.role);
           if (this.editQuery == 0) {
-            this.newMenuForm.controls['menu'].disable();
-            this.newMenuForm.controls['descripcion'].disable();
+            this.newRoleForm.controls['name'].disable();
             this.readonly = true;
           }
           else { 
@@ -88,24 +86,23 @@ export class MenuEditComponent implements OnInit {
 
   doNew() {
     let dialogRef = this.createSpinner();
-    var path = "api/Menu/New";
     var model = this.CreateUpdateModel(fuuidv4());
+    var path = "api/Configuration/GroupsNew";
     this.runWebservices(path, model, dialogRef);
   }
 
   doUpdate() {
     let dialogRef = this.createSpinner();
-    var path = "api/Menu/Update";
     var model = this.CreateUpdateModel(this.id);
+    var path = "api/Configuration/GroupsUpdate";
     this.runWebservices(path, model, dialogRef);
   }
 
   CreateUpdateModel(id) {
     var model = {
       id : id,
-      menu : this.newMenuForm.get('menu').value,
-      descripcion : this.newMenuForm.get('descripcion').value
-    };
+      name : this.newRoleForm.get('name').value,
+  };
 
     return model;
   }
@@ -124,7 +121,6 @@ export class MenuEditComponent implements OnInit {
     this.webservices.postMessage(path, model)
     .then( data => {
       if (data == null ) {
-        this.snack.open("Registro ha sido gurdado con exito ", "Aceptar", { duration: 2000 });
         this.doConsulta(model.id);
       }
       dialogRef.close();
@@ -135,7 +131,7 @@ export class MenuEditComponent implements OnInit {
   }
 
   riseError(control) {
-    if (this.newMenuForm.controls[control].invalid) {
+    if (this.newRoleForm.controls[control].invalid) {
         this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
         return true;
     }
@@ -143,8 +139,8 @@ export class MenuEditComponent implements OnInit {
   }
 
   showConfirmacion() {
-    if (!this.newMenuForm.valid) {
-        for (var control in  this.newMenuForm.controls) {
+    if (!this.newRoleForm.valid) {
+        for (var control in  this.newRoleForm.controls) {
             if (this.riseError(control)) {
                 break;
             }
@@ -153,10 +149,10 @@ export class MenuEditComponent implements OnInit {
     else  {
       let dialogRef = this.dialog.open(ModalsaveComponent,  {
         width: '250px',
+        data: { answer: true }
         //disableClose: true,
         //panelClass: 'spinner-dialog'
-        //data: { name: 'this.name', animal: 'this.animal' }
-        data: { answer: true }
+        //data: { name: this.name, animal: this.animal }
       });
       
       dialogRef.afterClosed().subscribe(result => {
@@ -176,15 +172,17 @@ export class MenuEditComponent implements OnInit {
     }
   }
 
+
   doConsulta(id) {
     if (id == undefined) {
       this.typeOperation = -1;
     }
     var model = {
       id : id,
-      menu : this.newMenuForm.get('menu').value,
+      role : this.newRoleForm.get('role').value,
       typeOperation : this.typeOperation
     }
     this.onSearch.emit(model);
   }
+
 }

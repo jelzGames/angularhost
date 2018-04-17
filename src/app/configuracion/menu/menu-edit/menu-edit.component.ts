@@ -26,6 +26,7 @@ export class MenuEditComponent implements OnInit {
   ngOnInit() {
     this.newMenuForm = this.fb.group ({
       menu : new FormControl('', [ Validators.required, CharacterLimit('shortname', 256)  ] ),
+      descripcion : new FormControl('', [ Validators.required ] ),
     });
     if (this.id == "0") {
       this.readonly = false;
@@ -64,8 +65,10 @@ export class MenuEditComponent implements OnInit {
       if (data != null ) {
         if (data.menu != undefined) {
           this.newMenuForm.controls['menu'].setValue(data.menu);
+          this.newMenuForm.controls['descripcion'].setValue(data.descripcion);
           if (this.editQuery == 0) {
             this.newMenuForm.controls['menu'].disable();
+            this.newMenuForm.controls['descripcion'].disable();
             this.readonly = true;
           }
           else { 
@@ -85,27 +88,26 @@ export class MenuEditComponent implements OnInit {
 
   doNew() {
     let dialogRef = this.createSpinner();
-    
-    var id = fuuidv4();
     var path = "api/Configuration/MenuNew";
-    var model = {
-      id : id,
-      menu : this.newMenuForm.get('menu').value,
-    }
-
+    var model = this.CreateUpdateModel(fuuidv4());
     this.runWebservices(path, model, dialogRef);
   }
 
   doUpdate() {
     let dialogRef = this.createSpinner();
-   
-    var model = {
-      id : this.id,
-      menu : this.newMenuForm.get('menu').value,
-    };
     var path = "api/Configuration/MenuUpdate";
-    
+    var model = this.CreateUpdateModel(this.id);
     this.runWebservices(path, model, dialogRef);
+  }
+
+  CreateUpdateModel(id) {
+    var model = {
+      id : id,
+      menu : this.newMenuForm.get('menu').value,
+      descripcion : this.newMenuForm.get('descripcion').value
+    };
+
+    return model;
   }
 
   createSpinner() {

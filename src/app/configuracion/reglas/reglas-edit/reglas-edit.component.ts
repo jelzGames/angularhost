@@ -27,6 +27,7 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.newRoleForm = this.fb.group ({
       role : new FormControl('', [ Validators.required, CharacterLimit('shortname', 256)  ] ),
+      descripcion : new FormControl('', [ Validators.required ] ),
     });
     if (this.id == "0") {
       this.readonly = false;
@@ -65,8 +66,10 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
       if (data != null ) {
         if (data.role != undefined) {
           this.newRoleForm.controls['role'].setValue(data.role);
+          this.newRoleForm.controls['descripcion'].setValue(data.descripcion);
           if (this.editQuery == 0) {
             this.newRoleForm.controls['role'].disable();
+            this.newRoleForm.controls['descripcion'].disable();
             this.readonly = true;
           }
           else { 
@@ -86,27 +89,26 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
 
   doNew() {
     let dialogRef = this.createSpinner();
-    
-    var id = fuuidv4();
+    var model = this.CreateUpdateModel(fuuidv4());
     var path = "api/Configuration/RolesNew";
-    var model = {
-      id : id,
-      role : this.newRoleForm.get('role').value,
-    }
-
     this.runWebservices(path, model, dialogRef);
   }
 
   doUpdate() {
     let dialogRef = this.createSpinner();
-   
-    var model = {
-      id : this.id,
-      role : this.newRoleForm.get('role').value,
-    };
+    var model = this.CreateUpdateModel(this.id);
     var path = "api/Configuration/RolesUpdate";
-    
     this.runWebservices(path, model, dialogRef);
+  }
+
+  CreateUpdateModel(id) {
+    var model = {
+      id : id,
+      role : this.newRoleForm.get('role').value,
+      descripcion : this.newRoleForm.get('descripcion').value
+    };
+
+    return model;
   }
 
   createSpinner() {

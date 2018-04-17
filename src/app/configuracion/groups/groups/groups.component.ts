@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuEditComponent } from '../../menu/menu-edit/menu-edit.component';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { WebservicesService } from '../../../services/webservices.service';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
+import { GroupsEditComponent } from '../groups-edit/groups-edit.component';
 
 @Component({
   selector: 'app-groups',
@@ -11,8 +11,8 @@ import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner
   styleUrls: ['./groups.component.scss']
 })
 export class GroupsComponent implements OnInit {
-  @ViewChild(MenuEditComponent)
-  private editQueryChild: MenuEditComponent;
+  @ViewChild(GroupsEditComponent)
+  private editQueryChild: GroupsEditComponent;
 
 
   basicForm;
@@ -63,7 +63,7 @@ export class GroupsComponent implements OnInit {
       status : this.status
     }
     
-    this.webservices.postMessage("api/Configuration/MenuSearchQuery", model)
+    this.webservices.postMessage("api/Groups/SearchQuery", model)
     .then( data => {
       if (data.error == null) {
         this.resultLst = data;
@@ -87,7 +87,7 @@ export class GroupsComponent implements OnInit {
     if (model.typeOperation == 0) {
       var tmpmodel = {
         id : model.id,
-        menu : model.menu,
+        name : model.name,
         status : 1
       }  
       this.resultLst.splice(0, 0, tmpmodel);
@@ -96,7 +96,7 @@ export class GroupsComponent implements OnInit {
       for (var x = 0; x < this.resultLst.length; x++) {
         var tmp = this.resultLst[x] as any;
         if (tmp.id == model.id) {
-            this.resultLst[x].menu = model.menu;
+            this.resultLst[x].name = model.name;
         } 
       }  
     }

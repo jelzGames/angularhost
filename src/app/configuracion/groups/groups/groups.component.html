@@ -13,47 +13,6 @@
                         </mat-form-field>
                     </div>
                     <div class="pb-1">
-                        <!--
-                        <div class="can-toggle">
-                            <input id="a" type="checkbox">
-                            <label for="a">
-                                <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
-                                <div class="can-toggle__label-text">.can-toggle</div>
-                            </label>
-                        </div>
-                        <br>
-                        <div class="can-toggle can-toggle--size-small">
-                            <input id="b" type="checkbox">
-                            <label for="b">
-                                <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
-                                <div class="can-toggle__label-text">.can-toggle.can-toggle--size-small</div>
-                            </label>
-                        </div>
-                        <br>
-                        <div class="can-toggle can-toggle--size-large">
-                            <input id="c" type="checkbox">
-                            <label for="c">
-                                <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
-                                <div class="can-toggle__label-text">.can-toggle.can-toggle--size-large</div>
-                            </label>
-                        </div>
-                        <br>-->
-                        <div class="can-toggle demo-rebrand-1">
-                            <input id="d" type="checkbox">
-                            <label for="d">
-                                <div class="can-toggle__switch" data-checked="Menu" data-unchecked="Roles"></div>
-                            </label>
-                        </div>
-                        <!--
-                        <br>
-                        <div class="can-toggle demo-rebrand-2">
-                            <input id="e" type="checkbox">
-                            <label for="e">
-                                <div class="can-toggle__switch" data-checked="Yes" data-unchecked="No"></div>
-                                <div class="can-toggle__label-text">.can-toggle.demo-rebrand-2</div>
-                            </label>
-                        </div>
-                        -->
                         <button type="button" mat-mini-fab color="primary" class="mr-1 pull-right" (click)="doSearch()">
                             <mat-icon>youtube_searched_for</mat-icon>
                         </button>
@@ -69,9 +28,9 @@
         </form>
     </mat-card-content>
 </mat-card>
-<app-menu-filtro *ngIf="viewFilter" (onToggleFiltro)="onToggleFiltro($event)" (onGoSearch)="onGoSearch($event)" [status]="status" ></app-menu-filtro>
-<app-menu-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)" [status]="status"></app-menu-result>
-<app-menu-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery"></app-menu-edit>
+<app-groups-filtro *ngIf="viewFilter" (onToggleFiltro)="onToggleFiltro($event)" (onGoSearch)="onGoSearch($event)" [status]="status" ></app-groups-filtro>
+<app-groups-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)" [status]="status"></app-groups-result>
+<app-groups-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery"></app-groups-edit>
   
   
   

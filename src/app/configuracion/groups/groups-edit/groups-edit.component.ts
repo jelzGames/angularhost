@@ -13,7 +13,7 @@ import { MatSnackBar, MatDialog } from '@angular/material';
 })
 export class GroupsEditComponent implements OnInit {
 
-  newRoleForm;
+  newForm;
   title = "Nuevo";
   readonly = true;
   typeOperation = 0;
@@ -25,7 +25,7 @@ export class GroupsEditComponent implements OnInit {
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
 
   ngOnInit() {
-    this.newRoleForm = this.fb.group ({
+    this.newForm = this.fb.group ({
       name : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
     });
     if (this.id == "0") {
@@ -50,7 +50,7 @@ export class GroupsEditComponent implements OnInit {
   }
 
   isValid(control) {
-    return this.newRoleForm.controls[control].invalid && this.newRoleForm.controls[control].touched;
+    return this.newForm.controls[control].invalid && this.newForm.controls[control].touched;
   }
 
   getById() {
@@ -60,13 +60,13 @@ export class GroupsEditComponent implements OnInit {
         id : this.id,
     }
         
-    this.webservices.postMessage("api/Configuration/GroupsById", model)
+    this.webservices.postMessage("api/Groups/ById", model)
     .then( data => {
       if (data != null ) {
-        if (data.role != undefined) {
-          this.newRoleForm.controls['name'].setValue(data.role);
+        if (data.name != undefined) {
+          this.newForm.controls['name'].setValue(data.name);
           if (this.editQuery == 0) {
-            this.newRoleForm.controls['name'].disable();
+            this.newForm.controls['name'].disable();
             this.readonly = true;
           }
           else { 
@@ -87,21 +87,21 @@ export class GroupsEditComponent implements OnInit {
   doNew() {
     let dialogRef = this.createSpinner();
     var model = this.CreateUpdateModel(fuuidv4());
-    var path = "api/Configuration/GroupsNew";
+    var path = "api/Groups/New";
     this.runWebservices(path, model, dialogRef);
   }
 
   doUpdate() {
     let dialogRef = this.createSpinner();
     var model = this.CreateUpdateModel(this.id);
-    var path = "api/Configuration/GroupsUpdate";
+    var path = "api/Groups/Update";
     this.runWebservices(path, model, dialogRef);
   }
 
   CreateUpdateModel(id) {
     var model = {
       id : id,
-      name : this.newRoleForm.get('name').value,
+      name : this.newForm.get('name').value,
   };
 
     return model;
@@ -131,7 +131,7 @@ export class GroupsEditComponent implements OnInit {
   }
 
   riseError(control) {
-    if (this.newRoleForm.controls[control].invalid) {
+    if (this.newForm.controls[control].invalid) {
         this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
         return true;
     }
@@ -139,8 +139,8 @@ export class GroupsEditComponent implements OnInit {
   }
 
   showConfirmacion() {
-    if (!this.newRoleForm.valid) {
-        for (var control in  this.newRoleForm.controls) {
+    if (!this.newForm.valid) {
+        for (var control in  this.newForm.controls) {
             if (this.riseError(control)) {
                 break;
             }
@@ -179,7 +179,7 @@ export class GroupsEditComponent implements OnInit {
     }
     var model = {
       id : id,
-      role : this.newRoleForm.get('role').value,
+      name : this.newForm.get('name').value,
       typeOperation : this.typeOperation
     }
     this.onSearch.emit(model);

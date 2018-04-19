@@ -158,8 +158,7 @@ export class GroupsEditComponent implements OnInit {
               }
             } 
             if (model.name != "") {
-              console.log(count);
-              this.rolesLst[count].roles.push(model);
+              this.rolesLst[count].roles.push(model.roles[0]);
             }
           }
 

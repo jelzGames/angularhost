@@ -22,42 +22,32 @@ export class GroupsComponent implements OnInit {
   filter = "";
   status = 1;
   resultLst = [];
-
+ 
   search = true;
   edit = false;
   viewFilter = false;
 
   id = '0';
   editQuery = 0;
-
+ 
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService) { 
-  this.basicForm = fb.group ({
-    filter: ["",[] ],
-  });
+    
   }
 
   ngOnInit() {
-  
+    this.basicForm = this.fb.group ({
+      filter: ["",[] ],
+    });
   }
-
-  /*
-  onChanges(): void {
-  this.basicForm.get('filter').valueChanges.subscribe(val => {
-    this.filter = val;
-  });
-  }
-  */
 
   doSearch() {
     this.resultLst = [];
-
     let dialogRef = this.dialog.open(ModalspinnerComponent,  {
       width: '250px',
       disableClose: true,
       panelClass: 'spinner-dialog'
       //data: { name: this.name, animal: this.animal }
     });
-    
     var model = {
       filter : this.basicForm.get('filter').value,
       status : this.status
@@ -65,15 +55,13 @@ export class GroupsComponent implements OnInit {
     
     this.webservices.postMessage("api/Groups/SearchQuery", model)
     .then( data => {
-      if (data.error == null) {
+      if (data.error == null ) {
         this.resultLst = data;
       }
-      
       dialogRef.close();
     }).catch( err => {
       dialogRef.close();
     });
-  
   }
 
   doNuevo() {
@@ -81,7 +69,6 @@ export class GroupsComponent implements OnInit {
     this.search = false;
     this.edit = true;
   }
-
 
   onSearch(model) {
     if (model.typeOperation == 0) {

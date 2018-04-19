@@ -5,6 +5,7 @@ import { fuuidv4, CharacterLimit } from '../../../helpers/text-helpers';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { WebservicesService } from '../../../services/webservices.service';
 import { MatSnackBar, MatDialog } from '@angular/material';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-groups-edit',
@@ -16,8 +17,12 @@ export class GroupsEditComponent implements OnInit {
   newForm;
   title = "Nuevo";
   readonly = true;
+  loading = false;
   typeOperation = 0;
-  
+  menuLst = [];
+  rolesLst = [];
+  interval;
+ 
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
@@ -27,7 +32,10 @@ export class GroupsEditComponent implements OnInit {
   ngOnInit() {
     this.newForm = this.fb.group ({
       name : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
+      typeData : new FormControl(''),
     });
+    this.newForm.get('typeData').setValue(false);
+
     if (this.id == "0") {
       this.readonly = false;
     }
@@ -39,6 +47,12 @@ export class GroupsEditComponent implements OnInit {
       this.title = "Consulta";
       this.typeOperation = 2;
     }
+
+    this.interval = setInterval( () => { 
+      clearInterval(this.interval);
+      this.getById();
+     });
+    
   }
 
   ngAfterViewInit(): void {
@@ -72,6 +86,85 @@ export class GroupsEditComponent implements OnInit {
           else { 
             this.readonly = false;
           }
+          /*
+          if (data.menu.length > 0) {
+            var names = data.menu[0].name.split("/");
+            if (names.length > 1) {
+              this.menuLst.push( 
+                {
+                  name : names[0]
+                }
+              );
+            }
+            console.log(1);
+            for (var x = 0; x <= data.menu.length; x++) {
+              if (names.length > 1) {
+                this.menuLst.push( 
+                  {
+                    id : data.menu[x].id,
+                    name : names[1],
+                    typeRight : data.menu[x].typeRight 
+                  }
+                );
+              }
+              var temp = data.menu[x].name.split("/");
+              if (temp[0] != names[0]) {
+                names = temp;
+              }
+            }; 
+          }*/
+          var model = 
+          {
+            name : "",
+            menu : [],
+            roles : []
+          }
+          var count = -1;
+          if (data.roles.length > 0) {
+            var names = data.roles[0].name.split("/");
+            if (names.length > 1) {
+              model.name = names[0]
+            }
+            for (var x = 0; x < data.roles.length; x++) {
+              var temp = data.roles[x].name.split("/");
+              if (x == (data.roles.length -1) || temp[0] != names[0]) {
+                names = temp;
+                this.rolesLst.push(model);
+                count++;
+                model = 
+                {
+                  name : names[0],
+                  menu : [],
+                  roles : []
+                }
+                model.roles.push( 
+                  {
+                    id : data.roles[x].id,
+                    name : temp[1],
+                    typeRight : data.roles[x].typeRight 
+                  }
+                );
+              }
+              else {
+                if (temp.length > 1) {
+                  model.roles.push( 
+                    {
+                      id : data.roles[x].id,
+                      name : temp[1],
+                      typeRight : data.roles[x].typeRight 
+                    }
+                  );
+                }
+              }
+            } 
+            if (model.name != "") {
+              console.log(count);
+              this.rolesLst[count].roles.push(model);
+            }
+          }
+
+          console.log(this.menuLst);
+          console.log(this.rolesLst);
         }
         else {
           this.readonly = true;
@@ -185,4 +278,7 @@ export class GroupsEditComponent implements OnInit {
     this.onSearch.emit(model);
   }
 
+  doNuevo() {
+   
+  }
 }

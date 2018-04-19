@@ -19,6 +19,7 @@ import { GroupsEditComponent } from './groups/groups-edit/groups-edit.component'
 import { GroupsFiltroComponent } from './groups/groups-filtro/groups-filtro.component';
 import { GroupsResultComponent } from './groups/groups-result/groups-result.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -29,6 +30,7 @@ import { GroupsResultComponent } from './groups/groups-result/groups-result.comp
     ReactiveFormsModule,
     ConfiguracionRoutingModule
   ],
-  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent, MenuComponent, MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent]
+  declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent, MenuComponent, 
+    MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent]
 })
 export class ConfiguracionModule { }

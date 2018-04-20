@@ -181,3 +181,18 @@ body {
   float: right;
   bottom: 0;
 }
+
+.displayExpandContent {
+  display: flex;
+  padding: 10px;
+  border-top: 0px;
+  border-bottom: 1px;
+  border-right: 0px;
+  border-left: 0px;
+  border-color: lightgray;
+  border-style: solid;
+}
+
+.displayExpandContent50 {
+  flex: 50%;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, group } from '@angular/core';
 import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { fuuidv4, CharacterLimit } from '../../../helpers/text-helpers';
@@ -23,6 +23,8 @@ export class GroupsEditComponent implements OnInit {
   rolesLst = [];
   interval;
  
+  viewRoles = false;
+
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
@@ -56,11 +58,13 @@ export class GroupsEditComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    /*
     if (this.id != "0") {
       setTimeout(()=>{   
         this.getById();
        },10);
     }
+    */
   }
 
   isValid(control) {
@@ -86,84 +90,8 @@ export class GroupsEditComponent implements OnInit {
           else { 
             this.readonly = false;
           }
-          /*
-          if (data.menu.length > 0) {
-            var names = data.menu[0].name.split("/");
-            if (names.length > 1) {
-              this.menuLst.push( 
-                {
-                  name : names[0]
-                }
-              );
-            }
-            console.log(1);
-            for (var x = 0; x <= data.menu.length; x++) {
-              if (names.length > 1) {
-                this.menuLst.push( 
-                  {
-                    id : data.menu[x].id,
-                    name : names[1],
-                    typeRight : data.menu[x].typeRight 
-                  }
-                );
-              }
-              var temp = data.menu[x].name.split("/");
-              if (temp[0] != names[0]) {
-                names = temp;
-              }
-            }; 
-          }*/
-          var model = 
-          {
-            name : "",
-            menu : [],
-            roles : []
-          }
-          var count = -1;
-          if (data.roles.length > 0) {
-            var names = data.roles[0].name.split("/");
-            if (names.length > 1) {
-              model.name = names[0]
-            }
-            for (var x = 0; x < data.roles.length; x++) {
-              var temp = data.roles[x].name.split("/");
-              if (x == (data.roles.length -1) || temp[0] != names[0]) {
-                names = temp;
-                this.rolesLst.push(model);
-                count++;
-                model = 
-                {
-                  name : names[0],
-                  menu : [],
-                  roles : []
-                }
-                model.roles.push( 
-                  {
-                    id : data.roles[x].id,
-                    name : temp[1],
-                    typeRight : data.roles[x].typeRight 
-                  }
-                );
-              }
-              else {
-                if (temp.length > 1) {
-                  model.roles.push( 
-                    {
-                      id : data.roles[x].id,
-                      name : temp[1],
-                      typeRight : data.roles[x].typeRight 
-                    }
-                  );
-                }
-              }
-            } 
-            if (model.name != "") {
-              this.rolesLst[count].roles.push(model.roles[0]);
-            }
-          }
-
-          console.log(this.menuLst);
-          console.log(this.rolesLst);
+          
+          this.extractData(data.roles, this.rolesLst);
         }
         else {
           this.readonly = true;
@@ -174,6 +102,59 @@ export class GroupsEditComponent implements OnInit {
     }).catch( err => {
       dialogRef.close();
     });
+  }
+
+  extractData(data, lstType) {
+    var count = 0;
+    var model = this.createExtractModel("", count);
+    if (data.length > 0) {
+      var names = data[0].name.split("/");
+      if (names.length > 1) {
+        model.name = names[0]
+        this.pushExtractModel(model, 0, "", 0, count);
+      }
+      for (var x = 0; x < data.length; x++) {
+        var temp = data[x].name.split("/");
+        if (x == (data.length -1) || temp[0] != names[0]) {
+          names = temp;
+          lstType.push(model);
+          count++;
+          model = this.createExtractModel( names[0], count);
+          this.pushExtractModel(model, 0, "", 0, count);
+          this.pushExtractModel(model, data[x].id, temp[1], data[x].typeRight, count);
+        }
+        else {
+          if (temp.length > 1) {
+            this.pushExtractModel(model, data[x].id, temp[1], data[x].typeRight, count);
+          }
+        }
+      } 
+      if (model.name != "") {
+        lstType[count-1].lst.push(model.lst[1]);
+      }
+    }
+  }
+
+  createExtractModel(name, group) {
+    var model = 
+    {
+      name : name,
+      group : group,
+      lst : []
+    };
+    return model;
+  }
+
+  pushExtractModel(model, id, name, typeRight, group) {
+    model.lst.push( 
+      {
+        id : id,
+        group : group,
+        name : name,
+        typeRight : typeRight,
+        status : 0,
+      }
+    );
   }
 
   doNew() {
@@ -278,6 +259,11 @@ export class GroupsEditComponent implements OnInit {
   }
 
   doNuevo() {
-   
+  }
+
+  doToogle() {
+    if (!this.newForm.get('typeData').value) {
+      this.viewRoles = true;
+    }
   }
 }

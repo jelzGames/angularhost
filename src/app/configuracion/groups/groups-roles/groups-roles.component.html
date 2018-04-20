@@ -1,0 +1,24 @@
+
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let res of resultLst">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{res.name}}
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div *ngFor="let reslst of res.lst">
+      <div class="displayExpandContent" >
+          <div class="displayExpandContent50" >
+                {{reslst.name}}
+          </div>
+          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="!isDelete">
+              <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" >
+                  <mat-icon>lock_outline</mat-icon>
+              </button>
+          </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+  

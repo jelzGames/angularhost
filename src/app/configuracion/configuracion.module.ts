@@ -18,6 +18,8 @@ import { MenuResultComponent } from './menu/menu-result/menu-result.component';
 import { GroupsEditComponent } from './groups/groups-edit/groups-edit.component';
 import { GroupsFiltroComponent } from './groups/groups-filtro/groups-filtro.component';
 import { GroupsResultComponent } from './groups/groups-result/groups-result.component';
+import { GroupsRolesComponent } from './groups/groups-roles/groups-roles.component';
+
 
 
 @NgModule({
@@ -31,6 +33,6 @@ import { GroupsResultComponent } from './groups/groups-result/groups-result.comp
     ConfiguracionRoutingModule
   ],
   declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent, MenuComponent, 
-    MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent]
+    MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent, GroupsRolesComponent]
 })
 export class ConfiguracionModule { }

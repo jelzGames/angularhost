@@ -27,20 +27,16 @@
                 </div>
                 <div class="pb-1">
                     <div class="can-toggle demo-rebrand-1">
-                        <input id="d" type="checkbox" formControlName="typeData">
+                        <input id="d" type="checkbox" formControlName="typeData" (click)='doToogle()'>
                         <label for="d">
                             <div class="can-toggle__switch" data-checked="Web" data-unchecked="Menu"></div>
                         </label>
                     </div>
                 </div> 
-                <div class="pb-1">
-                    <button type="button" mat-mini-fab color="warn" class="mr-1 pull-right" (click)='doNuevo()'>
-                    <mat-icon>add</mat-icon>
-                    </button>
-                </div>
-            </div>
+             </div>
         </div>
     </form>
+    <app-groups-roles *ngIf="viewRoles" [rolesLst]="rolesLst" ></app-groups-roles>
 </mat-card>
   
 <div class="floatButton" *ngIf="!readonly">
@@ -48,6 +44,8 @@
         <mat-icon>save</mat-icon>
     </button>
 </div>
+
+
 
 
     

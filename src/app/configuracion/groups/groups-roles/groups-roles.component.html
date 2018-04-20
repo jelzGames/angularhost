@@ -13,7 +13,17 @@
           </div>
           <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="!isDelete">
               <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" >
-                  <mat-icon>lock_outline</mat-icon>
+                  <mat-icon>remove</mat-icon>
+              </button>
+          </div>
+          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="!isDelete">
+              <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" >
+                  <mat-icon>done</mat-icon>
+              </button>
+          </div>
+          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="!isDelete">
+              <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" >
+                  <mat-icon>clear</mat-icon>
               </button>
           </div>
       </div>

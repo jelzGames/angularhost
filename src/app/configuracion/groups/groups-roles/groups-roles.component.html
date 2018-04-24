@@ -11,18 +11,18 @@
           <div class="displayExpandContent50" >
                 {{reslst.name}}
           </div>
-          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="!isDelete">
-              <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" >
+          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="reslst.typeRight == 0">
+              <button type="button" mat-mini-fab color="accent" (click)="changeStatus(reslst, res);" >
                   <mat-icon>remove</mat-icon>
               </button>
           </div>
-          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="!isDelete">
-              <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" >
+          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="reslst.typeRight == 1">
+              <button type="button" mat-mini-fab color="primary" (click)="changeStatus( reslst, res);" >
                   <mat-icon>done</mat-icon>
               </button>
           </div>
-          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="!isDelete">
-              <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" >
+          <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="reslst.typeRight == 2">
+              <button type="button" mat-mini-fab color="warn" (click)="changeStatus(reslst, res);" >
                   <mat-icon>clear</mat-icon>
               </button>
           </div>

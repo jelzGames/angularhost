@@ -13,4 +13,23 @@ export class GroupsRolesComponent implements OnInit {
   ngOnInit() {
   }
 
+  changeStatus(res, resLst) {
+    if (res.typeRight == 0) {
+      res.typeRight = 1;
+    }
+    else if (res.typeRight == 1) {
+      res.typeRight = 2;
+    }
+    else {
+      res.typeRight = 0;
+    }
+    if (res.name == "") {
+      for (var x = 0; x < resLst.lst.length; x++) {
+        resLst.lst[x].typeRight = res.typeRight;
+      }
+    }
+    else {
+      resLst.lst[0].typeRight = 0;
+    }
+  }
 }

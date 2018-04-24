@@ -152,7 +152,7 @@ export class GroupsEditComponent implements OnInit {
         group : group,
         name : name,
         typeRight : typeRight,
-        status : 0,
+        typeOriginal : typeRight
       }
     );
   }

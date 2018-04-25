@@ -36,7 +36,7 @@
              </div>
         </div>
     </form>
-    <app-groups-roles *ngIf="viewRoles" [rolesLst]="rolesLst" ></app-groups-roles>
+    <app-groups-roles *ngIf="viewRoles" [rolesLst]="rolesLst" [editQuery]="editQuery"></app-groups-roles>
 </mat-card>
   
 <div class="floatButton" *ngIf="!readonly">

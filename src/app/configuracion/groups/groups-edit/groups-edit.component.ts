@@ -83,7 +83,7 @@ export class GroupsEditComponent implements OnInit {
       if (data != null ) {
         if (data.name != undefined) {
           this.newForm.controls['name'].setValue(data.name);
-          if (this.editQuery == 0) {
+          if (this.editQuery == 1) {
             this.newForm.controls['name'].disable();
             this.readonly = true;
           }
@@ -92,6 +92,9 @@ export class GroupsEditComponent implements OnInit {
           }
           
           this.extractData(data.roles, this.rolesLst);
+          if (this.id != "0") {
+            this.reorderModel();
+          }
         }
         else {
           this.readonly = true;
@@ -111,7 +114,7 @@ export class GroupsEditComponent implements OnInit {
       var names = data[0].name.split("/");
       if (names.length > 1) {
         model.name = names[0]
-        this.pushExtractModel(model, 0, "", 0, count);
+        this.pushExtractModel(model, 0, "", 0, count, 0);
       }
       for (var x = 0; x < data.length; x++) {
         var temp = data[x].name.split("/");
@@ -120,12 +123,12 @@ export class GroupsEditComponent implements OnInit {
           lstType.push(model);
           count++;
           model = this.createExtractModel( names[0], count);
-          this.pushExtractModel(model, 0, "", 0, count);
-          this.pushExtractModel(model, data[x].id, temp[1], data[x].typeRight, count);
+          this.pushExtractModel(model, 0, "", 0, count, 0);
+          this.pushExtractModel(model, data[x].id, temp[1], data[x].typeRight, count, data[x].isEdit);
         }
         else {
           if (temp.length > 1) {
-            this.pushExtractModel(model, data[x].id, temp[1], data[x].typeRight, count);
+            this.pushExtractModel(model, data[x].id, temp[1], data[x].typeRight, count, data[x].isEdit);
           }
         }
       } 
@@ -145,16 +148,30 @@ export class GroupsEditComponent implements OnInit {
     return model;
   }
 
-  pushExtractModel(model, id, name, typeRight, group) {
+  pushExtractModel(model, id, name, typeRight, group, isEdit) {
     model.lst.push( 
       {
         id : id,
         group : group,
         name : name,
         typeRight : typeRight,
-        typeOriginal : typeRight
+        typeOriginal : typeRight,
+        isEdit : isEdit
       }
     );
+  }
+
+  reorderModel() {
+    for (var x = 0; x < this.rolesLst.length; x++) {
+      var type = this.rolesLst[x].lst[1].typeRight;
+      for (var y = 2; y < this.rolesLst[x].lst.length; y++) {
+        if (this.rolesLst[x].lst[y].typeRight != type) {
+          type = 0;
+          break;
+        }
+      }
+      this.rolesLst[x].lst[0].typeRight = type;
+    }
   }
 
   doNew() {
@@ -175,9 +192,24 @@ export class GroupsEditComponent implements OnInit {
     var model = {
       id : id,
       name : this.newForm.get('name').value,
-  };
-
-    return model;
+      roles : []
+    };
+    for (var x = 0; x < this.rolesLst.length; x++) {
+      for (var y = 0; y < this.rolesLst[x].lst.length; y++) {
+        if (this.rolesLst[x].lst[y].id != 0) {
+          if (this.rolesLst[x].lst[y].typeRight != this.rolesLst[x].lst[y].typeOriginal) {
+            model.roles.push( 
+              {
+                idrole : this.rolesLst[x].lst[y].id,
+                typeright : this.rolesLst[x].lst[y].typeRight,
+                isedit : this.rolesLst[x].lst[y].isEdit
+              }
+            );
+          }
+        }
+      }
+    }
+   return model;
   }
 
   createSpinner() {
@@ -244,7 +276,6 @@ export class GroupsEditComponent implements OnInit {
 
     }
   }
-
 
   doConsulta(id) {
     if (id == undefined) {

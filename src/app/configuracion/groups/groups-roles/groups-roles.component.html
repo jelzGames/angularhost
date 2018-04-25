@@ -12,17 +12,17 @@
                 {{reslst.name}}
           </div>
           <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="reslst.typeRight == 0">
-              <button type="button" mat-mini-fab color="accent" (click)="changeStatus(reslst, res);" >
+              <button type="button" mat-mini-fab color="accent" (click)="changeStatus(reslst, res);" [class.cursorpointer]="editQuery == 1">
                   <mat-icon>remove</mat-icon>
               </button>
           </div>
           <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="reslst.typeRight == 1">
-              <button type="button" mat-mini-fab color="primary" (click)="changeStatus( reslst, res);" >
+              <button type="button" mat-mini-fab color="primary" (click)="changeStatus( reslst, res);" [class.cursorpointer]="editQuery == 1">
                   <mat-icon>done</mat-icon>
               </button>
           </div>
           <div class="displayExpandContent50 mat-expansion-panel-body-mat" *ngIf="reslst.typeRight == 2">
-              <button type="button" mat-mini-fab color="warn" (click)="changeStatus(reslst, res);" >
+              <button type="button" mat-mini-fab color="warn" (click)="changeStatus(reslst, res);"  [class.cursorpointer]="editQuery == 1">
                   <mat-icon>clear</mat-icon>
               </button>
           </div>

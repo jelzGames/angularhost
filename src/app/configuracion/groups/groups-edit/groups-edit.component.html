@@ -36,6 +36,7 @@
              </div>
         </div>
     </form>
+    <app-groups-menu *ngIf="viewMenu" [menuLst]="menuLst" [editQuery]="editQuery"></app-groups-menu>
     <app-groups-roles *ngIf="viewRoles" [rolesLst]="rolesLst" [editQuery]="editQuery"></app-groups-roles>
 </mat-card>
   

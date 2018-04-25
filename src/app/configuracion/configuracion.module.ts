@@ -19,6 +19,7 @@ import { GroupsEditComponent } from './groups/groups-edit/groups-edit.component'
 import { GroupsFiltroComponent } from './groups/groups-filtro/groups-filtro.component';
 import { GroupsResultComponent } from './groups/groups-result/groups-result.component';
 import { GroupsRolesComponent } from './groups/groups-roles/groups-roles.component';
+import { GroupsMenuComponent } from './groups/groups-menu/groups-menu.component';
 
 
 
@@ -33,6 +34,6 @@ import { GroupsRolesComponent } from './groups/groups-roles/groups-roles.compone
     ConfiguracionRoutingModule
   ],
   declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent, MenuComponent, 
-    MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent, GroupsRolesComponent]
+    MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent, GroupsRolesComponent, GroupsMenuComponent]
 })
 export class ConfiguracionModule { }

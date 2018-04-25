@@ -24,6 +24,7 @@ export class GroupsEditComponent implements OnInit {
   interval;
  
   viewRoles = false;
+  viewMenu = false;
 
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
@@ -91,6 +92,7 @@ export class GroupsEditComponent implements OnInit {
             this.readonly = false;
           }
           
+          this.extractData(data.menu, this.menuLst);
           this.extractData(data.roles, this.rolesLst);
           if (this.id != "0") {
             this.reorderModel();
@@ -100,6 +102,7 @@ export class GroupsEditComponent implements OnInit {
           this.readonly = true;
         }
       }
+      this.viewMenu = true;
       dialogRef.close();
       
     }).catch( err => {
@@ -294,7 +297,13 @@ export class GroupsEditComponent implements OnInit {
 
   doToogle() {
     if (!this.newForm.get('typeData').value) {
+      this.viewMenu = false;
       this.viewRoles = true;
     }
+    else {
+      this.viewRoles = false;
+      this.viewMenu = true;
+    }
   }
+
 }

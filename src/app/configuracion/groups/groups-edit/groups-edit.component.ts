@@ -92,11 +92,12 @@ export class GroupsEditComponent implements OnInit {
             this.readonly = false;
           }
           
-          this.extractData(data.menu, this.menuLst);
-          this.extractData(data.roles, this.rolesLst);
+          this.extractData(data.menu, this.menuLst, 0);
+          this.extractData(data.roles, this.rolesLst, 1);
           if (this.id != "0") {
             this.reorderModel();
           }
+          console.log(this.menuLst);
         }
         else {
           this.readonly = true;
@@ -110,14 +111,14 @@ export class GroupsEditComponent implements OnInit {
     });
   }
 
-  extractData(data, lstType) {
+  extractData(data, lstType, typeModel) {
     var count = 0;
     var model = this.createExtractModel("", count);
     if (data.length > 0) {
       var names = data[0].name.split("/");
       if (names.length > 1) {
         model.name = names[0]
-        this.pushExtractModel(model, 0, "", 0, count, 0);
+        this.pushExtractModel(model,this.createHeaderModel(typeModel, 1), "", typeModel);
       }
       for (var x = 0; x < data.length; x++) {
         var temp = data[x].name.split("/");
@@ -126,12 +127,12 @@ export class GroupsEditComponent implements OnInit {
           lstType.push(model);
           count++;
           model = this.createExtractModel( names[0], count);
-          this.pushExtractModel(model, 0, "", 0, count, 0);
-          this.pushExtractModel(model, data[x].id, temp[1], data[x].typeRight, count, data[x].isEdit);
+          this.pushExtractModel(model, this.createHeaderModel(typeModel, 1), "", typeModel);
+          this.pushExtractModel(model, data[x], temp[1], typeModel);
         }
         else {
           if (temp.length > 1) {
-            this.pushExtractModel(model, data[x].id, temp[1], data[x].typeRight, count, data[x].isEdit);
+            this.pushExtractModel(model, data[x], temp[1], typeModel);
           }
         }
       } 
@@ -151,17 +152,53 @@ export class GroupsEditComponent implements OnInit {
     return model;
   }
 
-  pushExtractModel(model, id, name, typeRight, group, isEdit) {
-    model.lst.push( 
-      {
-        id : id,
-        group : group,
-        name : name,
-        typeRight : typeRight,
-        typeOriginal : typeRight,
-        isEdit : isEdit
-      }
-    );
+  createHeaderModel(typeModel, isEdit) {
+    var temp = {
+      id : 0,
+      name : "",
+      isEdit : isEdit
+    };
+    if (typeModel == 0) {
+      temp['header'] = 1;
+      temp['isquery'] = 0;
+      temp['isqueryOriginal'] = 0;
+      temp['isnew'] = 0;
+      temp['isnewdOriginal'] = 0;
+      temp['iseditField'] = 0;
+      temp['iseditFielddOriginal'] = 0;
+      temp['isdelete'] = 0;
+      temp['isdeleteOriginal'] = 0;
+    }
+    else {
+      temp['typeRight'] = 0;
+      temp['typeOriginal'] = 0;
+    }
+    return  temp;
+  }
+
+  pushExtractModel(model, data, name, typeModel) {
+    var temp = {
+      id : data.id,
+      name : name,
+      isEdit : data.isEdit
+    };
+    if (typeModel == 0) {
+      temp['header'] = 0;
+      temp['isquery'] = data.isquery;
+      temp['isqueryOriginal'] = data.isquery;
+      temp['isnew'] = data.isnew;
+      temp['isnewdOriginal'] = data.isnew;
+      temp['iseditField'] = data.iseditField;
+      temp['iseditFielddOriginal'] = data.iseditField;
+      temp['isdelete'] = data.isdelete;
+      temp['isdeleteOriginal'] = data.isdelete;
+    }
+    else {
+      temp['typeRight'] = data.typeRight;
+      temp['typeOriginal'] = data.typeRight;
+    }
+
+    model.lst.push(temp);
   }
 
   reorderModel() {

@@ -97,7 +97,6 @@ export class GroupsEditComponent implements OnInit {
           if (this.id != "0") {
             this.reorderModel();
           }
-          console.log(this.menuLst);
         }
         else {
           this.readonly = true;
@@ -118,7 +117,10 @@ export class GroupsEditComponent implements OnInit {
       var names = data[0].name.split("/");
       if (names.length > 1) {
         model.name = names[0]
-        this.pushExtractModel(model,this.createHeaderModel(typeModel, 1), "", typeModel);
+        if (typeModel == 0) {
+          this.pushExtractModel(model,this.createHeaderModel(typeModel, 0, 1), "", typeModel);
+        }
+        this.pushExtractModel(model,this.createHeaderModel(typeModel, 1, 0), "", typeModel);
       }
       for (var x = 0; x < data.length; x++) {
         var temp = data[x].name.split("/");
@@ -127,7 +129,10 @@ export class GroupsEditComponent implements OnInit {
           lstType.push(model);
           count++;
           model = this.createExtractModel( names[0], count);
-          this.pushExtractModel(model, this.createHeaderModel(typeModel, 1), "", typeModel);
+          if (typeModel == 0) {
+            this.pushExtractModel(model,this.createHeaderModel(typeModel, 0, 1), "", typeModel);
+          }
+          this.pushExtractModel(model, this.createHeaderModel(typeModel, 1, 0), "", typeModel);
           this.pushExtractModel(model, data[x], temp[1], typeModel);
         }
         else {
@@ -137,7 +142,12 @@ export class GroupsEditComponent implements OnInit {
         }
       } 
       if (model.name != "") {
-        lstType[count-1].lst.push(model.lst[1]);
+        if (typeModel == 1) {
+          lstType[count-1].lst.push(model.lst[1]);
+        }
+        else {
+          lstType[count-1].lst.push(model.lst[2]);
+        }
       }
     }
   }
@@ -152,14 +162,14 @@ export class GroupsEditComponent implements OnInit {
     return model;
   }
 
-  createHeaderModel(typeModel, isEdit) {
+  createHeaderModel(typeModel, isEdit, header) {
     var temp = {
       id : 0,
       name : "",
       isEdit : isEdit
     };
     if (typeModel == 0) {
-      temp['header'] = 1;
+      temp['header'] = header;
       temp['isquery'] = 0;
       temp['isqueryOriginal'] = 0;
       temp['isnew'] = 0;
@@ -183,7 +193,12 @@ export class GroupsEditComponent implements OnInit {
       isEdit : data.isEdit
     };
     if (typeModel == 0) {
-      temp['header'] = 0;
+      if (data.header == undefined) {
+        temp['header'] = 0;
+      }
+      else {
+        temp['header'] = data.header;
+      }
       temp['isquery'] = data.isquery;
       temp['isqueryOriginal'] = data.isquery;
       temp['isnew'] = data.isnew;
@@ -197,7 +212,6 @@ export class GroupsEditComponent implements OnInit {
       temp['typeRight'] = data.typeRight;
       temp['typeOriginal'] = data.typeRight;
     }
-
     model.lst.push(temp);
   }
 

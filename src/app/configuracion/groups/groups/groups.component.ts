@@ -128,4 +128,67 @@ export class GroupsComponent implements OnInit {
     
     //doc.save('Test.pdf');
   }
+
+    
+  template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+  uri = 'data:application/vnd.ms-excel;base64,';
+  interval;
+
+  doExcel() {
+    var exportHref = this.tableToExcel('WireWorkbenchDataExport');
+    this.interval = setInterval( () => { 
+      clearInterval(this.interval);
+      location.href = exportHref;
+     },100);
+  }
+
+  tableToExcel(worksheetName) {
+    
+    var table =  
+      '<table border="1">' +
+        '<thead>' +
+          '<tr class="table-header">' +
+            '<th>Team</th>' +
+            '<th>Process Type</th>' +
+            '<th>Cedent</th>' +
+          '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+          '<tr>' +
+            '<td>value 1</td>' +
+            '<td>value 2</td>' +
+            '<td>value 3</td>' +
+          '</tr>' +
+          '<tr>' +
+            '<td>value 4</td>' +
+            '<td>value 5</td>' +
+            '<td>value 6</td>' +
+          '</tr>' +
+          '<tr>' +
+            '<td>10.12.2015</td>' +
+            '<td>AXA Affin</td>' +
+            '<td>101024 - Quota Share QS</td>' +
+          '</tr>' +
+        '</tbody>' +
+      '</table>';
+   
+    var elem = document.createElement("div"); 
+    elem.innerHTML = table;
+    var ctx = {
+      worksheet : worksheetName, 
+      table : elem.innerHTML
+    }
+
+    var href = this.uri + this.base64(this.format(this.template,ctx));
+    return href;
+  }
+
+  base64(s) {
+    return btoa(s);
+  }
+
+  format(s,c) {
+    return s.replace(/{(\w+)}/g,function(m,p){return c[p];})
+  };
+    
 }

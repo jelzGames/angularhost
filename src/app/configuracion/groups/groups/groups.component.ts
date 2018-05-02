@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material';
 import { WebservicesService } from '../../../services/webservices.service';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { GroupsEditComponent } from '../groups-edit/groups-edit.component';
+import * as jsPDF from 'jspdf'
 
 @Component({
   selector: 'app-groups',
@@ -114,5 +115,17 @@ export class GroupsComponent implements OnInit {
     this.viewFilter = false;
   }
 
-
+  doReport() {
+    let doc = new jsPDF();
+    doc.text(20,20,'Hello world');
+    var img = new Image;
+    img.onload = function() {
+      doc.addImage(this, 30, 30, 5, 5);
+      doc.save("test.pdf");
+    };
+    img.crossOrigin = "";  // for demo as we are at different origin than image
+    img.src = "assets/icons/avatars.svg";  // some random imgur image
+    
+    //doc.save('Test.pdf');
+  }
 }

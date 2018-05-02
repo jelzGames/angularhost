@@ -34,3 +34,8 @@ npm install -g yarn
 https://material.angular.io
 https://google.github.io/material-design-icons
 https://tburleson-layouts-demos.firebaseapp.com/#/docs
+
+## jspdf
+https://rawgit.com/MrRio/jsPDF/master/docs/
+npm install --save jspdf
+npm install typings --global

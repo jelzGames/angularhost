@@ -37,6 +37,7 @@ import { ModalspinnerComponent } from './modalspinner/modalspinner.component';
 import { ModalsaveComponent } from './modalsave/modalsave.component';
 
 
+
 @NgModule({
   imports: [
     MatAutocompleteModule,
@@ -70,7 +71,7 @@ import { ModalsaveComponent } from './modalsave/modalsave.component';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   exports: [
     MatAutocompleteModule,

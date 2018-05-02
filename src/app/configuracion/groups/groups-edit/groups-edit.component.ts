@@ -226,6 +226,41 @@ export class GroupsEditComponent implements OnInit {
       }
       this.rolesLst[x].lst[0].typeRight = type;
     }
+    for (var x = 0; x < this.menuLst.length; x++) {
+      var typer = this.menuLst[x].lst[2].isquery;
+      var typen = this.menuLst[x].lst[2].isnew;
+      var typee = this.menuLst[x].lst[2].iseditField;
+      var typed = this.menuLst[x].lst[2].isdelete;
+      for (var y = 3; y < this.menuLst[x].lst.length; y++) {
+        var flagr = false;
+        var flagn = false;
+        var flage = false;
+        var flagd = false;
+        if (this.menuLst[x].lst[y].isquery != typer) {
+          typer = 0;
+          flagr = true;
+        }
+        if (this.menuLst[x].lst[y].isnew != typen) {
+          typen = 0;
+          flagn = true;
+        }
+        if (this.menuLst[x].lst[y].iseditField != typee) {
+          typee = 0;
+          flage = true;
+        }
+        if (this.menuLst[x].lst[y].isdelete != typed) {
+          typed = 0;
+          flagd = true;
+        }
+        if (flagr && flagn && flage && flagd) {
+          break;
+        }
+      }
+      this.menuLst[x].lst[1].isquery = typer;
+      this.menuLst[x].lst[1].isnew = typen;
+      this.menuLst[x].lst[1].iseditField = typee;
+      this.menuLst[x].lst[1].isdelete = typed;
+    }
   }
 
   doNew() {
@@ -246,6 +281,7 @@ export class GroupsEditComponent implements OnInit {
     var model = {
       id : id,
       name : this.newForm.get('name').value,
+      menu : [],
       roles : []
     };
     for (var x = 0; x < this.rolesLst.length; x++) {
@@ -263,7 +299,30 @@ export class GroupsEditComponent implements OnInit {
         }
       }
     }
-   return model;
+
+    for (var x = 0; x < this.menuLst.length; x++) {
+      for (var y = 0; y < this.menuLst[x].lst.length; y++) {
+        if (this.menuLst[x].lst[y].id != 0) {
+          if (this.menuLst[x].lst[y].isquery != this.menuLst[x].lst[y].isqueryOriginal ||
+            this.menuLst[x].lst[y].isnew != this.menuLst[x].lst[y].isnewOriginal ||
+            this.menuLst[x].lst[y].iseditField != this.menuLst[x].lst[y].iseditFieldOriginal ||
+            this.menuLst[x].lst[y].isdelete != this.menuLst[x].lst[y].isdeleteOriginal) {
+            model.menu.push( 
+              {
+                idmenu : this.menuLst[x].lst[y].id,
+                isquery : this.menuLst[x].lst[y].isquery,
+                isnew : this.menuLst[x].lst[y].isnew,
+                iseditField : this.menuLst[x].lst[y].iseditField,
+                isdelete : this.menuLst[x].lst[y].isdelete,
+                isedit : this.menuLst[x].lst[y].isEdit
+              }
+            );
+          }
+        }
+      }
+    }
+    
+    return model;
   }
 
   createSpinner() {

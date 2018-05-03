@@ -20,6 +20,10 @@ import { GroupsFiltroComponent } from './groups/groups-filtro/groups-filtro.comp
 import { GroupsResultComponent } from './groups/groups-result/groups-result.component';
 import { GroupsRolesComponent } from './groups/groups-roles/groups-roles.component';
 import { GroupsMenuComponent } from './groups/groups-menu/groups-menu.component';
+import { UsuariosComponent } from './usuarios/usuarios/usuarios.component';
+import { UsuariosResultComponent } from './usuarios/usuarios-result/usuarios-result.component';
+import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-filtro.component';
+import { UsuariosEditComponent } from './usuarios/usuarios-edit/usuarios-edit.component';
 
 
 
@@ -34,6 +38,7 @@ import { GroupsMenuComponent } from './groups/groups-menu/groups-menu.component'
     ConfiguracionRoutingModule
   ],
   declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent, MenuComponent, 
-    MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent, GroupsRolesComponent, GroupsMenuComponent]
+    MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent, 
+    GroupsRolesComponent, GroupsMenuComponent, UsuariosComponent, UsuariosResultComponent, UsuariosFiltroComponent, UsuariosEditComponent]
 })
 export class ConfiguracionModule { }

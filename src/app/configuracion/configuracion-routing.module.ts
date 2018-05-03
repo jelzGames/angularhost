@@ -3,11 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReglasComponent } from './reglas/reglas/reglas.component';
 import { MenuComponent } from './menu/menu/menu.component';
 import { GroupsComponent } from './groups/groups/groups.component';
+import { UsuariosComponent } from './usuarios/usuarios/usuarios.component';
 
 const routes: Routes = [
   { path: 'Reglas', component: ReglasComponent },
   { path: 'Menu', component: MenuComponent },
-  { path: 'Grupos', component: GroupsComponent }
+  { path: 'Grupos', component: GroupsComponent },
+  { path: 'Usuarios', component: UsuariosComponent }
 ];
 
 

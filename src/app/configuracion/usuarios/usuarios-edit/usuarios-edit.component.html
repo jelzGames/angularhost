@@ -62,10 +62,7 @@
                   </mat-form-field>
                 </div>
                 <div class="pb-1">
-                  <br/>
-                  <button type="button" mat-mini-fab color="primary" style="bottom: 35px;" (click)='showConfirmacion()'>
-                      <mat-icon>add_a_photo</mat-icon>
-                  </button>
+                    <input type="file" ng2FileSelect [uploader]="uploader" (change)="onFileSelected($event)"/>
                 </div>
                 <div class="pb-1">
                   <!--

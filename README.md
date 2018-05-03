@@ -39,3 +39,7 @@ https://tburleson-layouts-demos.firebaseapp.com/#/docs
 https://rawgit.com/MrRio/jsPDF/master/docs/
 npm install --save jspdf
 npm install typings --global
+
+## dialog
+https://github.com/valor-software/ng2-file-upload
+https://scotch.io/tutorials/angular-file-uploads-with-an-express-backend

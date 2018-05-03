@@ -5,6 +5,9 @@ import { WebservicesService } from '../../../services/webservices.service';
 import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
+import { FileUploader } from 'ng2-file-upload';
+
+const URL = '';
 
 @Component({
   selector: 'app-usuarios-edit',
@@ -418,6 +421,22 @@ export class UsuariosEditComponent implements OnInit {
       this.viewRoles = false;
       this.viewMenu = true;
     }
+  }
+ 
+  uploader:FileUploader = new FileUploader({url: URL});
+  hasBaseDropZoneOver:boolean = false;
+  hasAnotherDropZoneOver:boolean = false;
+ 
+  fileOverBase(e:any):void {
+    this.hasBaseDropZoneOver = e;
+  }
+ 
+  fileOverAnother(e:any):void {
+    this.hasAnotherDropZoneOver = e;
+  }
+
+  onFileSelected(e) {
+    console.log(this.uploader);
   }
 
 }

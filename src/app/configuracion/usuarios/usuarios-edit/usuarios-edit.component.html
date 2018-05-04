@@ -62,13 +62,11 @@
                   </mat-form-field>
                 </div>
                 <div class="pb-1">
-                    <input type="file" ng2FileSelect [uploader]="uploader" (change)="onFileSelected($event)"/>
-                </div>
-                <div class="pb-1">
-                  <!--
-                  <mat-form-field class="full-width">
-                      <img ng-src="data:image/JPEG;base64,{{image}}">
-                  </mat-form-field>-->
+                    <img [src]="_DomSanitizer.bypassSecurityTrustUrl(file)" width="100" height="100" style="float: left;" />
+                    <label class="fileContainer">
+                        <mat-icon>add_a_photo</mat-icon>
+                        <input  type="file" ngf-select ngf-pattern="'image/*'"accept="image/*" ngf-max-size="2MB" (change)="onFileSelected($event)" />
+                    </label>
                 </div>
              </div>
         </div>

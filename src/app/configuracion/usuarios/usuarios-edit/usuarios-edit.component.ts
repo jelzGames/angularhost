@@ -5,7 +5,7 @@ import { WebservicesService } from '../../../services/webservices.service';
 import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
-import { FileUploader } from 'ng2-file-upload';
+import { DomSanitizer } from '@angular/platform-browser';
 
 const URL = '';
 
@@ -28,11 +28,15 @@ export class UsuariosEditComponent implements OnInit {
   viewRoles = false;
   viewMenu = false;
 
+  imageRaw;
+  file = "";
+ 
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
+  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar,
+    public _DomSanitizer: DomSanitizer,) { }
 
   ngOnInit() {
     this.newForm = this.fb.group ({
@@ -43,7 +47,6 @@ export class UsuariosEditComponent implements OnInit {
       colonia : new FormControl('', [ CharacterLimit('name', 256)  ] ),
       ciudad : new FormControl('', [ CharacterLimit('name', 256)  ] ),
       tel : new FormControl('', [ CharacterLimit('name', 128)  ] ),
-      photo : new FormControl('', ),
     });
    
     if (this.id == "0") {
@@ -401,9 +404,14 @@ export class UsuariosEditComponent implements OnInit {
     if (id == undefined) {
       this.typeOperation = -1;
     }
+    var name = this.newForm.get('firstname').value + this.newForm.get('lastname').value;
+    if (this.newForm.get('firstname').value == "" && this.newForm.get('firstname').value == "")  {
+      var name = this.newForm.get('email').value;
+    }
     var model = {
       id : id,
-      name : this.newForm.get('name').value,
+      email : this.newForm.get('email').value,
+      name : name,
       typeOperation : this.typeOperation
     }
     this.onSearch.emit(model);
@@ -423,20 +431,12 @@ export class UsuariosEditComponent implements OnInit {
     }
   }
  
-  uploader:FileUploader = new FileUploader({url: URL});
-  hasBaseDropZoneOver:boolean = false;
-  hasAnotherDropZoneOver:boolean = false;
- 
-  fileOverBase(e:any):void {
-    this.hasBaseDropZoneOver = e;
-  }
- 
-  fileOverAnother(e:any):void {
-    this.hasAnotherDropZoneOver = e;
-  }
-
   onFileSelected(e) {
-    console.log(this.uploader);
+    var reader = new FileReader();
+    reader.onload = (event:any) => {
+     this.file = event.target.result;
+    }
+    reader.readAsDataURL(e.srcElement.files[0]);
   }
 
 }

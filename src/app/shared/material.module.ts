@@ -35,9 +35,6 @@ import {
 } from '@angular/material';
 import { ModalspinnerComponent } from './modalspinner/modalspinner.component';
 import { ModalsaveComponent } from './modalsave/modalsave.component';
-import { FileUploadModule } from 'ng2-file-upload';
-
-
 
 @NgModule({
   imports: [
@@ -73,7 +70,6 @@ import { FileUploadModule } from 'ng2-file-upload';
     MatTabsModule,
     MatToolbarModule,
     MatDividerModule,
-    FileUploadModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -109,7 +105,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     MatToolbarModule,
     ModalspinnerComponent,
     MatDividerModule,
-    FileUploadModule
+ 
   ],
   declarations: [ ModalspinnerComponent, ModalsaveComponent ],
   entryComponents: [ ModalspinnerComponent, ModalsaveComponent ]

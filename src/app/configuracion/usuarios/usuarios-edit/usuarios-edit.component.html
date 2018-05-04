@@ -21,10 +21,23 @@
             <div fxFlex="100" fxFlex.gt-xs="100" class="pr-1">
                 <div class="pb-1">
                   <mat-form-field class="full-width">
-                      <input matInput type="text" formControlName="email" placeholder="Correo*" 
+                      <input matInput type="email" formControlName="email" placeholder="Correo*" 
                           autocomplete="off" [ngClass]="{'error': isValid('email')}" />
                   </mat-form-field>
                 </div>
+                <div class="pb-1">
+                    <mat-form-field class="full-width">
+                        <input matInput type="password" formControlName="password" placeholder="Contraseña"  
+                        autocomplete="off" [ngClass]="{'error': isValid('password')}" />
+                    </mat-form-field>
+                </div>
+                <div class="pb-1">
+                    <mat-form-field class="full-width">
+                        <input matInput type="password" formControlName="retry" placeholder="Verifique Contraseña"  
+                            autocomplete="off" [ngClass]="{'error': isValid('retry')}" />
+                    </mat-form-field>
+                </div>
+                <span *ngIf="newForm.errors?.notMatchingPassword" style="color:red">Contraseñas no coinciden</span>
                 <div class="pb-1">
                   <mat-form-field class="full-width">
                       <input matInput type="text" formControlName="firstname" placeholder="Nombre*" 

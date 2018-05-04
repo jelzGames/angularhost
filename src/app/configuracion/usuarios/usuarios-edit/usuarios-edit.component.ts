@@ -40,15 +40,17 @@ export class UsuariosEditComponent implements OnInit {
 
   ngOnInit() {
     this.newForm = this.fb.group ({
-      email : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
+      email : new FormControl('', [ Validators.required, CharacterLimit('name', 256), this.emailValid() ] ),
+      password : new FormControl('', [ this.required(), CharacterLimit('name', 256) ] ),
+      retry : new FormControl('', [ this.required(), CharacterLimit('name', 256) ] ),
       firstname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
       lastname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
       direccion : new FormControl('', [ CharacterLimit('name', 256)  ] ),
       colonia : new FormControl('', [ CharacterLimit('name', 256)  ] ),
       ciudad : new FormControl('', [ CharacterLimit('name', 256)  ] ),
       tel : new FormControl('', [ CharacterLimit('name', 128)  ] ),
-    });
-   
+    },{ validator: this.matchingPassword('password','retry')});
+     
     if (this.id == "0") {
       this.readonly = false;
     }
@@ -358,13 +360,53 @@ export class UsuariosEditComponent implements OnInit {
     });
   }
 
-  riseError(control) {
-    if (this.newForm.controls[control].invalid) {
-        this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
-        return true;
+  matchingPassword(password, retry) {
+    return form => {
+      if (this.id != "0" && form.controls[password].value.trim() == "" && form.controls[retry].value.trim() == "") 
+      {
+      }
+      else if (form.controls[password].value != form.controls[retry].value) {
+          return { notMatchingPassword : true}
+      }
     }
-    return false;
   }
+
+  required() {
+    return control => {
+      if (this.id == "0" && control.value.trim() == "") {
+        return { invalidPassword : true};
+      }
+    }
+  }
+
+  emailValid() {
+    return control => {
+      var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return regex.test(control.value) ? null : { invalidEmail : true};
+    }
+  }
+
+  riseError(control) {
+     var flagInvalid = false;
+     if (this.newForm.controls[control].invalid) {
+        if (this.id != "0" && (control == "password" && this.newForm.controls[control].value.trim() == "")) {
+          flagInvalid = false;
+        }
+        else if (this.id != "0" && (control == "retry" && this.newForm.controls[control].value.trim() == "")) {
+          flagInvalid = false;
+        }
+        else {
+          flagInvalid = true;
+        }
+
+        if (flagInvalid) {
+          this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
+        }
+    }
+    return flagInvalid;
+  }
+
+ 
 
   showConfirmacion() {
     if (!this.newForm.valid) {

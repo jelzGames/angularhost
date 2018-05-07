@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { WebservicesService } from '../../../services/webservices.service';
-import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
+import { CharacterLimit, fuuidv4, CharacterMinumun } from '../../../helpers/text-helpers';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -30,6 +30,8 @@ export class UsuariosEditComponent implements OnInit {
 
   imageRaw;
   file = "";
+
+  notMaching = "Contraseñas no coinciden";
  
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
@@ -39,22 +41,34 @@ export class UsuariosEditComponent implements OnInit {
     public _DomSanitizer: DomSanitizer,) { }
 
   ngOnInit() {
-    this.newForm = this.fb.group ({
-      email : new FormControl('', [ Validators.required, CharacterLimit('name', 256), this.emailValid() ] ),
-      password : new FormControl('', [ this.required(), CharacterLimit('name', 256) ] ),
-      retry : new FormControl('', [ this.required(), CharacterLimit('name', 256) ] ),
-      firstname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
-      lastname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
-      direccion : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-      colonia : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-      ciudad : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-      tel : new FormControl('', [ CharacterLimit('name', 128)  ] ),
-    },{ validator: this.matchingPassword('password','retry')});
+    
      
     if (this.id == "0") {
+      this.newForm = this.fb.group ({
+        email : new FormControl('', [ Validators.required, CharacterLimit('name', 256), this.emailValid() ] ),
+        firstname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
+        lastname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
+        direccion : new FormControl('', [ CharacterLimit('name', 256)  ] ),
+        colonia : new FormControl('', [ CharacterLimit('name', 256)  ] ),
+        ciudad : new FormControl('', [ CharacterLimit('name', 256)  ] ),
+        tel : new FormControl('', [ CharacterLimit('name', 128)  ] ),
+        password : new FormControl('', [ Validators.required, CharacterLimit('name', 256), CharacterMinumun(10) ] ),
+        retry : new FormControl('', [ Validators.required, CharacterLimit('name', 256), CharacterMinumun(10) ] ),
+      },{ validator: this.matchingPassword()});
+
       this.readonly = false;
     }
     else if (this.editQuery == 1) {
+      this.newForm = this.fb.group ({
+        email : new FormControl('', [ Validators.required, CharacterLimit('name', 256), this.emailValid() ] ),
+        firstname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
+        lastname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
+        direccion : new FormControl('', [ CharacterLimit('name', 256)  ] ),
+        colonia : new FormControl('', [ CharacterLimit('name', 256)  ] ),
+        ciudad : new FormControl('', [ CharacterLimit('name', 256)  ] ),
+        tel : new FormControl('', [ CharacterLimit('name', 128)  ] ),
+      });
+
       this.title = "Editar";
       this.typeOperation = 1;
     }
@@ -360,21 +374,10 @@ export class UsuariosEditComponent implements OnInit {
     });
   }
 
-  matchingPassword(password, retry) {
+  matchingPassword() {
     return form => {
-      if (this.id != "0" && form.controls[password].value.trim() == "" && form.controls[retry].value.trim() == "") 
-      {
-      }
-      else if (form.controls[password].value != form.controls[retry].value) {
-          return { notMatchingPassword : true}
-      }
-    }
-  }
-
-  required() {
-    return control => {
-      if (this.id == "0" && control.value.trim() == "") {
-        return { invalidPassword : true};
+     if (form.controls["password"].value != form.controls["retry"].value) {
+        return { notMatchingPassword : true}
       }
     }
   }
@@ -387,36 +390,44 @@ export class UsuariosEditComponent implements OnInit {
   }
 
   riseError(control) {
-     var flagInvalid = false;
-     if (this.newForm.controls[control].invalid) {
-        if (this.id != "0" && (control == "password" && this.newForm.controls[control].value.trim() == "")) {
-          flagInvalid = false;
-        }
-        else if (this.id != "0" && (control == "retry" && this.newForm.controls[control].value.trim() == "")) {
-          flagInvalid = false;
-        }
-        else {
-          flagInvalid = true;
-        }
-
-        if (flagInvalid) {
-          this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
-        }
+    if (this.newForm.controls[control].invalid) {
+      if (control == "email") {
+         control = "correo";
+      }
+      else if (control == "password") {
+        control = "contraseña, minimo 10 caracteres";
+      }
+      else if (control == "retry") {
+        control = "verifique contraseña, minimo 10 caracteres";
+      }
+      else if (control == "firstname") {
+        control = "nombre";
+      }
+      else if (control == "lastname") {
+        control = "apellido";
+      }
+      this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
+      return true;
     }
-    return flagInvalid;
+    return false;
   }
 
  
 
   showConfirmacion() {
     if (!this.newForm.valid) {
-        for (var control in  this.newForm.controls) {
-            if (this.riseError(control)) {
-                break;
-            }
-        }
+      var flag = false;
+      for (var control in  this.newForm.controls) {
+          if (this.riseError(control)) {
+              flag = true;
+              break;
+          }
+      }
+      if (!flag) {
+        this.snack.open(this.notMaching , "Aceptar", { duration: 2000 });
+      }
     }
-    else  {
+    else {
       let dialogRef = this.dialog.open(ModalsaveComponent,  {
         width: '250px',
         data: { answer: true }
@@ -428,14 +439,14 @@ export class UsuariosEditComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result != undefined) {
           if (this.id == '0') {
-            this.doNew();
+            //this.doNew();
           }
           else {
-            this.doUpdate();
+            //this.doUpdate();
           }
         }
         else {
-          this.doConsulta(undefined);
+          //this.doConsulta(undefined);
         }
       });
 

@@ -26,19 +26,6 @@
                   </mat-form-field>
                 </div>
                 <div class="pb-1">
-                    <mat-form-field class="full-width">
-                        <input matInput type="password" formControlName="password" placeholder="Contraseña"  
-                        autocomplete="off" [ngClass]="{'error': isValid('password')}" />
-                    </mat-form-field>
-                </div>
-                <div class="pb-1">
-                    <mat-form-field class="full-width">
-                        <input matInput type="password" formControlName="retry" placeholder="Verifique Contraseña"  
-                            autocomplete="off" [ngClass]="{'error': isValid('retry')}" />
-                    </mat-form-field>
-                </div>
-                <span *ngIf="newForm.errors?.notMatchingPassword" style="color:red">Contraseñas no coinciden</span>
-                <div class="pb-1">
                   <mat-form-field class="full-width">
                       <input matInput type="text" formControlName="firstname" placeholder="Nombre*" 
                           autocomplete="off" [ngClass]="{'error': isValid('firstname')}" />
@@ -75,13 +62,26 @@
                   </mat-form-field>
                 </div>
                 <div class="pb-1">
-                    <img [src]="_DomSanitizer.bypassSecurityTrustUrl(file)" width="100" height="100" style="float: left;" />
-                    <label class="fileContainer">
+                    <img [src]="_DomSanitizer.bypassSecurityTrustUrl(file)" width="100" height="100" style="float: left;margin-bottom:20px;" />
+                    <label class="fileContainer ">
                         <mat-icon>add_a_photo</mat-icon>
                         <input  type="file" ngf-select ngf-pattern="'image/*'"accept="image/*" ngf-max-size="2MB" (change)="onFileSelected($event)" />
                     </label>
                 </div>
-             </div>
+                <div class="pb-1" *ngIf="this.id == '0'">
+                    <mat-form-field class="full-width">
+                        <input matInput type="password" formControlName="password" placeholder="Contraseña*"  
+                        autocomplete="off" [ngClass]="{'error': isValid('password')}" />
+                    </mat-form-field>
+                </div>
+                <div class="pb-1" *ngIf="this.id == '0'">
+                    <mat-form-field class="full-width">
+                        <input matInput type="password" formControlName="retry" placeholder="Verifique Contraseña*"  
+                            autocomplete="off" [ngClass]="{'error': isValid('retry')}" />
+                    </mat-form-field>
+                </div>
+                <!--<span *ngIf="newForm.errors?.notMatchingPassword" style="color:red">{{notMaching}}</span>-->
+            </div>
         </div>
     </form>
     <app-groups-menu *ngIf="viewMenu" [menuLst]="menuLst" [editQuery]="editQuery"></app-groups-menu>

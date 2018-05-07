@@ -45,28 +45,28 @@ export class UsuariosEditComponent implements OnInit {
      
     if (this.id == "0") {
       this.newForm = this.fb.group ({
-        email : new FormControl('', [ Validators.required, CharacterLimit('name', 256), this.emailValid() ] ),
-        firstname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
-        lastname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
-        direccion : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-        colonia : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-        ciudad : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-        tel : new FormControl('', [ CharacterLimit('name', 128)  ] ),
-        password : new FormControl('', [ Validators.required, CharacterLimit('name', 256), CharacterMinumun(10) ] ),
-        retry : new FormControl('', [ Validators.required, CharacterLimit('name', 256), CharacterMinumun(10) ] ),
+        email : new FormControl('', [ Validators.required, CharacterLimit(256), this.emailValid() ] ),
+        firstname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
+        lastname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
+        direccion : new FormControl('', [ CharacterLimit(256)  ] ),
+        colonia : new FormControl('', [ CharacterLimit(256)  ] ),
+        ciudad : new FormControl('', [ CharacterLimit(256)  ] ),
+        tel : new FormControl('', [ CharacterLimit(128)  ] ),
+        password : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(10) ] ),
+        retry : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(10) ] ),
       },{ validator: this.matchingPassword()});
 
       this.readonly = false;
     }
     else if (this.editQuery == 1) {
       this.newForm = this.fb.group ({
-        email : new FormControl('', [ Validators.required, CharacterLimit('name', 256), this.emailValid() ] ),
-        firstname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
-        lastname : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
-        direccion : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-        colonia : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-        ciudad : new FormControl('', [ CharacterLimit('name', 256)  ] ),
-        tel : new FormControl('', [ CharacterLimit('name', 128)  ] ),
+        email : new FormControl('', [ Validators.required, CharacterLimit(256), this.emailValid() ] ),
+        firstname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
+        lastname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
+        direccion : new FormControl('', [ CharacterLimit(256)  ] ),
+        colonia : new FormControl('', [ CharacterLimit(256)  ] ),
+        ciudad : new FormControl('', [ CharacterLimit(256)  ] ),
+        tel : new FormControl('', [ CharacterLimit(128)  ] ),
       });
 
       this.title = "Editar";

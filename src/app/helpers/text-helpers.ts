@@ -1,7 +1,7 @@
-export function CharacterLimit(control, limit) {
-  var field = 'invalid' + control;
+export function CharacterLimit(limit) {
   return control => {
-      return control.value.toString().length <= limit ? null : { field  : true }
+    var field = 'invalid' + control;
+    return control.value.toString().length <= limit ? null : { field  : true }
   }
 }
 

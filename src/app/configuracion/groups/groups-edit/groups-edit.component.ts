@@ -34,7 +34,7 @@ export class GroupsEditComponent implements OnInit {
 
   ngOnInit() {
     this.newForm = this.fb.group ({
-      name : new FormControl('', [ Validators.required, CharacterLimit('name', 256)  ] ),
+      name : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
       typeData : new FormControl(''),
     });
     this.newForm.get('typeData').setValue(false);

@@ -26,7 +26,7 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.newRoleForm = this.fb.group ({
-      role : new FormControl('', [ Validators.required, CharacterLimit('role', 256)  ] ),
+      role : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
       descripcion : new FormControl('', [ Validators.required ] ),
     });
     if (this.id == "0") {

@@ -25,7 +25,7 @@ export class MenuEditComponent implements OnInit {
 
   ngOnInit() {
     this.newMenuForm = this.fb.group ({
-      menu : new FormControl('', [ Validators.required, CharacterLimit('menu', 256)  ] ),
+      menu : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
       descripcion : new FormControl('', [ Validators.required ] ),
     });
     if (this.id == "0") {

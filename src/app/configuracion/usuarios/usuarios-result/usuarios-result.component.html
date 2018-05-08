@@ -10,8 +10,18 @@
                     <mat-panel-title>
                         <mat-icon *ngIf="res.status == 0" color="warn">lock_outline</mat-icon>
                         <mat-icon *ngIf="res.status == 1" color="primary">lock_open</mat-icon>
-                        <div style="flex-grow: 1; text-align: left;">{{res.name}}</div>
-                        <div style="flex-grow: 1; text-align: left;">{{res.email}}</div>
+                        <table style="width: 100%; text-align:left;">
+                          <tr>
+                            <th style="width: 40%;font-weight: normal !important;">
+                                {{res.name}}
+                            </th>
+                            <th style="width: 40%;font-weight: normal !important;">
+                                {{res.email}}
+                            </th>
+                          </tr>
+                        </table>
+                        <!--<div style="flex-grow: 1; text-align: left;">{{res.name}}</div>
+                        <div style="flex-grow: 2; text-align: left;">{{res.email}}</div>-->
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div *ngIf="res.status == 1">
@@ -21,12 +31,12 @@
                         </button>
                     </div>
                     <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
-                        <button type="button" mat-mini-fab color="accent" (click)="edicionConsulta(res.id, 0);" class="mr-1 pull-right">
+                        <button type="button" mat-mini-fab color="accent" (click)="edicionConsulta(res.id, 1);" class="mr-1 pull-right">
                           <mat-icon>edit</mat-icon>
                         </button>
                     </div>
                     <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
-                        <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 1)" class="mr-1 pull-right">
+                        <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 0)" class="mr-1 pull-right">
                           <mat-icon>assessment</mat-icon>
                         </button>
                     </div>

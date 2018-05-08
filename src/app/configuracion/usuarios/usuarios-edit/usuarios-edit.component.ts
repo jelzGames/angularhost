@@ -30,8 +30,11 @@ export class UsuariosEditComponent implements OnInit {
 
   imageRaw;
   file = "";
-
+ 
   notMaching = "Contraseñas no coinciden";
+  minimunPasswordLength = 6;
+
+  isShowBtnPhoto = true;
  
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
@@ -52,13 +55,13 @@ export class UsuariosEditComponent implements OnInit {
         colonia : new FormControl('', [ CharacterLimit(256)  ] ),
         ciudad : new FormControl('', [ CharacterLimit(256)  ] ),
         tel : new FormControl('', [ CharacterLimit(128)  ] ),
-        password : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(10) ] ),
-        retry : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(10) ] ),
+        password : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
+        retry : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
       },{ validator: this.matchingPassword()});
 
       this.readonly = false;
     }
-    else if (this.editQuery == 1) {
+    else {
       this.newForm = this.fb.group ({
         email : new FormControl('', [ Validators.required, CharacterLimit(256), this.emailValid() ] ),
         firstname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
@@ -68,15 +71,17 @@ export class UsuariosEditComponent implements OnInit {
         ciudad : new FormControl('', [ CharacterLimit(256)  ] ),
         tel : new FormControl('', [ CharacterLimit(128)  ] ),
       });
-
-      this.title = "Editar";
-      this.typeOperation = 1;
+      if (this.editQuery == 1) {
+        this.title = "Editar";
+        this.typeOperation = 1;
+      }
+      else {
+        this.title = "Consulta";
+        this.typeOperation = 2;
+        this.isShowBtnPhoto = false;
+      }
     }
-    else {
-      this.title = "Consulta";
-      this.typeOperation = 2;
-    }
-
+    
     this.interval = setInterval( () => { 
       clearInterval(this.interval);
       this.getById();
@@ -105,24 +110,40 @@ export class UsuariosEditComponent implements OnInit {
         id : this.id,
     }
         
-    this.webservices.postMessage("api/Groups/ById", model)
+    this.webservices.postMessage("api/Users/ById", model)
     .then( data => {
       if (data != null ) {
-        if (data.name != undefined) {
-          this.newForm.controls['name'].setValue(data.name);
-          if (this.editQuery == 1) {
-            this.newForm.controls['name'].disable();
+        if (data.email != undefined) {
+          this.newForm.controls['email'].setValue(data.email);
+          this.newForm.controls['firstname'].setValue(data.firstname);
+          this.newForm.controls['lastname'].setValue(data.lastname);
+          this.newForm.controls['direccion'].setValue(data.direccion);
+          this.newForm.controls['colonia'].setValue(data.colonia);
+          this.newForm.controls['ciudad'].setValue(data.ciudad);
+          this.newForm.controls['tel'].setValue(data.tel);
+          this.file = "data:image/jpeg;base64," + data.photo;
+          
+          if (this.editQuery == 0) {
+            this.newForm.controls['email'].disable();
+            this.newForm.controls['firstname'].disable();
+            this.newForm.controls['lastname'].disable();
+            this.newForm.controls['direccion'].disable();
+            this.newForm.controls['colonia'].disable();
+            this.newForm.controls['ciudad'].disable();
+            this.newForm.controls['tel'].disable();
             this.readonly = true;
           }
           else { 
             this.readonly = false;
           }
-          
+         
+          /*
           this.extractData(data.menu, this.menuLst, 0);
           this.extractData(data.roles, this.rolesLst, 1);
           if (this.id != "0") {
             this.reorderModel();
           }
+          */
         }
         else {
           this.readonly = true;
@@ -181,6 +202,7 @@ export class UsuariosEditComponent implements OnInit {
   createExtractModel(name, group) {
     var model = 
     {
+      id : "0",
       name : name,
       group : group,
       lst : []
@@ -291,63 +313,33 @@ export class UsuariosEditComponent implements OnInit {
 
   doNew() {
     let dialogRef = this.createSpinner();
-    var model = this.CreateUpdateModel(fuuidv4());
-    var path = "api/Groups/New";
+    var model = this.CreateUpdateModel("0");
+    var path = "api/Users/New";
     this.runWebservices(path, model, dialogRef);
   }
 
   doUpdate() {
     let dialogRef = this.createSpinner();
     var model = this.CreateUpdateModel(this.id);
-    var path = "api/Groups/Update";
+    var path = "api/Users/Update";
     this.runWebservices(path, model, dialogRef);
   }
 
   CreateUpdateModel(id) {
     var model = {
       id : id,
-      name : this.newForm.get('name').value,
-      menu : [],
-      roles : []
+      email : this.newForm.get("email").value,
+      firstname : this.newForm.get("firstname").value,
+      lastname : this.newForm.get("lastname").value,
+      direccion : this.newForm.get("direccion").value,
+      colonia : this.newForm.get("colonia").value,
+      ciudad : this.newForm.get("ciudad").value,
+      tel : this.newForm.get("tel").value,
+      photo : this.file.replace(/data:image\/jpeg;base64,/g, '')
     };
-    for (var x = 0; x < this.rolesLst.length; x++) {
-      for (var y = 0; y < this.rolesLst[x].lst.length; y++) {
-        if (this.rolesLst[x].lst[y].id != 0) {
-          if (this.rolesLst[x].lst[y].typeRight != this.rolesLst[x].lst[y].typeOriginal) {
-            model.roles.push( 
-              {
-                idrole : this.rolesLst[x].lst[y].id,
-                typeright : this.rolesLst[x].lst[y].typeRight,
-                isedit : this.rolesLst[x].lst[y].isEdit
-              }
-            );
-          }
-        }
-      }
+    if (this.id == "0") {
+      model["password"] = this.newForm.get("password").value;
     }
-
-    for (var x = 0; x < this.menuLst.length; x++) {
-      for (var y = 0; y < this.menuLst[x].lst.length; y++) {
-        if (this.menuLst[x].lst[y].id != 0) {
-          if (this.menuLst[x].lst[y].isquery != this.menuLst[x].lst[y].isqueryOriginal ||
-            this.menuLst[x].lst[y].isnew != this.menuLst[x].lst[y].isnewOriginal ||
-            this.menuLst[x].lst[y].iseditField != this.menuLst[x].lst[y].iseditFieldOriginal ||
-            this.menuLst[x].lst[y].isdelete != this.menuLst[x].lst[y].isdeleteOriginal) {
-            model.menu.push( 
-              {
-                idmenu : this.menuLst[x].lst[y].id,
-                isquery : this.menuLst[x].lst[y].isquery,
-                isnew : this.menuLst[x].lst[y].isnew,
-                iseditField : this.menuLst[x].lst[y].iseditField,
-                isdelete : this.menuLst[x].lst[y].isdelete,
-                isedit : this.menuLst[x].lst[y].isEdit
-              }
-            );
-          }
-        }
-      }
-    }
-    
     return model;
   }
 
@@ -395,10 +387,10 @@ export class UsuariosEditComponent implements OnInit {
          control = "correo";
       }
       else if (control == "password") {
-        control = "contraseña, minimo 10 caracteres";
+        control = "contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
       }
       else if (control == "retry") {
-        control = "verifique contraseña, minimo 10 caracteres";
+        control = "verifique contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
       }
       else if (control == "firstname") {
         control = "nombre";
@@ -411,8 +403,6 @@ export class UsuariosEditComponent implements OnInit {
     }
     return false;
   }
-
- 
 
   showConfirmacion() {
     if (!this.newForm.valid) {
@@ -439,14 +429,14 @@ export class UsuariosEditComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result != undefined) {
           if (this.id == '0') {
-            //this.doNew();
+            this.doNew();
           }
           else {
-            //this.doUpdate();
+            this.doUpdate();
           }
         }
         else {
-          //this.doConsulta(undefined);
+          this.doConsulta(undefined);
         }
       });
 
@@ -459,7 +449,7 @@ export class UsuariosEditComponent implements OnInit {
     }
     var name = this.newForm.get('firstname').value + this.newForm.get('lastname').value;
     if (this.newForm.get('firstname').value == "" && this.newForm.get('firstname').value == "")  {
-      var name = this.newForm.get('email').value;
+      name = this.newForm.get('email').value;
     }
     var model = {
       id : id,

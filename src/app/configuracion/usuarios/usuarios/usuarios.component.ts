@@ -74,6 +74,7 @@ export class UsuariosComponent implements OnInit {
     if (model.typeOperation == 0) {
       var tmpmodel = {
         id : model.id,
+        email : model.email,
         name : model.name,
         status : 1
       }  

@@ -1,10 +1,10 @@
 <mat-card class="p-0" >
-  <mat-card-title>
-      <div class="card-title-text">Resultados de la búsqueda</div>
-      <mat-divider></mat-divider>
-  </mat-card-title>
-  <mat-card-content>
-      <mat-accordion>
+    <mat-card-title>
+        <div class="card-title-text">Resultados de la búsqueda</div>
+        <mat-divider></mat-divider>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-accordion>
           <mat-expansion-panel *ngFor="let res of resultLst" class="mat-expansion-panel-body-mat">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
@@ -20,11 +20,14 @@
                             </th>
                           </tr>
                         </table>
-                        <!--<div style="flex-grow: 1; text-align: left;">{{res.name}}</div>
-                        <div style="flex-grow: 2; text-align: left;">{{res.email}}</div>-->
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div *ngIf="res.status == 1">
+                    <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
+                        <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 2)" class="mr-1 pull-right">
+                            <mat-icon>vpn_key</mat-icon>
+                        </button>
+                    </div>
                     <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
                         <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" class="mr-1 pull-right">
                             <mat-icon>lock_outline</mat-icon>
@@ -63,8 +66,8 @@
                         </button>
                     </div>
                 </div>
-          </mat-expansion-panel>
-      </mat-accordion>
-  </mat-card-content>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
 </mat-card>
   

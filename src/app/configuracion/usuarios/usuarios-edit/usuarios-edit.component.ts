@@ -44,8 +44,6 @@ export class UsuariosEditComponent implements OnInit {
     public _DomSanitizer: DomSanitizer,) { }
 
   ngOnInit() {
-    
-     
     if (this.id == "0") {
       this.newForm = this.fb.group ({
         email : new FormControl('', [ Validators.required, CharacterLimit(256), this.emailValid() ] ),
@@ -62,30 +60,41 @@ export class UsuariosEditComponent implements OnInit {
       this.readonly = false;
     }
     else {
-      this.newForm = this.fb.group ({
-        email : new FormControl('', [ Validators.required, CharacterLimit(256), this.emailValid() ] ),
-        firstname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
-        lastname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
-        direccion : new FormControl('', [ CharacterLimit(256)  ] ),
-        colonia : new FormControl('', [ CharacterLimit(256)  ] ),
-        ciudad : new FormControl('', [ CharacterLimit(256)  ] ),
-        tel : new FormControl('', [ CharacterLimit(128)  ] ),
-      });
-      if (this.editQuery == 1) {
-        this.title = "Editar";
-        this.typeOperation = 1;
+      if (this.editQuery == 2) {
+        this.newForm = this.fb.group ({
+          email : new FormControl('', [ Validators.required, CharacterLimit(256), this.emailValid() ] ),
+          password : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
+          retry : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
+        });
+        this.newForm.controls['email'].disable();
+        this.typeOperation = 3;
       }
       else {
-        this.title = "Consulta";
-        this.typeOperation = 2;
-        this.isShowBtnPhoto = false;
+        this.newForm = this.fb.group ({
+          email : new FormControl('', [ Validators.required, CharacterLimit(256), this.emailValid() ] ),
+          firstname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
+          lastname : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
+          direccion : new FormControl('', [ CharacterLimit(256)  ] ),
+          colonia : new FormControl('', [ CharacterLimit(256)  ] ),
+          ciudad : new FormControl('', [ CharacterLimit(256)  ] ),
+          tel : new FormControl('', [ CharacterLimit(128)  ] ),
+        });
+        if (this.editQuery == 1) {
+          this.title = "Editar";
+          this.typeOperation = 1;
+        }
+        else {
+          this.title = "Consulta";
+          this.typeOperation = 2;
+          this.isShowBtnPhoto = false;
+        }
+
+        this.interval = setInterval( () => { 
+          clearInterval(this.interval);
+          this.getById();
+        });
       }
     }
-    
-    this.interval = setInterval( () => { 
-      clearInterval(this.interval);
-      this.getById();
-     });
     
   }
 
@@ -105,7 +114,6 @@ export class UsuariosEditComponent implements OnInit {
 
   getById() {
     let dialogRef = this.createSpinner();
-    
     var model = {
         id : this.id,
     }
@@ -356,9 +364,10 @@ export class UsuariosEditComponent implements OnInit {
   runWebservices(path, model, dialogRef) {
     this.webservices.postMessage(path, model)
     .then( data => {
-      if (data == null ) {
-        this.doConsulta(model.id);
+      if (this.id == "0") {
+        model.id = data.id;
       }
+      this.doConsulta(model.id);
       dialogRef.close();
       
     }).catch( err => {
@@ -447,16 +456,20 @@ export class UsuariosEditComponent implements OnInit {
     if (id == undefined) {
       this.typeOperation = -1;
     }
-    var name = this.newForm.get('firstname').value + this.newForm.get('lastname').value;
-    if (this.newForm.get('firstname').value == "" && this.newForm.get('firstname').value == "")  {
-      name = this.newForm.get('email').value;
-    }
     var model = {
-      id : id,
-      email : this.newForm.get('email').value,
-      name : name,
       typeOperation : this.typeOperation
     }
+    if (this.typeOperation != 3) 
+    {
+      var name = this.newForm.get('firstname').value + " " + this.newForm.get('lastname').value;
+      if (this.newForm.get('firstname').value == "" && this.newForm.get('firstname').value == "")  {
+        name = this.newForm.get('email').value;
+      }
+      model["id"] = id;
+      model["email"] = this.newForm.get('email').value;
+      model["name"] = name;
+    }
+    
     this.onSearch.emit(model);
   }
 

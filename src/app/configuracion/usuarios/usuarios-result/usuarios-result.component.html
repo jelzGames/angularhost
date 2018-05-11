@@ -24,7 +24,7 @@
                 </mat-expansion-panel-header>
                 <div *ngIf="res.status == 1">
                     <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
-                        <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 2)" class="mr-1 pull-right">
+                        <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 2, res.email)" class="mr-1 pull-right">
                             <mat-icon>vpn_key</mat-icon>
                         </button>
                     </div>

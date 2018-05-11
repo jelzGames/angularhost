@@ -29,6 +29,7 @@ export class UsuariosComponent implements OnInit {
 
   id = '0';
   editQuery = 0;
+  email = "";
  
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService) { 
     
@@ -85,6 +86,7 @@ export class UsuariosComponent implements OnInit {
         var tmp = this.resultLst[x] as any;
         if (tmp.id == model.id) {
             this.resultLst[x].name = model.name;
+            this.resultLst[x].email = model.email;
         } 
       }  
     }
@@ -95,6 +97,9 @@ export class UsuariosComponent implements OnInit {
   onEditQuery(model) {
     this.id = model.id;
     this.editQuery = model.editQuery;
+    if (model.editQuery == 2) {
+      this.email = model.email;
+    } 
     this.search = false;
     this.edit = true;
   }

@@ -38,6 +38,7 @@ export class UsuariosEditComponent implements OnInit {
  
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
+  @Input('email') email: string;
   @Output() onSearch = new EventEmitter<any>();
 
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar,
@@ -65,9 +66,11 @@ export class UsuariosEditComponent implements OnInit {
           email : new FormControl('', [ Validators.required, CharacterLimit(256), this.emailValid() ] ),
           password : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
           retry : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
-        });
+        },{ validator: this.matchingPassword()});
+        this.newForm.controls['email'].setValue(this.email);
         this.newForm.controls['email'].disable();
         this.typeOperation = 3;
+        this.title = "Cambiar contraseña"
       }
       else {
         this.newForm = this.fb.group ({
@@ -326,6 +329,16 @@ export class UsuariosEditComponent implements OnInit {
     this.runWebservices(path, model, dialogRef);
   }
 
+  doChangePassword() {
+    let dialogRef = this.createSpinner();
+    var model = {
+      id : this.id,
+      password : this.newForm.get("password").value 
+    }
+    var path = "api/Users/ChangePassword";
+    this.runWebservices(path, model, dialogRef);
+  }
+
   doUpdate() {
     let dialogRef = this.createSpinner();
     var model = this.CreateUpdateModel(this.id);
@@ -440,12 +453,16 @@ export class UsuariosEditComponent implements OnInit {
           if (this.id == '0') {
             this.doNew();
           }
+          else if (this.editQuery == 2) {
+            this.doChangePassword();
+          }
           else {
+            
             this.doUpdate();
           }
         }
         else {
-          this.doConsulta(undefined);
+          //this.doConsulta(undefined);
         }
       });
 
@@ -453,14 +470,14 @@ export class UsuariosEditComponent implements OnInit {
   }
 
   doConsulta(id) {
-    if (id == undefined) {
-      this.typeOperation = -1;
-    }
     var model = {
       typeOperation : this.typeOperation
     }
     if (this.typeOperation != 3) 
     {
+      if (id == undefined) {
+        this.typeOperation = -1;
+      }
       var name = this.newForm.get('firstname').value + " " + this.newForm.get('lastname').value;
       if (this.newForm.get('firstname').value == "" && this.newForm.get('firstname').value == "")  {
         name = this.newForm.get('email').value;
@@ -468,6 +485,7 @@ export class UsuariosEditComponent implements OnInit {
       model["id"] = id;
       model["email"] = this.newForm.get('email').value;
       model["name"] = name;
+      model["typeOperation"] = this.typeOperation;
     }
     
     this.onSearch.emit(model);

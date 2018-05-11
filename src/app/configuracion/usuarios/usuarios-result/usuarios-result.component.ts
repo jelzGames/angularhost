@@ -21,8 +21,17 @@ export class UsuariosResultComponent implements OnInit {
   ngOnInit() {
   }
 
-  edicionConsulta(idValue, typeValue) {
-    this.onEditQuery.emit({ id : idValue, editQuery : typeValue});
+  edicionConsulta(idValue, typeValue, email) {
+    var model = { 
+      id : idValue, 
+      editQuery : typeValue
+    };
+    if (typeValue == 2) {
+      model["email"] = email;
+    }
+    
+    this.onEditQuery.emit(model);
+   
   }
 
   isGotoDelete(id) {

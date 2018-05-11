@@ -88,7 +88,7 @@
     <app-groups-roles *ngIf="viewRoles" [rolesLst]="rolesLst" [editQuery]="editQuery"></app-groups-roles>
 </mat-card>
   
-<div class="floatButton" *ngIf="!readonly">
+<div class="floatButton" *ngIf="!readonly || this.editQuery == 2">
     <button type="button" mat-mini-fab color="primary" style="bottom: 35px;" class="mr-1 floatButton" (click)='showConfirmacion()'>
         <mat-icon>save</mat-icon>
     </button>

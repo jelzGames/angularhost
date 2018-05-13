@@ -9,6 +9,6 @@ import { UpdateService } from './services/update.service';
 export class AppComponent {
   title = 'app';
   constructor(private update: UpdateService) {
-    update.checkForUpdate();
+    //update.checkForUpdate();
   }
 }

@@ -61,7 +61,7 @@ export class SidenavComponent implements OnInit {
     }
   ];
 
-  constructor(zone: NgZone, private router: Router, private auth: AuthService, private componentFactoryResolver: ComponentFactoryResolver) { 
+  constructor(zone: NgZone, private router: Router, public auth: AuthService, private componentFactoryResolver: ComponentFactoryResolver) { 
     this.mediaMatcher.addListener(mql => 
       zone.run(() => this.mediaMatcher = mql));
   }

@@ -43,3 +43,11 @@ npm install typings --global
 ## dialog
 https://github.com/valor-software/ng2-file-upload
 https://scotch.io/tutorials/angular-file-uploads-with-an-express-backend
+
+## progressive apps
+https://alligator.io/angular/service-workers/
+https://alligator.io/angular/service-worker-updates/
+https://medium.com/google-developer-experts/a-new-angular-service-worker-creating-automatic-progressive-web-apps-part-2-practice-3221471269a1
+
+## Update angular
+https://update.angular.io/

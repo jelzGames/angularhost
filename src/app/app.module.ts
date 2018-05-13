@@ -9,7 +9,9 @@ import { AuthService } from './services/auth.service';
 import { WebservicesService } from './services/webservices.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material';
-
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { UpdateService } from './services/update.service';
 
 
 const routes: Routes = [
@@ -41,9 +43,12 @@ const routes: Routes = [
     BrowserAnimationsModule,
     HttpClientModule,
     MatSnackBarModule,
+    ServiceWorkerModule.register('/ngsw-worker.js', {
+      enabled: environment.production
+    }),
     RouterModule.forRoot(routes)
   ],
-  providers: [ AcessguardService, AuthService, WebservicesService],
+  providers: [ AcessguardService, AuthService, WebservicesService, UpdateService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

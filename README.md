@@ -48,6 +48,7 @@ https://scotch.io/tutorials/angular-file-uploads-with-an-express-backend
 https://alligator.io/angular/service-workers/
 https://alligator.io/angular/service-worker-updates/
 https://medium.com/google-developer-experts/a-new-angular-service-worker-creating-automatic-progressive-web-apps-part-2-practice-3221471269a1
+https://patrickdesjardins.com/blog/service-worker-push-notification-and-asp-net-mvc-part-1-of-3-client-side
 
 ## Update angular
 https://update.angular.io/

@@ -20,6 +20,19 @@
         <div fxLayout="row" fxLayoutWrap="wrap">
             <div fxFlex="100" fxFlex.gt-xs="100" class="pr-1">
                 <div class="pb-1" *ngIf="this.id == '0' || this.editQuery !=2">
+                    <div class="radio-group">
+                        <input type="radio" id="option-one" name="selector">
+                        <label #labelPerfil for="option-one" (click)="goRadio(0)">Perfil</label>
+                        <input type="radio" id="option-two" name="selector" >
+                        <label for="option-two" (click)="goRadio(1)">Menu</label>
+                        <input type="radio" id="option-three" name="selector" >
+                        <label for="option-three" (click)="goRadio(2)">Web</label>
+                        <input type="radio" id="option-four" name="selector" >
+                        <label for="option-four" (click)="goRadio(3)">Grupos</label>
+                        
+                    </div>
+                </div>
+                <div class="pb-1" *ngIf="this.id == '0' || this.editQuery !=2">
                     <img [src]="_DomSanitizer.bypassSecurityTrustUrl(file)" width="100" height="100" style="float: left;margin-bottom:20px;" />
                     <label class="fileContainer " *ngIf="isShowBtnPhoto">
                         <mat-icon>add_a_photo</mat-icon>

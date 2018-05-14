@@ -6,6 +6,8 @@ import { CharacterLimit, fuuidv4, CharacterMinumun } from '../../../helpers/text
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 const URL = '';
 
@@ -41,6 +43,13 @@ export class UsuariosEditComponent implements OnInit {
   @Input('email') email: string;
   @Output() onSearch = new EventEmitter<any>();
 
+  radios = 0;
+  @ViewChild("labelPerfil", {read: ElementRef}) labelPerfil: ElementRef;
+ 
+  goRadio(value) {
+    this.radios = value;
+  }
+  
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar,
     public _DomSanitizer: DomSanitizer,) { }
 
@@ -102,6 +111,9 @@ export class UsuariosEditComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    if (this.id == "0" || this.editQuery != 2) {
+      this.labelPerfil.nativeElement.click();
+    }
     /*
     if (this.id != "0") {
       setTimeout(()=>{   

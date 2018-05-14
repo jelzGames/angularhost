@@ -35,3 +35,41 @@
 .fileContainer [type=file] {
     cursor: pointer;
 }
+
+$bg: #332f35;
+$fg: lighten($bg,20%);
+$borderWidth: 1px;
+
+input[type=radio] {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+}
+  
+label {
+    color: white;
+    display: inline-block;
+    cursor: pointer;
+    padding: 8px 8px 8px;
+}
+
+input[type=radio]:checked + label{
+    color: #c14b81;
+    background: white;
+    border-bottom: rgba(0, 0, 0, 0.4);
+    border-style: solid;
+    border-width: 1px;
+}
+
+label + input[type=radio] + label {
+    border-left: solid $borderWidth $fg;
+}
+
+.radio-group {
+    border: solid $borderWidth $fg;
+    border-color:  #c14b81;
+    background: #c14b81;
+    display: inline-block;
+    overflow: hidden;
+}
+  

@@ -392,6 +392,7 @@ export class UsuariosEditComponent implements OnInit {
       if (this.id == "0") {
         model.id = data.id;
       }
+      this.snack.open("Registro ha sido gurdado con exito ", "Aceptar", { duration: 2000 });
       this.doConsulta(model.id);
       dialogRef.close();
       
@@ -461,16 +462,18 @@ export class UsuariosEditComponent implements OnInit {
       });
       
       dialogRef.afterClosed().subscribe(result => {
-        if (result != undefined) {
-          if (this.id == '0') {
-            this.doNew();
-          }
-          else if (this.editQuery == 2) {
-            this.doChangePassword();
-          }
-          else {
-            
-            this.doUpdate();
+        if (result != 0) {
+          if (result == 1) {
+            if (this.id == '0') {
+              this.doNew();
+            }
+            else if (this.editQuery == 2) {
+              this.doChangePassword();
+            }
+            else {
+              
+              this.doUpdate();
+            }
           }
         }
         else {

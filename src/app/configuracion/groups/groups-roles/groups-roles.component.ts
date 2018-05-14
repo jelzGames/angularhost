@@ -8,14 +8,19 @@ import { Component, OnInit, Input } from '@angular/core';
 export class GroupsRolesComponent implements OnInit {
   @Input('rolesLst') resultLst: string;
   @Input('editQuery') editQuery: number;
+  @Input('id') id: string;
+  flagCursor = true;
 
   constructor() { }
 
   ngOnInit() {
+    if (this.id == "0" || this.editQuery == 1) {
+      this.flagCursor = false;
+    }
   }
 
   changeStatus(res, resLst) {
-    if (this.editQuery == 0) {
+    if (!this.flagCursor) {
       if (res.typeRight == 0) {
         res.typeRight = 1;
       }

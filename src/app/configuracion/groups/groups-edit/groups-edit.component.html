@@ -36,8 +36,8 @@
              </div>
         </div>
     </form>
-    <app-groups-menu *ngIf="viewMenu" [menuLst]="menuLst" [editQuery]="editQuery"></app-groups-menu>
-    <app-groups-roles *ngIf="viewRoles" [rolesLst]="rolesLst" [editQuery]="editQuery"></app-groups-roles>
+    <app-groups-menu *ngIf="viewMenu" [menuLst]="menuLst" [editQuery]="editQuery" [id]="id"></app-groups-menu>
+    <app-groups-roles *ngIf="viewRoles" [rolesLst]="rolesLst" [editQuery]="editQuery" [id]="id"></app-groups-roles>
 </mat-card>
   
 <div class="floatButton" *ngIf="!readonly">

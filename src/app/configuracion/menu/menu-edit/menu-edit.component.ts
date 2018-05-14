@@ -160,12 +160,14 @@ export class MenuEditComponent implements OnInit {
       });
       
       dialogRef.afterClosed().subscribe(result => {
-        if (result != undefined) {
-          if (this.id == '0') {
-            this.doNew();
-          }
-          else {
-            this.doUpdate();
+        if (result != 0) {
+          if (result == 1) {
+            if (this.id == '0') {
+              this.doNew();
+            }
+            else {
+              this.doUpdate();
+            }
           }
         }
         else {

@@ -17,8 +17,8 @@ export class ModalsaveComponent implements OnInit {
 
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
+  onClick(value): void {
+    this.dialogRef.close(value);
   }
 
 }

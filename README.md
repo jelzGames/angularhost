@@ -53,6 +53,7 @@ https://medium.com/google-developer-experts/a-new-angular-service-worker-creatin
 https://patrickdesjardins.com/blog/service-worker-push-notification-and-asp-net-mvc-part-1-of-3-client-side
 http://henriquat.re/server-integration/signalr/integrateWithSignalRHubs.html
 https://angularfirebase.com/lessons/send-push-notifications-in-angular-with-firebase-cloud-messaging/
+https://damienbod.com/2017/09/12/getting-started-with-signalr-using-asp-net-core-and-angular/
 
 ## Update angular
 https://update.angular.io/

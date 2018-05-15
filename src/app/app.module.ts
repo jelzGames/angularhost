@@ -12,6 +12,7 @@ import { MatSnackBarModule } from '@angular/material';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { UpdateService } from './services/update.service';
+import { ConfigService } from './services/config.service';
 
 
 const routes: Routes = [
@@ -48,7 +49,7 @@ const routes: Routes = [
     }),
     RouterModule.forRoot(routes)
   ],
-  providers: [ AcessguardService, AuthService, WebservicesService, UpdateService],
+  providers: [ AcessguardService, AuthService, WebservicesService, UpdateService, ConfigService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

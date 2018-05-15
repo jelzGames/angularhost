@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UpdateService } from './services/update.service';
 import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
+import { ConfigService } from './services/config.service';
 
 @Component({
   selector: 'app-root',
@@ -13,20 +14,20 @@ export class AppComponent implements OnInit {
   private _hubConnection: HubConnection;
   msgs = [];
 
-  constructor(private update: UpdateService) {
+  constructor(private update: UpdateService, private config : ConfigService) {
     //update.checkForUpdate();
   }
 
   ngOnInit(): void {
     this._hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl('https://localhost:44324/loopy')
+        .withUrl(this.config.BASE_SIGNALR)
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
     this._hubConnection
       .start()
-      .then(() => console.log('Connection started!'))
-      .catch(err => console.log('Error while establishing connection :('));
+      .then(() => console.log('Conectado a mensajeria! :)'))
+      .catch(err => console.log('Error conectando a mensajeria:('));
   
     this._hubConnection.on('Send', (type: string, payload: string) => {
       this.msgs.push({ severity: type, summary: payload });

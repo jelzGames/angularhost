@@ -2,21 +2,21 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class WebservicesService {
 
     TokenInfo = ""; 
-    BASE_URL = 'http://localhost:30270/';
-
-    constructor(private router: Router, private http : HttpClient, private snackBar: MatSnackBar) {}
+   
+    constructor(private router: Router, private http : HttpClient, private snackBar: MatSnackBar, private config : ConfigService) {}
 
     async postMessage(url, model) {
         var headers = new HttpHeaders();
         headers = headers.append('Authorization', 'Bearer ' + this.TokenInfo);
         headers = headers.append('Content-Type', 'application/json; charset=utf-8');
         
-        return await this.http.post(this.BASE_URL + url, model, { headers : headers } ).toPromise()
+        return await this.http.post(this.config.BASE_URL + url, model, { headers : headers } ).toPromise()
         .then ( response => {
             var data = response as any;
             return data;
@@ -40,7 +40,7 @@ export class WebservicesService {
         urlSearchParams.append('password', model.password);
         let body = urlSearchParams.toString()
 
-        return await this.http.post(this.BASE_URL + 'token', body, options).toPromise()
+        return await this.http.post(this.config.BASE_URL + 'token', body, options).toPromise()
         .then ( response => {
             var data = response as any;
             if (data != undefined && data.access_token != null) {

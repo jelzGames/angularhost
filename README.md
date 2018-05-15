@@ -50,10 +50,15 @@ https://alligator.io/angular/service-worker-updates/
 https://medium.com/google-developer-experts/a-new-angular-service-worker-creating-automatic-progressive-web-apps-part-2-practice-3221471269a1
 
 ## notificactions
+https://blog.angular-university.io/angular-push-notifications/
 https://patrickdesjardins.com/blog/service-worker-push-notification-and-asp-net-mvc-part-1-of-3-client-side
 http://henriquat.re/server-integration/signalr/integrateWithSignalRHubs.html
 https://angularfirebase.com/lessons/send-push-notifications-in-angular-with-firebase-cloud-messaging/
+
+## chat
 https://damienbod.com/2017/09/12/getting-started-with-signalr-using-asp-net-core-and-angular/
+https://medium.com/@rukshandangalla/how-to-notify-your-angular-5-app-using-signalr-5e5aea2030b2
+https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr-and-mvc
 
 ## Update angular
 https://update.angular.io/

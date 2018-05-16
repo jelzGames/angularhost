@@ -8,12 +8,11 @@ import { AcessguardService } from './services/acessguard.service';
 import { AuthService } from './services/auth.service';
 import { WebservicesService } from './services/webservices.service';
 import { HttpClientModule } from '@angular/common/http';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule, MatDialogModule } from '@angular/material';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { UpdateService } from './services/update.service';
 import { ConfigService } from './services/config.service';
-
 
 const routes: Routes = [
   {
@@ -44,6 +43,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     HttpClientModule,
     MatSnackBarModule,
+    MatDialogModule,
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production
     }),

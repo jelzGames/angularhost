@@ -5,6 +5,7 @@ import { WebservicesService } from '../../../services/webservices.service';
 import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 import { GroupsEditComponent } from '../groups-edit/groups-edit.component';
 import * as jsPDF from 'jspdf'
+import { DialogsDataService } from '../../../services/dialogs.data.service';
 
 @Component({
   selector: 'app-groups',
@@ -31,7 +32,8 @@ export class GroupsComponent implements OnInit {
   id = '0';
   editQuery = 0;
  
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService) { 
+  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService,
+    private dialogsService : DialogsDataService) { 
     
   }
 
@@ -43,25 +45,17 @@ export class GroupsComponent implements OnInit {
 
   doSearch() {
     this.resultLst = [];
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
-    });
     var model = {
       filter : this.basicForm.get('filter').value,
       status : this.status
     }
-    
-    this.webservices.postMessage("api/Groups/SearchQuery", model)
+    var path = "api/Groups/SearchQuery";
+
+    this.dialogsService.runWebservices(path, model, 1)
     .then( data => {
-      if (data.error == null ) {
+      if (data.error == undefined) {
         this.resultLst = data;
       }
-      dialogRef.close();
-    }).catch( err => {
-      dialogRef.close();
     });
   }
 

@@ -8,6 +8,7 @@ import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.componen
 import { DomSanitizer } from '@angular/platform-browser';
 import { ViewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
+import { MenusRoles } from '../../../classes/menus.roles';
 
 const URL = '';
 
@@ -21,15 +22,11 @@ export class UsuariosEditComponent implements OnInit {
   newForm;
   title = "Nuevo";
   readonly = true;
-  loading = false;
   typeOperation = 0;
   menuLst = [];
   rolesLst = [];
   interval;
  
-  viewRoles = false;
-  viewMenu = false;
-
   imageRaw;
   file = "";
  
@@ -51,7 +48,7 @@ export class UsuariosEditComponent implements OnInit {
   }
   
   constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar,
-    public _DomSanitizer: DomSanitizer,) { }
+    public _DomSanitizer: DomSanitizer) { }
 
   ngOnInit() {
     if (this.id == "0") {
@@ -114,13 +111,6 @@ export class UsuariosEditComponent implements OnInit {
     if (this.id == "0" || this.editQuery != 2) {
       this.labelPerfil.nativeElement.click();
     }
-    /*
-    if (this.id != "0") {
-      setTimeout(()=>{   
-        this.getById();
-       },10);
-    }
-    */
   }
 
   isValid(control) {
@@ -160,178 +150,22 @@ export class UsuariosEditComponent implements OnInit {
             this.readonly = false;
           }
          
-          /*
-          this.extractData(data.menu, this.menuLst, 0);
-          this.extractData(data.roles, this.rolesLst, 1);
+          let menuRolesClass = new MenusRoles();
+          menuRolesClass.extractData(data.menu, this.menuLst, 0);
+          menuRolesClass.extractData(data.roles, this.rolesLst, 1);
           if (this.id != "0") {
-            this.reorderModel();
+            menuRolesClass.reorderModel(this.menuLst, this.rolesLst);
           }
-          */
         }
         else {
           this.readonly = true;
         }
       }
-      this.viewMenu = true;
       dialogRef.close();
       
     }).catch( err => {
       dialogRef.close();
     });
-  }
-
-  extractData(data, lstType, typeModel) {
-    var count = 0;
-    var model = this.createExtractModel("", count);
-    if (data.length > 0) {
-      var names = data[0].name.split("/");
-      if (names.length > 1) {
-        model.name = names[0]
-        if (typeModel == 0) {
-          this.pushExtractModel(model,this.createHeaderModel(typeModel, 0, 1), "", typeModel);
-        }
-        this.pushExtractModel(model,this.createHeaderModel(typeModel, 1, 0), "", typeModel);
-      }
-      for (var x = 0; x < data.length; x++) {
-        var temp = data[x].name.split("/");
-        if (x == (data.length -1) || temp[0] != names[0]) {
-          names = temp;
-          lstType.push(model);
-          count++;
-          model = this.createExtractModel( names[0], count);
-          if (typeModel == 0) {
-            this.pushExtractModel(model,this.createHeaderModel(typeModel, 0, 1), "", typeModel);
-          }
-          this.pushExtractModel(model, this.createHeaderModel(typeModel, 1, 0), "", typeModel);
-          this.pushExtractModel(model, data[x], temp[1], typeModel);
-        }
-        else {
-          if (temp.length > 1) {
-            this.pushExtractModel(model, data[x], temp[1], typeModel);
-          }
-        }
-      } 
-      if (model.name != "") {
-        if (typeModel == 1) {
-          lstType[count-1].lst.push(model.lst[1]);
-        }
-        else {
-          lstType[count-1].lst.push(model.lst[2]);
-        }
-      }
-    }
-  }
-
-  createExtractModel(name, group) {
-    var model = 
-    {
-      id : "0",
-      name : name,
-      group : group,
-      lst : []
-    };
-    return model;
-  }
-
-  createHeaderModel(typeModel, isEdit, header) {
-    var temp = {
-      id : 0,
-      name : "",
-      isEdit : isEdit
-    };
-    if (typeModel == 0) {
-      temp['header'] = header;
-      temp['isquery'] = 0;
-      temp['isqueryOriginal'] = 0;
-      temp['isnew'] = 0;
-      temp['isnewdOriginal'] = 0;
-      temp['iseditField'] = 0;
-      temp['iseditFielddOriginal'] = 0;
-      temp['isdelete'] = 0;
-      temp['isdeleteOriginal'] = 0;
-    }
-    else {
-      temp['typeRight'] = 0;
-      temp['typeOriginal'] = 0;
-    }
-    return  temp;
-  }
-
-  pushExtractModel(model, data, name, typeModel) {
-    var temp = {
-      id : data.id,
-      name : name,
-      isEdit : data.isEdit
-    };
-    if (typeModel == 0) {
-      if (data.header == undefined) {
-        temp['header'] = 0;
-      }
-      else {
-        temp['header'] = data.header;
-      }
-      temp['isquery'] = data.isquery;
-      temp['isqueryOriginal'] = data.isquery;
-      temp['isnew'] = data.isnew;
-      temp['isnewdOriginal'] = data.isnew;
-      temp['iseditField'] = data.iseditField;
-      temp['iseditFielddOriginal'] = data.iseditField;
-      temp['isdelete'] = data.isdelete;
-      temp['isdeleteOriginal'] = data.isdelete;
-    }
-    else {
-      temp['typeRight'] = data.typeRight;
-      temp['typeOriginal'] = data.typeRight;
-    }
-    model.lst.push(temp);
-  }
-
-  reorderModel() {
-    for (var x = 0; x < this.rolesLst.length; x++) {
-      var type = this.rolesLst[x].lst[1].typeRight;
-      for (var y = 2; y < this.rolesLst[x].lst.length; y++) {
-        if (this.rolesLst[x].lst[y].typeRight != type) {
-          type = 0;
-          break;
-        }
-      }
-      this.rolesLst[x].lst[0].typeRight = type;
-    }
-    for (var x = 0; x < this.menuLst.length; x++) {
-      var typer = this.menuLst[x].lst[2].isquery;
-      var typen = this.menuLst[x].lst[2].isnew;
-      var typee = this.menuLst[x].lst[2].iseditField;
-      var typed = this.menuLst[x].lst[2].isdelete;
-      for (var y = 3; y < this.menuLst[x].lst.length; y++) {
-        var flagr = false;
-        var flagn = false;
-        var flage = false;
-        var flagd = false;
-        if (this.menuLst[x].lst[y].isquery != typer) {
-          typer = 0;
-          flagr = true;
-        }
-        if (this.menuLst[x].lst[y].isnew != typen) {
-          typen = 0;
-          flagn = true;
-        }
-        if (this.menuLst[x].lst[y].iseditField != typee) {
-          typee = 0;
-          flage = true;
-        }
-        if (this.menuLst[x].lst[y].isdelete != typed) {
-          typed = 0;
-          flagd = true;
-        }
-        if (flagr && flagn && flage && flagd) {
-          break;
-        }
-      }
-      this.menuLst[x].lst[1].isquery = typer;
-      this.menuLst[x].lst[1].isnew = typen;
-      this.menuLst[x].lst[1].iseditField = typee;
-      this.menuLst[x].lst[1].isdelete = typed;
-    }
   }
 
   doNew() {
@@ -477,7 +311,7 @@ export class UsuariosEditComponent implements OnInit {
           }
         }
         else {
-          //this.doConsulta(undefined);
+          this.doConsulta(undefined);
         }
       });
 
@@ -506,26 +340,5 @@ export class UsuariosEditComponent implements OnInit {
     this.onSearch.emit(model);
   }
 
-  doNuevo() {
-  }
-
-  doToogle() {
-    if (!this.newForm.get('typeData').value) {
-      this.viewMenu = false;
-      this.viewRoles = true;
-    }
-    else {
-      this.viewRoles = false;
-      this.viewMenu = true;
-    }
-  }
  
-  onFileSelected(e) {
-    var reader = new FileReader();
-    reader.onload = (event:any) => {
-     this.file = event.target.result;
-    }
-    reader.readAsDataURL(e.srcElement.files[0]);
-  }
-
 }

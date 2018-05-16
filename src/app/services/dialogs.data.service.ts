@@ -13,7 +13,7 @@ export class DialogsDataService {
 
   createView(view) {
     let dialogRef = this.dialog.open(view,  {
-      width: '250px',
+      width: '265px',
       disableClose: true,
       panelClass: 'spinner-dialog'
       //data: { name: this.name, animal: this.animal }

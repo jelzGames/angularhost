@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-groups-menu',
@@ -11,7 +12,8 @@ export class GroupsMenuComponent implements OnInit {
   @Input('id') id: string;
   flagCursor = true;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     if (this.id == "0" || this.editQuery == 1) {

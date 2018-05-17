@@ -1,19 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { WebservicesService } from '../../../services/webservices.service';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
-import { MenuEditComponent } from '../menu-edit/menu-edit.component';
+//import { MenuEditComponent } from '../menu-edit/menu-edit.component';
+import { DialogsDataService } from '../../../services/dialogs.data.service';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit {
-  @ViewChild(MenuEditComponent)
-  private editQueryChild: MenuEditComponent;
-
+export class MenuComponent {
+  //@ViewChild(MenuEditComponent)
+  //private editQueryChild: MenuEditComponent;
 
   basicForm;
 
@@ -30,14 +27,10 @@ export class MenuComponent implements OnInit {
   id = '0';
   editQuery = 0;
 
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService) { 
-  this.basicForm = fb.group ({
-    filter: ["",[] ],
-  });
-  }
-
-  ngOnInit() {
-  
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
+    this.basicForm = fb.group ({
+      filter: ["",[] ],
+    });
   }
 
   /*
@@ -50,30 +43,17 @@ export class MenuComponent implements OnInit {
 
   doSearch() {
     this.resultLst = [];
-
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
-    });
-    
     var model = {
       filter : this.basicForm.get('filter').value,
       status : this.status
     }
-    
-    this.webservices.postMessage("api/Menu/SearchQuery", model)
+
+    this.dialogsService.runWebservices("api/Menu/SearchQuery", model, 1)
     .then( data => {
       if (data.error == null) {
         this.resultLst = data;
       }
-      
-      dialogRef.close();
-    }).catch( err => {
-      dialogRef.close();
     });
-  
   }
 
   doNuevo() {

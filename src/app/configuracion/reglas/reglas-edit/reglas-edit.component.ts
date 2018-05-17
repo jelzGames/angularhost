@@ -1,53 +1,48 @@
-import { Component, OnInit, Output, EventEmitter, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { WebservicesService } from '../../../services/webservices.service';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
-import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
+import { DialogsDataService } from '../../../services/dialogs.data.service';
+import { MenuRole } from '../../../classes/menu.role';
 
 @Component({
   selector: 'app-reglas-edit',
   templateUrl: './reglas-edit.component.html',
   styleUrls: ['./reglas-edit.component.scss'],
 })
-export class ReglasEditComponent implements OnInit, AfterViewInit {
- 
+export class ReglasEditComponent {
   newRoleForm;
   title = "Nuevo";
-  readonly = true;
+  readonly = false;
   typeOperation = 0;
+  interval;
   
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
+     let menuRoleClass = new MenuRole();
+   
     this.newRoleForm = this.fb.group ({
-      role : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
+      role : new FormControl('', [ Validators.required, CharacterLimit(256), menuRoleClass.validFormat() ] ),
       descripcion : new FormControl('', [ Validators.required ] ),
     });
-    if (this.id == "0") {
-      this.readonly = false;
-    }
-    else if (this.editQuery == 1) {
-      this.title = "Editar";
-      this.typeOperation = 1;
-    }
-    else {
-      this.title = "Consulta";
-      this.typeOperation = 2;
-    }
-  }
-
-  ngAfterViewInit(): void {
-    if (this.id != "0") {
-      setTimeout(()=>{   
+     
+    this.interval = setInterval( () => { 
+      clearInterval(this.interval);
+      if (this.id != "0") {
+        if (this.editQuery == 1) {
+          this.title = "Editar";
+          this.typeOperation = 1;
+        }
+        else {
+          this.title = "Consulta";
+          this.typeOperation = 2;
+        }
+      
         this.getById();
-       },10);
-    }
+      }
+    });
   }
 
   isValid(control) {
@@ -55,13 +50,11 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
   }
 
   getById() {
-    let dialogRef = this.createSpinner();
-    
     var model = {
         id : this.id,
     }
-        
-    this.webservices.postMessage("api/Roles/ById", model)
+
+    this.dialogsService.runWebservices("api/Roles/ById", model, 1)
     .then( data => {
       if (data != null ) {
         if (data.role != undefined) {
@@ -80,25 +73,52 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
           this.readonly = true;
         }
       }
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
     });
+    
   }
 
-  doNew() {
-    let dialogRef = this.createSpinner();
-    var model = this.CreateUpdateModel(fuuidv4());
-    var path = "api/Roles/New";
-    this.runWebservices(path, model, dialogRef);
+ 
+  showConfirmacion() {
+    if (!this.dialogsService.checkError(this.newRoleForm)) {
+      let dialogRef = this.dialogsService.createView(0);
+      dialogRef.afterClosed().subscribe(result => {
+        if (result != 0) {
+          if (result == 1) {
+            this.doUpdate();
+          }
+        }
+        else {
+          this.doConsulta(undefined);
+        }
+      });
+    }
+  }
+
+  riseError(control) {
+    if (this.newRoleForm.controls[control].invalid) {
+        this.dialogsService.showSnack("Debe ingresar un valor valido para el campo " + control);
+        return true;
+    }
+    return false;
   }
 
   doUpdate() {
-    let dialogRef = this.createSpinner();
-    var model = this.CreateUpdateModel(this.id);
-    var path = "api/Roles/Update";
-    this.runWebservices(path, model, dialogRef);
+    var model;
+    var path;
+    if (this.id == '0') {
+      model = this.CreateUpdateModel(fuuidv4());
+      path = "api/Roles/New";
+    }
+    else {
+      model = this.CreateUpdateModel(this.id);
+      path = "api/Roles/Update";
+    }
+    this.dialogsService.runWebservices(path, model, 0)
+    .then( data => {
+      if (data == null) {
+        this.doConsulta(model.id);
+      }
+    });
   }
 
   CreateUpdateModel(id) {
@@ -110,75 +130,6 @@ export class ReglasEditComponent implements OnInit, AfterViewInit {
 
     return model;
   }
-
-  createSpinner() {
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
-    });
-    return dialogRef;
-  }
-  
-  runWebservices(path, model, dialogRef) {
-    this.webservices.postMessage(path, model)
-    .then( data => {
-      if (data == null ) {
-        this.snack.open("Registro ha sido gurdado con exito ", "Aceptar", { duration: 2000 });
-        this.doConsulta(model.id);
-      }
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
-    });
-  }
-
-  riseError(control) {
-    if (this.newRoleForm.controls[control].invalid) {
-        this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
-        return true;
-    }
-    return false;
-  }
-
-  showConfirmacion() {
-    if (!this.newRoleForm.valid) {
-        for (var control in  this.newRoleForm.controls) {
-            if (this.riseError(control)) {
-                break;
-            }
-        }
-    }
-    else  {
-      let dialogRef = this.dialog.open(ModalsaveComponent,  {
-        width: '250px',
-        data: { answer: true }
-        //disableClose: true,
-        //panelClass: 'spinner-dialog'
-        //data: { name: this.name, animal: this.animal }
-      });
-      
-      dialogRef.afterClosed().subscribe(result => {
-        if (result != 0) {
-          if (result == 1) {
-            if (this.id == '0') {
-              this.doNew();
-            }
-            else {
-              this.doUpdate();
-            }
-          }
-        }
-        else {
-          this.doConsulta(undefined);
-        }
-      });
-
-    }
-  }
-
 
   doConsulta(id) {
     if (id == undefined) {

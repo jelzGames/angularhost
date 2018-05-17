@@ -1,22 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { WebservicesService } from '../../../services/webservices.service';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
-import { GroupsEditComponent } from '../groups-edit/groups-edit.component';
-import * as jsPDF from 'jspdf'
 import { DialogsDataService } from '../../../services/dialogs.data.service';
+import * as jsPDF from 'jspdf'
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss']
 })
-export class GroupsComponent implements OnInit {
-  @ViewChild(GroupsEditComponent)
-  private editQueryChild: GroupsEditComponent;
-
-
+export class GroupsComponent {
   basicForm;
 
   title = "Búsqueda";
@@ -32,12 +24,7 @@ export class GroupsComponent implements OnInit {
   id = '0';
   editQuery = 0;
  
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService,
-    private dialogsService : DialogsDataService) { 
-    
-  }
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
     this.basicForm = this.fb.group ({
       filter: ["",[] ],
     });
@@ -49,9 +36,8 @@ export class GroupsComponent implements OnInit {
       filter : this.basicForm.get('filter').value,
       status : this.status
     }
-    var path = "api/Groups/SearchQuery";
-
-    this.dialogsService.runWebservices(path, model, 1)
+  
+    this.dialogsService.runWebservices("api/Groups/SearchQuery", model, 1)
     .then( data => {
       if (data.error == undefined) {
         this.resultLst = data;

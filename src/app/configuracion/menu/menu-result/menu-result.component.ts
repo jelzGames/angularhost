@@ -1,14 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { WebservicesService } from '../../../services/webservices.service';
-import { MatDialog } from '@angular/material';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { DialogsDataService } from '../../../services/dialogs.data.service';
 
 @Component({
   selector: 'app-menu-result',
   templateUrl: './menu-result.component.html',
   styleUrls: ['./menu-result.component.scss']
 })
-export class MenuResultComponent implements OnInit {
+export class MenuResultComponent {
   @Input('resultLst') resultLst: any;
   @Output() onEditQuery = new EventEmitter<any>();
   @Input('status') status: number;
@@ -16,10 +14,7 @@ export class MenuResultComponent implements OnInit {
   isDelete = false;
   isUnLock = false;
 
-  constructor(private webservices: WebservicesService, public dialog: MatDialog) { }
-
-  ngOnInit() {
-  }
+  constructor(private dialogsService : DialogsDataService) { }
 
   edicionConsulta(idValue, typeValue) {
     this.onEditQuery.emit({ id : idValue, editQuery : typeValue});
@@ -34,27 +29,11 @@ export class MenuResultComponent implements OnInit {
   }
 
   lockUnlock(id, status) {
-    let dialogRef = this.createSpinner();
-      var model = {
-        id : id,
-        status : status
-      };
-      var path = "api/Menu/UpdateIsActive";
-      this.runWebservices(path, model, dialogRef);
-  }
-
-  createSpinner() {
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
-    });
-    return dialogRef;
-  }
-  
-  runWebservices(path, model, dialogRef) {
-    this.webservices.postMessage(path, model)
+    var model = {
+      id : id,
+      status : status
+    };
+    this.dialogsService.runWebservices("api/Menu/UpdateIsActive", model, 1)
     .then( data => {
       if (data == null) {
         for (var x = 0; x < this.resultLst.length; x++) {
@@ -73,10 +52,6 @@ export class MenuResultComponent implements OnInit {
         }
         this.isDelete = false;
       }
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
     });
   }
 

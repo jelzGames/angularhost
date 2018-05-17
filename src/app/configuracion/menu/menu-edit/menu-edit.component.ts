@@ -1,52 +1,47 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { WebservicesService } from '../../../services/webservices.service';
 import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
-import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
+import { DialogsDataService } from '../../../services/dialogs.data.service';
+import { MenuRole } from '../../../classes/menu.role';
 
 @Component({
   selector: 'app-menu-edit',
   templateUrl: './menu-edit.component.html',
   styleUrls: ['./menu-edit.component.scss']
 })
-export class MenuEditComponent implements OnInit {
+export class MenuEditComponent {
   newMenuForm;
   title = "Nuevo";
-  readonly = true;
+  readonly = false;
   typeOperation = 0;
+  interval;
   
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
+    let menuRoleClass = new MenuRole();
+   
     this.newMenuForm = this.fb.group ({
-      menu : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
+      menu : new FormControl('', [ Validators.required, CharacterLimit(256),  menuRoleClass.validFormat() ] ),
       descripcion : new FormControl('', [ Validators.required ] ),
     });
-    if (this.id == "0") {
-      this.readonly = false;
-    }
-    else if (this.editQuery == 1) {
-      this.title = "Editar";
-      this.typeOperation = 1;
-    }
-    else {
-      this.title = "Consulta";
-      this.typeOperation = 2;
-    }
-  }
-
-  ngAfterViewInit(): void {
-    if (this.id != "0") {
-      setTimeout(()=>{   
+    
+    this.interval = setInterval( () => { 
+      clearInterval(this.interval);
+      if (this.id != "0") {
+        if (this.editQuery == 1) {
+          this.title = "Editar";
+          this.typeOperation = 1;
+        }
+        else {
+          this.title = "Consulta";
+          this.typeOperation = 2;
+        }
         this.getById();
-       },10);
-    }
+      }
+    });
   }
 
   isValid(control) {
@@ -54,13 +49,11 @@ export class MenuEditComponent implements OnInit {
   }
 
   getById() {
-    let dialogRef = this.createSpinner();
-    
     var model = {
         id : this.id,
     }
-        
-    this.webservices.postMessage("api/Menu/ById", model)
+
+    this.dialogsService.runWebservices("api/Menu/ById", model, 1)
     .then( data => {
       if (data != null ) {
         if (data.menu != undefined) {
@@ -79,25 +72,50 @@ export class MenuEditComponent implements OnInit {
           this.readonly = true;
         }
       }
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
     });
   }
 
-  doNew() {
-    let dialogRef = this.createSpinner();
-    var path = "api/Menu/New";
-    var model = this.CreateUpdateModel(fuuidv4());
-    this.runWebservices(path, model, dialogRef);
+  showConfirmacion() {
+    if (!this.dialogsService.checkError(this.newMenuForm)) {
+      let dialogRef = this.dialogsService.createView(0);
+      dialogRef.afterClosed().subscribe(result => {
+        if (result != 0) {
+          if (result == 1) {
+            this.doUpdate();
+          }
+        }
+        else {
+          this.doConsulta(undefined);
+        }
+      });
+    }
+  }
+
+  riseError(control) {
+    if (this.newMenuForm.controls[control].invalid) {
+        this.dialogsService.showSnack("Debe ingresar un valor valido para el campo " + control);
+        return true;
+    }
+    return false;
   }
 
   doUpdate() {
-    let dialogRef = this.createSpinner();
-    var path = "api/Menu/Update";
-    var model = this.CreateUpdateModel(this.id);
-    this.runWebservices(path, model, dialogRef);
+    var model;
+    var path;
+    if (this.id == '0') {
+      model = this.CreateUpdateModel(fuuidv4());
+      path = "api/Menu/New";
+    }
+    else {
+      model = this.CreateUpdateModel(this.id);
+      path = "api/Menu/Update";
+    }
+    this.dialogsService.runWebservices(path, model, 0)
+    .then( data => {
+      if (data == null) {
+        this.doConsulta(model.id);
+      }
+    });
   }
 
   CreateUpdateModel(id) {
@@ -106,76 +124,7 @@ export class MenuEditComponent implements OnInit {
       menu : this.newMenuForm.get('menu').value,
       descripcion : this.newMenuForm.get('descripcion').value
     };
-
     return model;
-  }
-
-  createSpinner() {
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
-    });
-    return dialogRef;
-  }
-  
-  runWebservices(path, model, dialogRef) {
-    this.webservices.postMessage(path, model)
-    .then( data => {
-      if (data == null ) {
-        this.snack.open("Registro ha sido gurdado con exito ", "Aceptar", { duration: 2000 });
-        this.doConsulta(model.id);
-      }
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
-    });
-  }
-
-  riseError(control) {
-    if (this.newMenuForm.controls[control].invalid) {
-        this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
-        return true;
-    }
-    return false;
-  }
-
-  showConfirmacion() {
-    if (!this.newMenuForm.valid) {
-        for (var control in  this.newMenuForm.controls) {
-            if (this.riseError(control)) {
-                break;
-            }
-        }
-    }
-    else  {
-      let dialogRef = this.dialog.open(ModalsaveComponent,  {
-        width: '250px',
-        //disableClose: true,
-        //panelClass: 'spinner-dialog'
-        //data: { name: 'this.name', animal: 'this.animal' }
-        data: { answer: true }
-      });
-      
-      dialogRef.afterClosed().subscribe(result => {
-        if (result != 0) {
-          if (result == 1) {
-            if (this.id == '0') {
-              this.doNew();
-            }
-            else {
-              this.doUpdate();
-            }
-          }
-        }
-        else {
-          this.doConsulta(undefined);
-        }
-      });
-
-    }
   }
 
   doConsulta(id) {

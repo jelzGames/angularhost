@@ -1,47 +1,44 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-groups-filtro',
   templateUrl: './groups-filtro.component.html',
   styleUrls: ['./groups-filtro.component.scss']
 })
-export class GroupsFiltroComponent implements OnInit {
+export class GroupsFiltroComponent {
 
-  @Input('status') typeactivoinactivo: number;
-  @Output() onToggleFiltro = new EventEmitter<void>();
-  @Output() onGoSearch = new EventEmitter<number>();
+    @Input('status') typeactivoinactivo: number;
+    @Output() onToggleFiltro = new EventEmitter<void>();
+    @Output() onGoSearch = new EventEmitter<number>();
   
-  title = 'Filtro';
+    title = 'Filtro';
 
-  showResults = true;
-  loading: boolean = false;
-  
-  formData = {};
-  basicForm: FormGroup;
+    showResults = true;
+    loading: boolean = false;
+    
+    formData = {};
+    basicForm: FormGroup;
 
-  typeArray = [
+    typeArray = [
       { id : 0,  typeName : 'Inactivos' },
       { id : 1, typeName : 'Activos' },
       { id : 2, typeName : 'Todos' },
-  ];
+    ];
 
-  constructor(private router: Router, private route : ActivatedRoute) { }
-
-  ngOnInit() {
-      this.basicForm = new FormGroup({
-          typeactivoinactivo: new FormControl('',  [ ]),
-      });
-     
-      this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
-  }
+    constructor() {
+        this.basicForm = new FormGroup({
+            typeactivoinactivo: new FormControl('',  [ ]),
+        });
+    
+        this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
+    }
  
-  doConsulta() {
-    this.onToggleFiltro.emit();
-  }
+    doConsulta() {
+        this.onToggleFiltro.emit();
+    }
 
-  reloadQuery() {
-      this.onGoSearch.emit(this.basicForm.controls["typeactivoinactivo"].value);
-  }
+    reloadQuery() {
+        this.onGoSearch.emit(this.basicForm.controls["typeactivoinactivo"].value);
+    }
 }

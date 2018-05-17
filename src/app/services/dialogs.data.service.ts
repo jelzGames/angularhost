@@ -12,6 +12,9 @@ export class DialogsDataService {
   constructor(public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
 
   createView(view) {
+    if (view == 0) {
+      view = ModalsaveComponent;
+    }
     let dialogRef = this.dialog.open(view,  {
       width: '265px',
       disableClose: true,
@@ -28,7 +31,7 @@ export class DialogsDataService {
       dialogRef.close();
       if (data == null) {
         if (type == 0) {
-          this.snack.open("Registro ha sido gurdado con exito ", "Aceptar", { duration: 2000 });
+          this.showSnack("Registro ha sido gurdado con exito ");
         }
       }
       return data;
@@ -37,4 +40,22 @@ export class DialogsDataService {
     });
   }
   
+  showSnack(message) {
+    this.snack.open(message, "Aceptar", { duration: 2000 });
+  }
+
+  checkError(newForm) {
+    if (!newForm.valid) {
+      for (var control in  newForm.controls) {
+        if (newForm.controls[control].invalid) {
+          if (newForm.controls[control]['tagname'] != undefined) {
+            control = newForm.controls[control]['tagname'];
+          }
+          this.showSnack("Debe ingresar un valor valido para el campo " + control);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

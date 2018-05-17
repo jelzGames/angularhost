@@ -1,13 +1,12 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-reglas-filtro',
   templateUrl: './reglas-filtro.component.html',
   styleUrls: ['./reglas-filtro.component.scss']
 })
-export class ReglasFiltroComponent implements OnInit {
+export class ReglasFiltroComponent {
   @Input('status') typeactivoinactivo: number;
   @Output() onToggleFiltro = new EventEmitter<void>();
   @Output() onGoSearch = new EventEmitter<number>();
@@ -26,15 +25,13 @@ export class ReglasFiltroComponent implements OnInit {
       { id : 2, typeName : 'Todos' },
   ];
 
-  constructor(private router: Router, private route : ActivatedRoute) { }
-
-  ngOnInit() {
-      this.basicForm = new FormGroup({
-          typeactivoinactivo: new FormControl('',  [ ]),
-      });
-     
-      this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
-  }
+  constructor() {
+    this.basicForm = new FormGroup({
+        typeactivoinactivo: new FormControl('',  [ ]),
+    });
+   
+    this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
+   }
  
   doConsulta() {
     this.onToggleFiltro.emit();

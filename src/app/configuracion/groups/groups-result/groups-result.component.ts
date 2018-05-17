@@ -1,7 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { WebservicesService } from '../../../services/webservices.service';
-import { MatDialog } from '@angular/material';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DialogsDataService } from '../../../services/dialogs.data.service';
 
 @Component({
@@ -9,7 +6,7 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
   templateUrl: './groups-result.component.html',
   styleUrls: ['./groups-result.component.scss']
 })
-export class GroupsResultComponent implements OnInit {
+export class GroupsResultComponent {
 
   @Input('resultLst') resultLst: any;
   @Output() onEditQuery = new EventEmitter<any>();
@@ -18,10 +15,7 @@ export class GroupsResultComponent implements OnInit {
   isDelete = false;
   isUnLock = false;
 
-  constructor(private webservices: WebservicesService, public dialog: MatDialog, private dialogsService : DialogsDataService) { }
-
-  ngOnInit() {
-  }
+  constructor(private dialogsService : DialogsDataService) { }
 
   edicionConsulta(idValue, typeValue) {
     this.onEditQuery.emit({ id : idValue, editQuery : typeValue});
@@ -40,9 +34,8 @@ export class GroupsResultComponent implements OnInit {
       id : id,
       status : status
     };
-    var path = "api/Groups/UpdateIsActive";
-
-    this.dialogsService.runWebservices(path, model, 1)
+   
+    this.dialogsService.runWebservices("api/Groups/UpdateIsActive", model, 1)
       .then( data => {
         if (data == null) {
           for (var x = 0; x < this.resultLst.length; x++) {

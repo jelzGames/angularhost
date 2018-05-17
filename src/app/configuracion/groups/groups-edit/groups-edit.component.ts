@@ -1,11 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { fuuidv4, CharacterLimit } from '../../../helpers/text-helpers';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { WebservicesService } from '../../../services/webservices.service';
-import { MatSnackBar, MatDialog } from '@angular/material';
-import { forEach } from '@angular/router/src/utils/collection';
 import { MenusRoles } from '../../../classes/menus.roles';
 import { DialogsDataService } from '../../../services/dialogs.data.service';
 
@@ -15,11 +10,11 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
   templateUrl: './groups-edit.component.html',
   styleUrls: ['./groups-edit.component.scss']
 })
-export class GroupsEditComponent implements OnInit {
+export class GroupsEditComponent {
 
   newForm;
   title = "Nuevo";
-  readonly = true;
+  readonly = false;
   loading = false;
   typeOperation = 0;
   menuLst = [];
@@ -33,33 +28,28 @@ export class GroupsEditComponent implements OnInit {
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, private webservices: WebservicesService, private snack: MatSnackBar,
-  private dialogsService : DialogsDataService) { }
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) {
     this.newForm = this.fb.group ({
       name : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
       typeData : new FormControl(''),
     });
     this.newForm.get('typeData').setValue(false);
-
-    if (this.id == "0") {
-      this.readonly = false;
-    }
-    else if (this.editQuery == 1) {
-      this.title = "Editar";
-      this.typeOperation = 1;
-    }
-    else {
-      this.title = "Consulta";
-      this.typeOperation = 2;
-    }
-
+    this.newForm.get('name')['tagname'] = 'nombre';
+  
     this.interval = setInterval( () => { 
       clearInterval(this.interval);
+      if (this.id != "0") {
+        if (this.editQuery == 1) {
+          this.title = "Editar";
+          this.typeOperation = 1;
+        }
+        else {
+          this.title = "Consulta";
+          this.typeOperation = 2;
+        }
+      }
       this.getById();
-     });
-    
+    });
   }
 
   isValid(control) {
@@ -67,13 +57,11 @@ export class GroupsEditComponent implements OnInit {
   }
 
   getById() {
-    let dialogRef = this.dialogsService.createView(ModalspinnerComponent);
-    
     var model = {
         id : this.id,
     }
-        
-    this.webservices.postMessage("api/Groups/ById", model)
+   
+    this.dialogsService.runWebservices("api/Groups/ById", model, 1)
     .then( data => {
       if (data != null ) {
         if (data.name != undefined) {
@@ -98,23 +86,12 @@ export class GroupsEditComponent implements OnInit {
         }
       }
       this.viewMenu = true;
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
     });
   }
 
   showConfirmacion() {
-    if (!this.newForm.valid) {
-        for (var control in  this.newForm.controls) {
-            if (this.riseError(control)) {
-                break;
-            }
-        }
-    }
-    else  {
-      let dialogRef = this.dialogsService.createView(ModalsaveComponent);
+    if (!this.dialogsService.checkError(this.newForm)) {
+      let dialogRef = this.dialogsService.createView(0);
       dialogRef.afterClosed().subscribe(result => {
         if (result != 0) {
           if (result == 1) {
@@ -126,14 +103,6 @@ export class GroupsEditComponent implements OnInit {
         }
       });
     }
-  }
-
-  riseError(control) {
-    if (this.newForm.controls[control].invalid) {
-        this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
-        return true;
-    }
-    return false;
   }
 
   doUpdate() {

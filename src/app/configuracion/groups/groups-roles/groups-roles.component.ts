@@ -1,17 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-groups-roles',
   templateUrl: './groups-roles.component.html',
   styleUrls: ['./groups-roles.component.scss']
 })
-export class GroupsRolesComponent implements OnInit {
+export class GroupsRolesComponent {
   @Input('rolesLst') resultLst: string;
   @Input('editQuery') editQuery: number;
   @Input('id') id: string;
   flagCursor = true;
 
-  constructor() { }
+  constructor() { 
+  }
 
   ngOnInit() {
     if (this.id == "0" || this.editQuery == 1) {

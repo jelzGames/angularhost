@@ -152,4 +152,6 @@ export class MenusRoles {
             menuLst[x].lst[1].isdelete = typed;
         }
     }
+
+    
 }

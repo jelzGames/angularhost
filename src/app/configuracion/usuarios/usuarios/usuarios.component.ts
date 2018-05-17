@@ -1,20 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { WebservicesService } from '../../../services/webservices.service';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
-import { UsuariosEditComponent } from '../usuarios-edit/usuarios-edit.component';
+import { DialogsDataService } from '../../../services/dialogs.data.service';
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.scss']
 })
-export class UsuariosComponent implements OnInit {
-  @ViewChild(UsuariosEditComponent)
-  private editQueryChild: UsuariosEditComponent;
-
-
+export class UsuariosComponent  {
+ 
   basicForm;
 
   title = "Búsqueda";
@@ -31,11 +25,7 @@ export class UsuariosComponent implements OnInit {
   editQuery = 0;
   email = "";
  
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService) { 
-    
-  }
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
     this.basicForm = this.fb.group ({
       filter: ["",[] ],
     });
@@ -43,30 +33,23 @@ export class UsuariosComponent implements OnInit {
 
   doSearch() {
     this.resultLst = [];
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
-    });
     var model = {
       filter : this.basicForm.get('filter').value,
       status : this.status
     }
     
-    this.webservices.postMessage("api/Users/SearchQuery", model)
+    this.dialogsService.runWebservices("api/Users/SearchQuery", model, 1)
     .then( data => {
-      if (data.error == null ) {
+      if (data.error == undefined) {
         this.resultLst = data;
       }
-      dialogRef.close();
-    }).catch( err => {
-      dialogRef.close();
     });
+   
   }
 
   doNuevo() {
     this.id = '0';
+    this.editQuery = 0;
     this.search = false;
     this.edit = true;
   }

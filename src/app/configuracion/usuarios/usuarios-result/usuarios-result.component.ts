@@ -1,14 +1,12 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { WebservicesService } from '../../../services/webservices.service';
-import { MatDialog } from '@angular/material';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { DialogsDataService } from '../../../services/dialogs.data.service';
 
 @Component({
   selector: 'app-usuarios-result',
   templateUrl: './usuarios-result.component.html',
   styleUrls: ['./usuarios-result.component.scss']
 })
-export class UsuariosResultComponent implements OnInit {
+export class UsuariosResultComponent {
   @Input('resultLst') resultLst: any;
   @Output() onEditQuery = new EventEmitter<any>();
   @Input('status') status: number;
@@ -16,10 +14,7 @@ export class UsuariosResultComponent implements OnInit {
   isDelete = false;
   isUnLock = false;
 
-  constructor(private webservices: WebservicesService, public dialog: MatDialog) { }
-
-  ngOnInit() {
-  }
+  constructor(private dialogsService : DialogsDataService) { }
 
   edicionConsulta(idValue, typeValue, email) {
     var model = { 
@@ -43,27 +38,12 @@ export class UsuariosResultComponent implements OnInit {
   }
 
   lockUnlock(id, status) {
-    let dialogRef = this.createSpinner();
-      var model = {
-        id : id,
-        status : status
-      };
-      var path = "api/Users/UpdateIsActive";
-      this.runWebservices(path, model, dialogRef);
-  }
-
-  createSpinner() {
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
-    });
-    return dialogRef;
-  }
-  
-  runWebservices(path, model, dialogRef) {
-    this.webservices.postMessage(path, model)
+    var model = {
+      id : id,
+      status : status
+    };
+    
+    this.dialogsService.runWebservices("api/Users/UpdateIsActive", model, 1)
     .then( data => {
       if (data == null) {
         for (var x = 0; x < this.resultLst.length; x++) {
@@ -82,10 +62,6 @@ export class UsuariosResultComponent implements OnInit {
         }
         this.isDelete = false;
       }
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
     });
   }
 

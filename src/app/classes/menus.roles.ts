@@ -1,44 +1,46 @@
 export class MenusRoles {
     
     extractData(data, lstType, typeModel) {
-        var count = 0;
-        var model = this.createExtractModel("", count);
-        if (data.length > 0) {
-          var names = data[0].name.split("/");
-          if (names.length > 1) {
-            model.name = names[0]
-            if (typeModel == 0) {
-              this.pushExtractModel(model,this.createHeaderModel(typeModel, 0, 1), "", typeModel);
+        if (data != undefined) {
+            var count = 0;
+            var model = this.createExtractModel("", count);
+            if (data.length > 0) {
+                var names = data[0].name.split("/");
+                if (names.length > 1) {
+                    model.name = names[0]
+                    if (typeModel == 0) {
+                        this.pushExtractModel(model,this.createHeaderModel(typeModel, 0, 1), "", typeModel);
+                    }
+                    this.pushExtractModel(model,this.createHeaderModel(typeModel, 1, 0), "", typeModel);
+                }
+                for (var x = 0; x < data.length; x++) {
+                    var temp = data[x].name.split("/");
+                    if (x == (data.length -1) || temp[0] != names[0]) {
+                        names = temp;
+                        lstType.push(model);
+                        count++;
+                        model = this.createExtractModel( names[0], count);
+                        if (typeModel == 0) {
+                            this.pushExtractModel(model,this.createHeaderModel(typeModel, 0, 1), "", typeModel);
+                        }
+                        this.pushExtractModel(model, this.createHeaderModel(typeModel, 1, 0), "", typeModel);
+                        this.pushExtractModel(model, data[x], temp[1], typeModel);
+                        }
+                    else {
+                        if (temp.length > 1) {
+                            this.pushExtractModel(model, data[x], temp[1], typeModel);
+                        }
+                    }
+                } 
+                if (model.name != "") {
+                    if (typeModel == 1) {
+                        lstType[count-1].lst.push(model.lst[1]);
+                    }
+                    else {
+                        lstType[count-1].lst.push(model.lst[2]);
+                    }
+                }
             }
-            this.pushExtractModel(model,this.createHeaderModel(typeModel, 1, 0), "", typeModel);
-          }
-          for (var x = 0; x < data.length; x++) {
-            var temp = data[x].name.split("/");
-            if (x == (data.length -1) || temp[0] != names[0]) {
-              names = temp;
-              lstType.push(model);
-              count++;
-              model = this.createExtractModel( names[0], count);
-              if (typeModel == 0) {
-                this.pushExtractModel(model,this.createHeaderModel(typeModel, 0, 1), "", typeModel);
-              }
-              this.pushExtractModel(model, this.createHeaderModel(typeModel, 1, 0), "", typeModel);
-              this.pushExtractModel(model, data[x], temp[1], typeModel);
-            }
-            else {
-              if (temp.length > 1) {
-                this.pushExtractModel(model, data[x], temp[1], typeModel);
-              }
-            }
-          } 
-          if (model.name != "") {
-            if (typeModel == 1) {
-              lstType[count-1].lst.push(model.lst[1]);
-            }
-            else {
-              lstType[count-1].lst.push(model.lst[2]);
-            }
-          }
         }
     }
     

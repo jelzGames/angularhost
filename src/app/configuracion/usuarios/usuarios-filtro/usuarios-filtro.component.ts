@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -6,7 +6,7 @@ import { FormGroup, FormControl } from '@angular/forms';
   templateUrl: './usuarios-filtro.component.html',
   styleUrls: ['./usuarios-filtro.component.scss']
 })
-export class UsuariosFiltroComponent implements OnInit {
+export class UsuariosFiltroComponent  {
   @Input('status') typeactivoinactivo: number;
   @Output() onToggleFiltro = new EventEmitter<void>();
   @Output() onGoSearch = new EventEmitter<number>();
@@ -25,16 +25,14 @@ export class UsuariosFiltroComponent implements OnInit {
       { id : 2, typeName : 'Todos' },
   ];
 
-  constructor() { }
-
-  ngOnInit() {
-      this.basicForm = new FormGroup({
-          typeactivoinactivo: new FormControl('',  [ ]),
-      });
-     
-      this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
+  constructor() { 
+    this.basicForm = new FormGroup({
+        typeactivoinactivo: new FormControl('',  [ ]),
+    });
+   
+    this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
   }
- 
+
   doConsulta() {
     this.onToggleFiltro.emit();
   }

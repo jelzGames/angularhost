@@ -1,13 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { WebservicesService } from '../../../services/webservices.service';
 import { CharacterLimit, fuuidv4, CharacterMinumun } from '../../../helpers/text-helpers';
-import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
-import { ModalsaveComponent } from '../../../shared/modalsave/modalsave.component';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ViewChild } from '@angular/core';
-import { ElementRef } from '@angular/core';
+import { DialogsDataService } from '../../../services/dialogs.data.service';
 import { MenusRoles } from '../../../classes/menus.roles';
 
 const URL = '';
@@ -47,8 +42,7 @@ export class UsuariosEditComponent implements OnInit {
     this.radios = value;
   }
   
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar,
-    public _DomSanitizer: DomSanitizer) { }
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService, public _DomSanitizer: DomSanitizer) { }
 
   ngOnInit() {
     if (this.id == "0") {
@@ -104,7 +98,16 @@ export class UsuariosEditComponent implements OnInit {
         });
       }
     }
-    
+    if (this.id == "0" || this.editQuery != 2) {
+      this.newForm.get('email')['tagname'] = 'correo';
+      this.newForm.get('firstname')['tagname'] = 'nombre';
+      this.newForm.get('lastname')['tagname'] = 'apellido';
+      this.newForm.get('tel')['tagname'] = 'telefono';
+    }
+    if (this.id == "0" || this.editQuery == 2) {
+      this.newForm.get('password')['tagname'] = "contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
+      this.newForm.get('retry')['tagname'] = "verifique contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
+    }
   }
 
   ngAfterViewInit(): void {
@@ -118,12 +121,11 @@ export class UsuariosEditComponent implements OnInit {
   }
 
   getById() {
-    let dialogRef = this.createSpinner();
     var model = {
         id : this.id,
     }
         
-    this.webservices.postMessage("api/Users/ById", model)
+    this.dialogsService.runWebservices("api/Users/ById", model, 1)
     .then( data => {
       if (data != null ) {
         if (data.email != undefined) {
@@ -161,35 +163,65 @@ export class UsuariosEditComponent implements OnInit {
           this.readonly = true;
         }
       }
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
     });
   }
 
-  doNew() {
-    let dialogRef = this.createSpinner();
-    var model = this.CreateUpdateModel("0");
-    var path = "api/Users/New";
-    this.runWebservices(path, model, dialogRef);
-  }
-
-  doChangePassword() {
-    let dialogRef = this.createSpinner();
-    var model = {
-      id : this.id,
-      password : this.newForm.get("password").value 
+  
+  matchingPassword() {
+    return form => {
+     if (form.controls["password"].value != form.controls["retry"].value) {
+        return { notMatchingPassword : true}
+      }
     }
-    var path = "api/Users/ChangePassword";
-    this.runWebservices(path, model, dialogRef);
   }
 
+  emailValid() {
+    return control => {
+      var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return regex.test(control.value) ? null : { invalidEmail : true};
+    }
+  }
+
+  showConfirmacion() {
+    if (!this.dialogsService.checkError(this.newForm)) {
+      if (!this.newForm.valid) {
+        this.dialogsService.showSnack(this.notMaching);
+      }
+      else {
+        let dialogRef = this.dialogsService.createView(0);
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != 0) {
+            if (result == 1) {
+               this.doUpdate();
+            }
+          }
+          else {
+            this.doConsulta(undefined);
+          }
+        });
+      }
+    }
+  }
+  
   doUpdate() {
-    let dialogRef = this.createSpinner();
-    var model = this.CreateUpdateModel(this.id);
-    var path = "api/Users/Update";
-    this.runWebservices(path, model, dialogRef);
+    var model;
+    var path;
+    if (this.editQuery == 2) {
+      model = {
+        id : this.id,
+        password : this.newForm.get("password").value 
+      }
+      path = "api/Users/ChangePassword";
+    }
+    else if (this.id == '0') {
+      model = this.CreateUpdateModel(fuuidv4());
+      path = "api/Users/New";
+    }
+    else {
+      model = this.CreateUpdateModel(this.id);
+      path = "api/Users/Update";
+    }
+    this.runWebservices(path, model);
   }
 
   CreateUpdateModel(id) {
@@ -210,114 +242,20 @@ export class UsuariosEditComponent implements OnInit {
     return model;
   }
 
-  createSpinner() {
-    let dialogRef = this.dialog.open(ModalspinnerComponent,  {
-      width: '250px',
-      disableClose: true,
-      panelClass: 'spinner-dialog'
-      //data: { name: this.name, animal: this.animal }
+  runWebservices(path, model) {
+    this.dialogsService.runWebservices(path, model, 0)
+    .then( data => {
+      if (data != null && data.error != undefined) {
+      }
+      else {
+        if (this.id == "0") {
+          model.id = data.id;
+        }
+        this.doConsulta(model.id);
+      }
     });
-    return dialogRef;
   }
   
-  runWebservices(path, model, dialogRef) {
-    this.webservices.postMessage(path, model)
-    .then( data => {
-      if (this.id == "0") {
-        model.id = data.id;
-      }
-      this.snack.open("Registro ha sido gurdado con exito ", "Aceptar", { duration: 2000 });
-      this.doConsulta(model.id);
-      dialogRef.close();
-      
-    }).catch( err => {
-      dialogRef.close();
-    });
-  }
-
-  matchingPassword() {
-    return form => {
-     if (form.controls["password"].value != form.controls["retry"].value) {
-        return { notMatchingPassword : true}
-      }
-    }
-  }
-
-  emailValid() {
-    return control => {
-      var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return regex.test(control.value) ? null : { invalidEmail : true};
-    }
-  }
-
-  riseError(control) {
-    if (this.newForm.controls[control].invalid) {
-      if (control == "email") {
-         control = "correo";
-      }
-      else if (control == "password") {
-        control = "contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
-      }
-      else if (control == "retry") {
-        control = "verifique contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
-      }
-      else if (control == "firstname") {
-        control = "nombre";
-      }
-      else if (control == "lastname") {
-        control = "apellido";
-      }
-      this.snack.open("Debe ingresar un valor valido para el campo " + control , "Aceptar", { duration: 2000 });
-      return true;
-    }
-    return false;
-  }
-
-  showConfirmacion() {
-    if (!this.newForm.valid) {
-      var flag = false;
-      for (var control in  this.newForm.controls) {
-          if (this.riseError(control)) {
-              flag = true;
-              break;
-          }
-      }
-      if (!flag) {
-        this.snack.open(this.notMaching , "Aceptar", { duration: 2000 });
-      }
-    }
-    else {
-      let dialogRef = this.dialog.open(ModalsaveComponent,  {
-        width: '250px',
-        data: { answer: true }
-        //disableClose: true,
-        //panelClass: 'spinner-dialog'
-        //data: { name: this.name, animal: this.animal }
-      });
-      
-      dialogRef.afterClosed().subscribe(result => {
-        if (result != 0) {
-          if (result == 1) {
-            if (this.id == '0') {
-              this.doNew();
-            }
-            else if (this.editQuery == 2) {
-              this.doChangePassword();
-            }
-            else {
-              
-              this.doUpdate();
-            }
-          }
-        }
-        else {
-          this.doConsulta(undefined);
-        }
-      });
-
-    }
-  }
-
   doConsulta(id) {
     var model = {
       typeOperation : this.typeOperation
@@ -340,5 +278,12 @@ export class UsuariosEditComponent implements OnInit {
     this.onSearch.emit(model);
   }
 
+  onFileSelected(e) {
+    var reader = new FileReader();
+    reader.onload = (event:any) => {
+     this.file = event.target.result;
+    }
+    reader.readAsDataURL(e.srcElement.files[0]);
+  }
  
 }

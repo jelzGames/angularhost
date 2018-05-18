@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material';
 import { ConfigService } from './config.service';
+import { DialogSnackService } from './dialog.snack.service';
 
 @Injectable()
 export class WebservicesService {
 
     TokenInfo = ""; 
    
-    constructor(private router: Router, private http : HttpClient, private snackBar: MatSnackBar, private config : ConfigService) {}
+    constructor(private router: Router, private http : HttpClient, private snack : DialogSnackService, private config : ConfigService) {}
 
     async postMessage(url, model) {
         var headers = new HttpHeaders();
@@ -67,7 +67,7 @@ export class WebservicesService {
             errorMessage = "No autorizado";
             this.router.navigate(['/login']);
         }
-        else if (error.status != "0" && error.status != "400") {
+        else if (error.status != "0") {
             if (error.error != undefined && error.error.error == "invalid_grant") {
                 errorMessage = "Correo o contraseña es incorrecto";
             }
@@ -77,13 +77,16 @@ export class WebservicesService {
             else if (error.error.message != undefined) {
                 errorMessage = error.error.message;
             }
+            else if (error.status == "400"){
+                errorMessage = "No es posible conectar al servidor";
+            } 
             else {
                 errorMessage = error.error.error_description;
-            } 
+            }
         }
         else {
             errorMessage = "No es posible conectar al servidor";
         }
-        this.snackBar.open(errorMessage , 'Close', {duration: 3000});
+        this.snack.showSnack(errorMessage);
     }
 }

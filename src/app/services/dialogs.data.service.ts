@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { WebservicesService } from './webservices.service';
 import { ModalspinnerComponent } from '../shared/modalspinner/modalspinner.component';
 import { ModalsaveComponent } from '../shared/modalsave/modalsave.component';
+import { DialogSnackService } from './dialog.snack.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DialogsDataService {
 
-  constructor(public dialog: MatDialog, private webservices: WebservicesService, private snack: MatSnackBar) { }
+  constructor(public dialog: MatDialog, private webservices: WebservicesService, private snack : DialogSnackService ) { }
 
   createView(view) {
     if (view == 0) {
@@ -31,7 +32,7 @@ export class DialogsDataService {
       dialogRef.close();
       if (data == null) {
         if (type == 0) {
-          this.showSnack("Registro ha sido gurdado con exito ");
+          this.snack.showSnack("Registro ha sido gurdado con exito ");
         }
       }
       return data;
@@ -40,9 +41,7 @@ export class DialogsDataService {
     });
   }
   
-  showSnack(message) {
-    this.snack.open(message, "Aceptar", { duration: 2000 });
-  }
+ 
 
   checkError(newForm) {
     if (!newForm.valid) {
@@ -51,7 +50,7 @@ export class DialogsDataService {
           if (newForm.controls[control]['tagname'] != undefined) {
             control = newForm.controls[control]['tagname'];
           }
-          this.showSnack("Debe ingresar un valor valido para el campo " + control);
+          this.snack.showSnack("Debe ingresar un valor valido para el campo " + control);
           return true;
         }
       }

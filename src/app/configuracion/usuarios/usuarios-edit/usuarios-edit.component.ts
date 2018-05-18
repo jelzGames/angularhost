@@ -4,6 +4,7 @@ import { CharacterLimit, fuuidv4, CharacterMinumun } from '../../../helpers/text
 import { DomSanitizer } from '@angular/platform-browser';
 import { DialogsDataService } from '../../../services/dialogs.data.service';
 import { MenusRoles } from '../../../classes/menus.roles';
+import { DialogSnackService } from '../../../services/dialog.snack.service';
 
 const URL = '';
 
@@ -42,7 +43,7 @@ export class UsuariosEditComponent implements OnInit {
     this.radios = value;
   }
   
-  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService, public _DomSanitizer: DomSanitizer) { }
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService, public _DomSanitizer: DomSanitizer, private snack : DialogSnackService) { }
 
   ngOnInit() {
     if (this.id == "0") {
@@ -185,7 +186,7 @@ export class UsuariosEditComponent implements OnInit {
   showConfirmacion() {
     if (!this.dialogsService.checkError(this.newForm)) {
       if (!this.newForm.valid) {
-        this.dialogsService.showSnack(this.notMaching);
+        this.snack.showSnack(this.notMaching);
       }
       else {
         let dialogRef = this.dialogsService.createView(0);

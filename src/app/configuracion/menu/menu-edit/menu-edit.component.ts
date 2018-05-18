@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { CharacterLimit, fuuidv4 } from '../../../helpers/text-helpers';
 import { DialogsDataService } from '../../../services/dialogs.data.service';
 import { MenuRole } from '../../../classes/menu.role';
+import { DialogSnackService } from '../../../services/dialog.snack.service';
 
 @Component({
   selector: 'app-menu-edit',
@@ -20,7 +21,7 @@ export class MenuEditComponent {
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService, private snack : DialogSnackService ) { 
     let menuRoleClass = new MenuRole();
    
     this.newMenuForm = this.fb.group ({
@@ -93,7 +94,7 @@ export class MenuEditComponent {
 
   riseError(control) {
     if (this.newMenuForm.controls[control].invalid) {
-        this.dialogsService.showSnack("Debe ingresar un valor valido para el campo " + control);
+        this.snack.showSnack("Debe ingresar un valor valido para el campo " + control);
         return true;
     }
     return false;

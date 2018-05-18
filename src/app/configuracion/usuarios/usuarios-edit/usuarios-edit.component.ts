@@ -17,7 +17,7 @@ export class UsuariosEditComponent implements OnInit {
   
   newForm;
   title = "Nuevo";
-  readonly = true;
+  readonly = false;
   typeOperation = 0;
   menuLst = [];
   rolesLst = [];
@@ -28,8 +28,8 @@ export class UsuariosEditComponent implements OnInit {
  
   notMaching = "Contraseñas no coinciden";
   minimunPasswordLength = 6;
-
   isShowBtnPhoto = true;
+  menuRolesClass = new MenusRoles();
  
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
@@ -59,7 +59,6 @@ export class UsuariosEditComponent implements OnInit {
         retry : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
       },{ validator: this.matchingPassword()});
 
-      this.readonly = false;
     }
     else {
       if (this.editQuery == 2) {
@@ -93,10 +92,7 @@ export class UsuariosEditComponent implements OnInit {
           this.isShowBtnPhoto = false;
         }
 
-        this.interval = setInterval( () => { 
-          clearInterval(this.interval);
-          this.getById();
-        });
+        
       }
     }
     if (this.id == "0" || this.editQuery != 2) {
@@ -109,6 +105,11 @@ export class UsuariosEditComponent implements OnInit {
       this.newForm.get('password')['tagname'] = "contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
       this.newForm.get('retry')['tagname'] = "verifique contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
     }
+
+    this.interval = setInterval( () => { 
+      clearInterval(this.interval);
+      this.getById();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -130,16 +131,19 @@ export class UsuariosEditComponent implements OnInit {
     .then( data => {
       if (data != null ) {
         if (data.email != undefined) {
-          this.newForm.controls['email'].setValue(data.email);
-          this.newForm.controls['firstname'].setValue(data.firstname);
-          this.newForm.controls['lastname'].setValue(data.lastname);
-          this.newForm.controls['direccion'].setValue(data.direccion);
-          this.newForm.controls['colonia'].setValue(data.colonia);
-          this.newForm.controls['ciudad'].setValue(data.ciudad);
-          this.newForm.controls['tel'].setValue(data.tel);
-          this.file = "data:image/jpeg;base64," + data.photo;
           
-          if (this.editQuery == 0) {
+          if (this.id == "0" || this.editQuery != 2) {
+            this.newForm.controls['email'].setValue(data.email);
+            this.newForm.controls['firstname'].setValue(data.firstname);
+            this.newForm.controls['lastname'].setValue(data.lastname);
+            this.newForm.controls['direccion'].setValue(data.direccion);
+            this.newForm.controls['colonia'].setValue(data.colonia);
+            this.newForm.controls['ciudad'].setValue(data.ciudad);
+            this.newForm.controls['tel'].setValue(data.tel);
+            this.file = "data:image/jpeg;base64," + data.photo;
+          }
+          
+          if (this.id != "0" && this.editQuery == 0) {
             this.newForm.controls['email'].disable();
             this.newForm.controls['firstname'].disable();
             this.newForm.controls['lastname'].disable();
@@ -152,12 +156,10 @@ export class UsuariosEditComponent implements OnInit {
           else { 
             this.readonly = false;
           }
-         
-          let menuRolesClass = new MenusRoles();
-          menuRolesClass.extractData(data.menu, this.menuLst, 0);
-          menuRolesClass.extractData(data.roles, this.rolesLst, 1);
+          this.menuRolesClass.extractData(data.menu, this.menuLst, 0);
+          this.menuRolesClass.extractData(data.roles, this.rolesLst, 1);
           if (this.id != "0") {
-            menuRolesClass.reorderModel(this.menuLst, this.rolesLst);
+            this.menuRolesClass.reorderModel(this.menuLst, this.rolesLst);
           }
         }
         else {
@@ -186,6 +188,7 @@ export class UsuariosEditComponent implements OnInit {
   showConfirmacion() {
     if (!this.dialogsService.checkError(this.newForm)) {
       if (!this.newForm.valid) {
+        this.moveButtonPosition();
         this.snack.showSnack(this.notMaching);
       }
       else {
@@ -202,8 +205,16 @@ export class UsuariosEditComponent implements OnInit {
         });
       }
     }
+    else {
+      this.moveButtonPosition();
+    }
   }
   
+  moveButtonPosition() {
+    this.radios = 0;
+    this.labelPerfil.nativeElement.click();
+  }
+
   doUpdate() {
     var model;
     var path;
@@ -235,11 +246,16 @@ export class UsuariosEditComponent implements OnInit {
       colonia : this.newForm.get("colonia").value,
       ciudad : this.newForm.get("ciudad").value,
       tel : this.newForm.get("tel").value,
-      photo : this.file.replace(/data:image\/jpeg;base64,/g, '')
+      photo : this.file.replace(/data:image\/jpeg;base64,/g, ''),
+      menu : [],
+      roles : []
     };
     if (this.id == "0") {
       model["password"] = this.newForm.get("password").value;
     }
+    
+    this.menuRolesClass.pushDataModel(this.rolesLst, this.menuLst, model);
+   
     return model;
   }
 

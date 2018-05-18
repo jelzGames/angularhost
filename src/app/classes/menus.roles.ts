@@ -155,5 +155,44 @@ export class MenusRoles {
         }
     }
 
-    
+    pushDataModel(rolesLst, menuLst, model) 
+    {
+        for (var x = 0; x < rolesLst.length; x++) {
+            for (var y = 0; y < rolesLst[x].lst.length; y++) {
+                if (rolesLst[x].lst[y].id != 0) {
+                    if (rolesLst[x].lst[y].typeRight != rolesLst[x].lst[y].typeOriginal) {
+                        model.roles.push( 
+                        {
+                            idrole : rolesLst[x].lst[y].id,
+                            typeright : rolesLst[x].lst[y].typeRight,
+                            isedit : rolesLst[x].lst[y].isEdit
+                        }
+                        );
+                    }
+                }
+            }
+        }
+      
+        for (var x = 0; x < menuLst.length; x++) {
+            for (var y = 0; y < menuLst[x].lst.length; y++) {
+                if (menuLst[x].lst[y].id != 0) {
+                    if (menuLst[x].lst[y].isquery != menuLst[x].lst[y].isqueryOriginal ||
+                        menuLst[x].lst[y].isnew != menuLst[x].lst[y].isnewOriginal ||
+                        menuLst[x].lst[y].iseditField != menuLst[x].lst[y].iseditFieldOriginal ||
+                        menuLst[x].lst[y].isdelete != menuLst[x].lst[y].isdeleteOriginal) {
+                        model.menu.push( 
+                        {
+                            idmenu : menuLst[x].lst[y].id,
+                            isquery : menuLst[x].lst[y].isquery,
+                            isnew : menuLst[x].lst[y].isnew,
+                            iseditField : menuLst[x].lst[y].iseditField,
+                            isdelete : menuLst[x].lst[y].isdelete,
+                            isedit : menuLst[x].lst[y].isEdit
+                        }
+                        );
+                    }
+                }
+            }
+        }
+    }
 }

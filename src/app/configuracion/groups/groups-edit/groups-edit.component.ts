@@ -23,6 +23,7 @@ export class GroupsEditComponent {
  
   viewRoles = false;
   viewMenu = false;
+  menuRolesClass = new MenusRoles();
 
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
@@ -74,11 +75,11 @@ export class GroupsEditComponent {
             this.readonly = false;
           }
           
-          let menuRolesClass = new MenusRoles();
-          menuRolesClass.extractData(data.menu, this.menuLst, 0);
-          menuRolesClass.extractData(data.roles, this.rolesLst, 1);
+         
+          this.menuRolesClass.extractData(data.menu, this.menuLst, 0);
+          this.menuRolesClass.extractData(data.roles, this.rolesLst, 1);
           if (this.id != "0") {
-            menuRolesClass.reorderModel(this.menuLst, this.rolesLst);
+            this.menuRolesClass.reorderModel(this.menuLst, this.rolesLst);
           }
         }
         else {
@@ -131,44 +132,8 @@ export class GroupsEditComponent {
       menu : [],
       roles : []
     };
-    for (var x = 0; x < this.rolesLst.length; x++) {
-      for (var y = 0; y < this.rolesLst[x].lst.length; y++) {
-        if (this.rolesLst[x].lst[y].id != 0) {
-          if (this.rolesLst[x].lst[y].typeRight != this.rolesLst[x].lst[y].typeOriginal) {
-            model.roles.push( 
-              {
-                idrole : this.rolesLst[x].lst[y].id,
-                typeright : this.rolesLst[x].lst[y].typeRight,
-                isedit : this.rolesLst[x].lst[y].isEdit
-              }
-            );
-          }
-        }
-      }
-    }
-
-    for (var x = 0; x < this.menuLst.length; x++) {
-      for (var y = 0; y < this.menuLst[x].lst.length; y++) {
-        if (this.menuLst[x].lst[y].id != 0) {
-          if (this.menuLst[x].lst[y].isquery != this.menuLst[x].lst[y].isqueryOriginal ||
-            this.menuLst[x].lst[y].isnew != this.menuLst[x].lst[y].isnewOriginal ||
-            this.menuLst[x].lst[y].iseditField != this.menuLst[x].lst[y].iseditFieldOriginal ||
-            this.menuLst[x].lst[y].isdelete != this.menuLst[x].lst[y].isdeleteOriginal) {
-            model.menu.push( 
-              {
-                idmenu : this.menuLst[x].lst[y].id,
-                isquery : this.menuLst[x].lst[y].isquery,
-                isnew : this.menuLst[x].lst[y].isnew,
-                iseditField : this.menuLst[x].lst[y].iseditField,
-                isdelete : this.menuLst[x].lst[y].isdelete,
-                isedit : this.menuLst[x].lst[y].isEdit
-              }
-            );
-          }
-        }
-      }
-    }
-    
+    this.menuRolesClass.pushDataModel(this.rolesLst, this.menuLst, model);
+   
     return model;
   }
 

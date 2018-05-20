@@ -71,6 +71,12 @@ export class WebservicesService {
             if (error.error != undefined && error.error.error == "invalid_grant") {
                 errorMessage = "Correo o contraseña es incorrecto";
             }
+            else if (error.error != undefined && error.error.error == "user_lockedout") {
+                errorMessage = "Usuario bloquedo, trate de nuevo despues de 10 min o contacte a su admnistrador";
+            }
+            else if (error.error != undefined && error.error.error == "user_lockedout_by_admin") {
+                errorMessage = "Usuario bloquedo por su admnistrador";
+            }
             else if (error.Message != undefined) {
                 errorMessage = error.Message;
             }

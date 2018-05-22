@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -6,7 +6,7 @@ import { FormGroup, FormControl } from '@angular/forms';
   templateUrl: './menu-filtro.component.html',
   styleUrls: ['./menu-filtro.component.scss']
 })
-export class MenuFiltroComponent {
+export class MenuFiltroComponent implements OnInit {
   @Input('status') typeactivoinactivo: number;
   @Output() onToggleFiltro = new EventEmitter<void>();
   @Output() onGoSearch = new EventEmitter<number>();
@@ -29,9 +29,12 @@ export class MenuFiltroComponent {
     this.basicForm = new FormGroup({
         typeactivoinactivo: new FormControl('',  [ ]),
     });
-    this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
   }
  
+  ngOnInit() {
+    this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
+  }
+
   doConsulta() {
     this.onToggleFiltro.emit();
   }

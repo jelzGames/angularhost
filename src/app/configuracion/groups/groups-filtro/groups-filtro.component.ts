@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -6,7 +6,7 @@ import { FormGroup, FormControl } from '@angular/forms';
   templateUrl: './groups-filtro.component.html',
   styleUrls: ['./groups-filtro.component.scss']
 })
-export class GroupsFiltroComponent {
+export class GroupsFiltroComponent implements OnInit {
 
     @Input('status') typeactivoinactivo: number;
     @Output() onToggleFiltro = new EventEmitter<void>();
@@ -31,6 +31,9 @@ export class GroupsFiltroComponent {
             typeactivoinactivo: new FormControl('',  [ ]),
         });
     
+    }
+
+    ngOnInit() {
         this.basicForm.controls["typeactivoinactivo"].setValue(this.typeactivoinactivo);
     }
  

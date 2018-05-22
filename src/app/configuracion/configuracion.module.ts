@@ -25,6 +25,7 @@ import { UsuariosResultComponent } from './usuarios/usuarios-result/usuarios-res
 import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-filtro.component';
 import { UsuariosEditComponent } from './usuarios/usuarios-edit/usuarios-edit.component';
 import { DialogsDataService } from '../services/dialogs.data.service';
+import { UsuariosGruposComponent } from './usuarios/usuarios-grupos/usuarios-grupos.component';
 
 
 
@@ -40,7 +41,7 @@ import { DialogsDataService } from '../services/dialogs.data.service';
   ],
   declarations: [ReglasComponent, ReglasResultComponent, ReglasEditComponent, GroupsComponent, ReglasFiltroComponent, MenuComponent, 
     MenuEditComponent, MenuFiltroComponent, MenuResultComponent, GroupsEditComponent, GroupsFiltroComponent, GroupsResultComponent, 
-    GroupsRolesComponent, GroupsMenuComponent, UsuariosComponent, UsuariosResultComponent, UsuariosFiltroComponent, UsuariosEditComponent],
+    GroupsRolesComponent, GroupsMenuComponent, UsuariosComponent, UsuariosResultComponent, UsuariosFiltroComponent, UsuariosEditComponent, UsuariosGruposComponent],
   providers: [ DialogsDataService ],
 })
 export class ConfiguracionModule { }

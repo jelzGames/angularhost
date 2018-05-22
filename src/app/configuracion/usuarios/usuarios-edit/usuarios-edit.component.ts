@@ -21,6 +21,7 @@ export class UsuariosEditComponent implements OnInit {
   typeOperation = 0;
   menuLst = [];
   rolesLst = [];
+  groupsLst = [];
   interval;
  
   imageRaw;
@@ -161,6 +162,7 @@ export class UsuariosEditComponent implements OnInit {
           if (this.id != "0") {
             this.menuRolesClass.reorderModel(this.menuLst, this.rolesLst);
           }
+          this.addOriginalGroupValue(data);
         }
         else {
           this.readonly = true;
@@ -169,6 +171,12 @@ export class UsuariosEditComponent implements OnInit {
     });
   }
 
+  addOriginalGroupValue(data) {
+    for (var x = 0; x < data.groups.length; x++ ) {
+      data.groups[x]['ischeckedOriginal'] = data.groups[x].ischecked;
+    }
+    this.groupsLst = data.groups;
+  }
   
   matchingPassword() {
     return form => {
@@ -248,15 +256,31 @@ export class UsuariosEditComponent implements OnInit {
       tel : this.newForm.get("tel").value,
       photo : this.file.replace(/data:image\/jpeg;base64,/g, ''),
       menu : [],
-      roles : []
+      roles : [],
+      groups : [],
     };
     if (this.id == "0") {
       model["password"] = this.newForm.get("password").value;
     }
     
     this.menuRolesClass.pushDataModel(this.rolesLst, this.menuLst, model);
-   
+    this.pushGroupsModel(model);
+
     return model;
+  }
+
+  pushGroupsModel(model) {
+    for (var x = 0; x < this.groupsLst.length; x++) {
+      if (this.groupsLst[x].ischecked != this.groupsLst[x].ischeckedOriginal) {
+        model.groups.push( 
+          {
+            idgroup : this.groupsLst[x].id,
+            ischecked : this.groupsLst[x].ischecked,
+            isedit : this.groupsLst[x].isEdit
+          }
+        );
+      }
+    }
   }
 
   runWebservices(path, model) {

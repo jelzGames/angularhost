@@ -153,6 +153,7 @@ export class MenusRoles {
             menuLst[x].lst[1].iseditField = typee;
             menuLst[x].lst[1].isdelete = typed;
         }
+        
     }
 
     pushDataModel(rolesLst, menuLst, model) 
@@ -172,13 +173,12 @@ export class MenusRoles {
                 }
             }
         }
-      
         for (var x = 0; x < menuLst.length; x++) {
             for (var y = 0; y < menuLst[x].lst.length; y++) {
                 if (menuLst[x].lst[y].id != 0) {
                     if (menuLst[x].lst[y].isquery != menuLst[x].lst[y].isqueryOriginal ||
-                        menuLst[x].lst[y].isnew != menuLst[x].lst[y].isnewOriginal ||
-                        menuLst[x].lst[y].iseditField != menuLst[x].lst[y].iseditFieldOriginal ||
+                        menuLst[x].lst[y].isnew != menuLst[x].lst[y].isnewdOriginal ||
+                        menuLst[x].lst[y].iseditField != menuLst[x].lst[y].iseditFielddOriginal ||
                         menuLst[x].lst[y].isdelete != menuLst[x].lst[y].isdeleteOriginal) {
                         model.menu.push( 
                         {

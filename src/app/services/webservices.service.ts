@@ -77,6 +77,9 @@ export class WebservicesService {
             else if (error.error != undefined && error.error.error == "user_lockedout_by_admin") {
                 errorMessage = "Usuario bloquedo por su admnistrador";
             }
+            else if (error.error.error_description != undefined) {
+                errorMessage = error.error.error_description;
+            }
             else if (error.Message != undefined) {
                 errorMessage = error.Message;
             }

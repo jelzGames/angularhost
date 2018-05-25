@@ -11,8 +11,9 @@ export class UsuariosResultComponent {
   @Output() onEditQuery = new EventEmitter<any>();
   @Input('status') status: number;
   
-  isDelete = false;
+  isDelete = true;
   isUnLock = false;
+  isLock = false;
 
   constructor(private dialogsService : DialogsDataService) { }
 
@@ -29,17 +30,19 @@ export class UsuariosResultComponent {
    
   }
 
-  isGotoDelete(id) {
-    this.isDelete = true;
+  isGotoDelete() {
+    console.log("aqui");
+    this.isDelete = false;
+    this.isLock = true;
   }
 
-  delete(id) {
-    this.lockUnlock(id, 0);
+  delete(res) {
+    this.lockUnlock(0, res);
   }
 
-  lockUnlock(id, status) {
+  lockUnlock(status, res) {
     var model = {
-      id : id,
+      id : res.id,
       status : status
     };
     
@@ -49,37 +52,54 @@ export class UsuariosResultComponent {
         for (var x = 0; x < this.resultLst.length; x++) {
           var tmp = this.resultLst[x] as any;
           if (tmp.id == model.id) {
-            if (this.status != 2) {
+            if (this.status != 2 && res.status != 2) {
               this.resultLst.splice(x, 1);
             } 
             else {
+              if (model.status == 2) {
+                model.status = 0;
+              }
               this.resultLst[x].status = model.status;
-              this.isUnLock = false;
+              
   
             }  
             break;
           } 
         }
-        this.isDelete = false;
+        if (res.needreload == 1) {
+          res.isReloadOriginal = res.needreload;
+          res.needreload = 0;
+        }
+        else  if (res.isReloadOriginal != undefined) {
+            res.isReloadOriginal = undefined;
+            res.needreload = 1;
+        } 
+        this.isLock = false;
+        this.isUnLock = false;
+        this.isDelete = true;
       }
     });
   }
 
   undo() {
-    this.isDelete = false;
+    this.isDelete = true;
+    this.isLock = false;
   }
 
   undoUnlock() {
+    this.isDelete = true;
     this.isUnLock = false;
   }
 
-  unlock(id) {
+  unlock(res) {
     if (!this.isUnLock) {
+      this.isDelete = false;
       this.isUnLock = true;
     }
     else {
-      this.lockUnlock(id, 1)
+      this.lockUnlock(1, res)
     }
+    
   }
 
 }

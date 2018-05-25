@@ -42,6 +42,7 @@ export class UsuariosComponent  {
     .then( data => {
       if (data.error == undefined) {
         this.resultLst = data;
+        console.log(data);
       }
     });
    
@@ -60,7 +61,9 @@ export class UsuariosComponent  {
         id : model.id,
         email : model.email,
         name : model.name,
-        status : 1
+        status : 0,
+        needreload: 1
+
       }  
       this.resultLst.splice(0, 0, tmpmodel);
     }   
@@ -70,6 +73,7 @@ export class UsuariosComponent  {
         if (tmp.id == model.id) {
             this.resultLst[x].name = model.name;
             this.resultLst[x].email = model.email;
+            this.resultLst[x].needReload = model.needReload;
         } 
       }  
     }

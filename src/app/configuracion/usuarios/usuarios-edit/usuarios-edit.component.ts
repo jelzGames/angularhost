@@ -31,6 +31,7 @@ export class UsuariosEditComponent implements OnInit {
   minimunPasswordLength = 6;
   isShowBtnPhoto = true;
   menuRolesClass = new MenusRoles();
+  needReload = false;
  
   @Input('id') id: string;
   @Input('editQuery') editQuery: number;
@@ -263,7 +264,7 @@ export class UsuariosEditComponent implements OnInit {
       model["password"] = this.newForm.get("password").value;
     }
     
-    this.menuRolesClass.pushDataModel(this.rolesLst, this.menuLst, model);
+    this.needReload = this.menuRolesClass.pushDataModel(this.rolesLst, this.menuLst, model);
     this.pushGroupsModel(model);
 
     return model;
@@ -272,6 +273,7 @@ export class UsuariosEditComponent implements OnInit {
   pushGroupsModel(model) {
     for (var x = 0; x < this.groupsLst.length; x++) {
       if (this.groupsLst[x].ischecked != this.groupsLst[x].ischeckedOriginal) {
+        this.needReload = true; 
         model.groups.push( 
           {
             idgroup : this.groupsLst[x].id,
@@ -314,6 +316,7 @@ export class UsuariosEditComponent implements OnInit {
       model["email"] = this.newForm.get('email').value;
       model["name"] = name;
       model["typeOperation"] = this.typeOperation;
+      model["needReload"] = this.needReload;
     }
     
     this.onSearch.emit(model);

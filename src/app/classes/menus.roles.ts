@@ -158,10 +158,12 @@ export class MenusRoles {
 
     pushDataModel(rolesLst, menuLst, model) 
     {
+        var needReload = false;
         for (var x = 0; x < rolesLst.length; x++) {
             for (var y = 0; y < rolesLst[x].lst.length; y++) {
                 if (rolesLst[x].lst[y].id != 0) {
                     if (rolesLst[x].lst[y].typeRight != rolesLst[x].lst[y].typeOriginal) {
+                        needReload = true;
                         model.roles.push( 
                         {
                             idrole : rolesLst[x].lst[y].id,
@@ -180,6 +182,7 @@ export class MenusRoles {
                         menuLst[x].lst[y].isnew != menuLst[x].lst[y].isnewdOriginal ||
                         menuLst[x].lst[y].iseditField != menuLst[x].lst[y].iseditFielddOriginal ||
                         menuLst[x].lst[y].isdelete != menuLst[x].lst[y].isdeleteOriginal) {
+                        needReload = true;
                         model.menu.push( 
                         {
                             idmenu : menuLst[x].lst[y].id,
@@ -194,5 +197,6 @@ export class MenusRoles {
                 }
             }
         }
+        return needReload;
     }
 }

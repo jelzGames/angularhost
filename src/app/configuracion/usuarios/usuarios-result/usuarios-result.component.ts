@@ -11,9 +11,9 @@ export class UsuariosResultComponent {
   @Output() onEditQuery = new EventEmitter<any>();
   @Input('status') status: number;
   
-  isDelete = true;
+  isDelete = false;
   isUnLock = false;
-  isLock = false;
+  //isLock = false;
 
   constructor(private dialogsService : DialogsDataService) { }
 
@@ -31,9 +31,8 @@ export class UsuariosResultComponent {
   }
 
   isGotoDelete() {
-    console.log("aqui");
-    this.isDelete = false;
-    this.isLock = true;
+    this.isDelete = true;
+    //this.isLock = false;
   }
 
   delete(res) {
@@ -74,7 +73,7 @@ export class UsuariosResultComponent {
             res.isReloadOriginal = undefined;
             res.needreload = 1;
         } 
-        this.isLock = false;
+        //this.isLock = false;
         this.isUnLock = false;
         this.isDelete = true;
       }
@@ -82,8 +81,8 @@ export class UsuariosResultComponent {
   }
 
   undo() {
-    this.isDelete = true;
-    this.isLock = false;
+    this.isDelete = false;
+    //this.isLock = true;
   }
 
   undoUnlock() {

@@ -14,7 +14,7 @@ export class UsuariosComponent  {
   title = "Búsqueda";
 
   filter = "";
-  status = 1;
+  status = 0;
   resultLst = [];
  
   search = true;

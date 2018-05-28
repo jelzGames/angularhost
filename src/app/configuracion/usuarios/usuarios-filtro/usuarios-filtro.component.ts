@@ -21,8 +21,8 @@ export class UsuariosFiltroComponent implements OnInit {
   basicForm: FormGroup;
 
   typeArray = [
-      { id : 0,  typeName : 'Inactivos' },
-      { id : 1, typeName : 'Activos' },
+      { id : 1,  typeName : 'Inactivos' },
+      { id : 0, typeName : 'Activos' },
       { id : 2, typeName : 'Todos' },
   ];
 

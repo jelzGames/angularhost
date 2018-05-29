@@ -27,11 +27,6 @@ export class SidenavComponent implements OnInit {
       'subMenuitems' : [
         {
           'avatar' : 'Catalogos',
-          'menuItem' : 'Servicios Web',
-          'route' : 'Configuracion/Reglas'
-        },
-        {
-          'avatar' : 'Catalogos',
           'menuItem' : 'Menu',
           'route' : 'Configuracion/Menu'
         },

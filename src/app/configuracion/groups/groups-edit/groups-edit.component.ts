@@ -34,7 +34,7 @@ export class GroupsEditComponent {
       name : new FormControl('', [ Validators.required, CharacterLimit(256)  ] ),
       typeData : new FormControl(''),
     });
-    this.newForm.get('typeData').setValue(false);
+   this.newForm.get('typeData').setValue(false);
     this.newForm.get('name')['tagname'] = 'nombre';
   
     this.interval = setInterval( () => { 
@@ -59,10 +59,13 @@ export class GroupsEditComponent {
 
   getById() {
     var model = {
+      type : 2,
+      byId : {
         id : this.id,
+      }
     }
    
-    this.dialogsService.runWebservices("api/Groups/ById", model, 1)
+    this.dialogsService.runWebservices("api/groups", model, 1)
     .then( data => {
       if (data != null ) {
         if (data.name != undefined) {
@@ -74,12 +77,10 @@ export class GroupsEditComponent {
           else { 
             this.readonly = false;
           }
-          
          
           this.menuRolesClass.extractData(data.menu, this.menuLst, 0);
-          this.menuRolesClass.extractData(data.roles, this.rolesLst, 1);
           if (this.id != "0") {
-            this.menuRolesClass.reorderModel(this.menuLst, this.rolesLst);
+            this.menuRolesClass.reorderModel(this.menuLst);
           }
         }
         else {
@@ -108,14 +109,12 @@ export class GroupsEditComponent {
 
   doUpdate() {
     var model;
-    var path;
+    var path = "api/groups";
     if (this.id == '0') {
-      model = this.CreateUpdateModel(fuuidv4());
-      path = "api/Groups/New";
+      model = this.CreateUpdateModel(fuuidv4(), 3);
     }
     else {
-      model = this.CreateUpdateModel(this.id);
-      path = "api/Groups/Update";
+      model = this.CreateUpdateModel(this.id, 4);
     }
     this.dialogsService.runWebservices(path, model, 0)
     .then( data => {
@@ -125,14 +124,17 @@ export class GroupsEditComponent {
     });
   }
 
-  CreateUpdateModel(id) {
+  CreateUpdateModel(id, type) {
     var model = {
-      id : id,
-      name : this.newForm.get('name').value,
-      menu : [],
-      roles : []
+      type : type,
+      update : {
+        id : id,
+        name : this.newForm.get('name').value,
+        menu : [],
+        roles : []
+      }
     };
-    this.menuRolesClass.pushDataModel(this.rolesLst, this.menuLst, model);
+    this.menuRolesClass.pushDataModel(this.menuLst, model);
    
     return model;
   }
@@ -159,5 +161,4 @@ export class GroupsEditComponent {
       this.viewMenu = true;
     }
   }
-
 }

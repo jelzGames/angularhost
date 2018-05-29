@@ -19,7 +19,6 @@
   <div class="pb-1"></div>    
   <form [formGroup]="newMenuForm" class="form-mat" >
       <div fxLayout="row" fxLayoutWrap="wrap">
-        
           <div fxFlex="100" fxFlex.gt-xs="100" class="pr-1">
               <div class="pb-1">
                 <mat-form-field class="full-width">
@@ -27,9 +26,8 @@
                         autocomplete="off" [ngClass]="{'error': isValid('menu')}" />
                 </mat-form-field>
                 <mat-form-field class="full-width">
-                    <textarea matInput type="text" formControlName="descripcion" placeholder="Descripcion*" 
-                        autocomplete="off" [ngClass]="{'error': isValid('descripcion')}" >
-                    </textarea>
+                    <input matInput type="text" formControlName="entitie" placeholder="Entidad*" 
+                        autocomplete="off" [ngClass]="{'error': isValid('entitie')}" />
                 </mat-form-field>
               </div> 
           </div>

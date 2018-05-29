@@ -26,8 +26,9 @@ export class MenuEditComponent {
    
     this.newMenuForm = this.fb.group ({
       menu : new FormControl('', [ Validators.required, CharacterLimit(256),  menuRoleClass.validFormat() ] ),
-      descripcion : new FormControl('', [ Validators.required ] ),
+      entitie : new FormControl('', [ Validators.required, CharacterLimit(256) ] ),
     });
+    this.newMenuForm.get('entitie')['tagname'] = 'entidad';
     
     this.interval = setInterval( () => { 
       clearInterval(this.interval);
@@ -51,18 +52,21 @@ export class MenuEditComponent {
 
   getById() {
     var model = {
+      type : 2,
+      byId : {
         id : this.id,
+      }
     }
 
-    this.dialogsService.runWebservices("api/Menu/ById", model, 1)
+    this.dialogsService.runWebservices("api/menu", model, 1)
     .then( data => {
       if (data != null ) {
         if (data.menu != undefined) {
           this.newMenuForm.controls['menu'].setValue(data.menu);
-          this.newMenuForm.controls['descripcion'].setValue(data.descripcion);
+          this.newMenuForm.controls['entitie'].setValue(data.role);
           if (this.editQuery == 0) {
             this.newMenuForm.controls['menu'].disable();
-            this.newMenuForm.controls['descripcion'].disable();
+            this.newMenuForm.controls['entitie'].disable();
             this.readonly = true;
           }
           else { 
@@ -102,28 +106,29 @@ export class MenuEditComponent {
 
   doUpdate() {
     var model;
-    var path;
+    var path = "api/menu";
     if (this.id == '0') {
-      model = this.CreateUpdateModel(fuuidv4());
-      path = "api/Menu/New";
+      model = this.CreateUpdateModel(fuuidv4(), 3);
     }
     else {
-      model = this.CreateUpdateModel(this.id);
-      path = "api/Menu/Update";
+      model = this.CreateUpdateModel(this.id, 4);
     }
     this.dialogsService.runWebservices(path, model, 0)
     .then( data => {
       if (data == null) {
-        this.doConsulta(model.id);
+        this.doConsulta(model.update.id);
       }
     });
   }
 
-  CreateUpdateModel(id) {
+  CreateUpdateModel(id, type) {
     var model = {
-      id : id,
-      menu : this.newMenuForm.get('menu').value,
-      descripcion : this.newMenuForm.get('descripcion').value
+      type : type,
+      update : {
+        id : id,
+        menu : this.newMenuForm.get('menu').value,
+        role : this.newMenuForm.get('entitie').value,
+      }
     };
     return model;
   }

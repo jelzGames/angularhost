@@ -31,21 +31,24 @@ export class GroupsResultComponent {
 
   lockUnlock(id, status) {
     var model = {
-      id : id,
-      status : status
-    };
+      type : 5,
+      isActive : {
+        id : id,
+        status : status
+      }
+  };
    
-    this.dialogsService.runWebservices("api/Groups/UpdateIsActive", model, 1)
+    this.dialogsService.runWebservices("api/groups", model, 1)
       .then( data => {
         if (data == null) {
           for (var x = 0; x < this.resultLst.length; x++) {
             var tmp = this.resultLst[x] as any;
-            if (tmp.id == model.id) {
+            if (tmp.id == model.isActive.id) {
               if (this.status != 2) {
                 this.resultLst.splice(x, 1);
               } 
               else {
-                this.resultLst[x].status = model.status;
+                this.resultLst[x].status = model.isActive.status;
                 this.isUnLock = false;
     
               }  

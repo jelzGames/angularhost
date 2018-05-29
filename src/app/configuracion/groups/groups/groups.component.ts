@@ -33,11 +33,14 @@ export class GroupsComponent {
   doSearch() {
     this.resultLst = [];
     var model = {
-      filter : this.basicForm.get('filter').value,
-      status : this.status
+      type : 1,
+      search : {
+        filter : this.basicForm.get('filter').value,
+        status : this.status
+      }
     }
   
-    this.dialogsService.runWebservices("api/Groups/SearchQuery", model, 1)
+    this.dialogsService.runWebservices("api/groups", model, 1)
     .then( data => {
       if (data.error == undefined) {
         this.resultLst = data;

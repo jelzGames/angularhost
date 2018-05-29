@@ -161,7 +161,7 @@ export class UsuariosEditComponent implements OnInit {
           this.menuRolesClass.extractData(data.menu, this.menuLst, 0);
           this.menuRolesClass.extractData(data.roles, this.rolesLst, 1);
           if (this.id != "0") {
-            this.menuRolesClass.reorderModel(this.menuLst, this.rolesLst);
+            this.menuRolesClass.reorderModel(this.menuLst);
           }
           this.addOriginalGroupValue(data);
         }
@@ -264,7 +264,7 @@ export class UsuariosEditComponent implements OnInit {
       model["password"] = this.newForm.get("password").value;
     }
     
-    this.needReload = this.menuRolesClass.pushDataModel(this.rolesLst, this.menuLst, model);
+    this.needReload = this.menuRolesClass.pushDataModel(this.menuLst, model);
     this.pushGroupsModel(model);
 
     return model;

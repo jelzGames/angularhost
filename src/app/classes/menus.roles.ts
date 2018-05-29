@@ -107,17 +107,7 @@ export class MenusRoles {
         model.lst.push(temp);
     }
     
-    reorderModel(menuLst, rolesLst) {
-        for (var x = 0; x < rolesLst.length; x++) {
-            var type = rolesLst[x].lst[1].typeRight;
-            for (var y = 2; y < rolesLst[x].lst.length; y++) {
-                if (rolesLst[x].lst[y].typeRight != type) {
-                    type = 0;
-                    break;
-                }
-            }
-            rolesLst[x].lst[0].typeRight = type;
-        }
+    reorderModel(menuLst) {
         for (var x = 0; x < menuLst.length; x++) {
             var typer = menuLst[x].lst[2].isquery;
             var typen = menuLst[x].lst[2].isnew;
@@ -156,25 +146,9 @@ export class MenusRoles {
         
     }
 
-    pushDataModel(rolesLst, menuLst, model) 
+    pushDataModel(menuLst, model) 
     {
         var needReload = false;
-        for (var x = 0; x < rolesLst.length; x++) {
-            for (var y = 0; y < rolesLst[x].lst.length; y++) {
-                if (rolesLst[x].lst[y].id != 0) {
-                    if (rolesLst[x].lst[y].typeRight != rolesLst[x].lst[y].typeOriginal) {
-                        needReload = true;
-                        model.roles.push( 
-                        {
-                            idrole : rolesLst[x].lst[y].id,
-                            typeright : rolesLst[x].lst[y].typeRight,
-                            isedit : rolesLst[x].lst[y].isEdit
-                        }
-                        );
-                    }
-                }
-            }
-        }
         for (var x = 0; x < menuLst.length; x++) {
             for (var y = 0; y < menuLst[x].lst.length; y++) {
                 if (menuLst[x].lst[y].id != 0) {

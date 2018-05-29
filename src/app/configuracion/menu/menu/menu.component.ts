@@ -44,11 +44,14 @@ export class MenuComponent {
   doSearch() {
     this.resultLst = [];
     var model = {
-      filter : this.basicForm.get('filter').value,
-      status : this.status
+      type : 1,
+      search : {
+        filter : this.basicForm.get('filter').value,
+        status : this.status
+      }
     }
 
-    this.dialogsService.runWebservices("api/Menu/SearchQuery", model, 1)
+    this.dialogsService.runWebservices("api/Menu", model, 1)
     .then( data => {
       if (data.error == null) {
         this.resultLst = data;

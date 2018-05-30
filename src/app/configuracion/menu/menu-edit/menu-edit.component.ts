@@ -63,7 +63,7 @@ export class MenuEditComponent {
       if (data != null ) {
         if (data.menu != undefined) {
           this.newMenuForm.controls['menu'].setValue(data.menu);
-          this.newMenuForm.controls['entitie'].setValue(data.role);
+          this.newMenuForm.controls['entitie'].setValue(data.entitie);
           if (this.editQuery == 0) {
             this.newMenuForm.controls['menu'].disable();
             this.newMenuForm.controls['entitie'].disable();
@@ -127,7 +127,7 @@ export class MenuEditComponent {
       update : {
         id : id,
         menu : this.newMenuForm.get('menu').value,
-        role : this.newMenuForm.get('entitie').value,
+        entitie : this.newMenuForm.get('entitie').value,
       }
     };
     return model;

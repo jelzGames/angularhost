@@ -17,10 +17,10 @@ export class GroupsEditComponent {
   loading = false;
   typeOperation = 0;
   menuLst = [];
-  rolesLst = [];
+  groupsLst = [];
   interval;
  
-  viewRoles = false;
+  viewUsers = false;
   viewMenu = false;
   menuRolesClass = new MenusRoles();
 
@@ -82,6 +82,7 @@ export class GroupsEditComponent {
           if (this.id != "0") {
             this.menuRolesClass.reorderModel(this.menuLst);
           }
+          this.addOriginalGroupValue(data);
         }
         else {
           this.readonly = true;
@@ -89,6 +90,15 @@ export class GroupsEditComponent {
       }
       this.viewMenu = true;
     });
+  }
+
+  addOriginalGroupValue(data) {
+    
+    for (var x = 0; x < data.users.length; x++ ) {
+      data.users[x]['ischeckedOriginal'] = data.users[x].ischecked;
+    }
+    this.groupsLst = data.users;
+    console.log(data.users);
   }
 
   showConfirmacion() {
@@ -130,7 +140,7 @@ export class GroupsEditComponent {
         id : id,
         name : this.newForm.get('name').value,
         menu : [],
-        roles : []
+        users : []
       }
     };
     this.menuRolesClass.pushDataModel(this.menuLst, model.update);
@@ -153,10 +163,10 @@ export class GroupsEditComponent {
   doToogle() {
     if (!this.newForm.get('typeData').value) {
       this.viewMenu = false;
-      this.viewRoles = true;
+      this.viewUsers = true;
     }
     else {
-      this.viewRoles = false;
+      this.viewUsers = false;
       this.viewMenu = true;
     }
   }

@@ -148,7 +148,6 @@ export class MenusRoles {
 
     pushDataModel(menuLst, model) 
     {
-        var needReload = false;
         for (var x = 0; x < menuLst.length; x++) {
             for (var y = 0; y < menuLst[x].lst.length; y++) {
                 if (menuLst[x].lst[y].id != 0) {
@@ -156,21 +155,19 @@ export class MenusRoles {
                         menuLst[x].lst[y].isnew != menuLst[x].lst[y].isnewdOriginal ||
                         menuLst[x].lst[y].iseditField != menuLst[x].lst[y].iseditFielddOriginal ||
                         menuLst[x].lst[y].isdelete != menuLst[x].lst[y].isdeleteOriginal) {
-                        needReload = true;
                         model.menu.push( 
-                        {
-                            idmenu : menuLst[x].lst[y].id,
-                            isquery : menuLst[x].lst[y].isquery,
-                            isnew : menuLst[x].lst[y].isnew,
-                            iseditField : menuLst[x].lst[y].iseditField,
-                            isdelete : menuLst[x].lst[y].isdelete,
-                            isedit : menuLst[x].lst[y].isEdit
-                        }
+                            {
+                                idmenu : menuLst[x].lst[y].id,
+                                isquery : menuLst[x].lst[y].isquery,
+                                isnew : menuLst[x].lst[y].isnew,
+                                iseditField : menuLst[x].lst[y].iseditField,
+                                isdelete : menuLst[x].lst[y].isdelete,
+                                isedit : menuLst[x].lst[y].isEdit
+                            }
                         );
                     }
                 }
             }
         }
-        return needReload;
     }
 }

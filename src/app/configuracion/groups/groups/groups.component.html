@@ -36,8 +36,8 @@
     </mat-card-content>
 </mat-card>
 <app-groups-filtro *ngIf="viewFilter" (onToggleFiltro)="onToggleFiltro($event)" (onGoSearch)="onGoSearch($event)" [status]="status" ></app-groups-filtro>
-<app-groups-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)" [status]="status"></app-groups-result>
-<app-groups-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery"></app-groups-edit>
+<app-groups-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)" [status]="status" [path]="path"></app-groups-result>
+<app-groups-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery" [path]="path"></app-groups-edit>
   
   
   

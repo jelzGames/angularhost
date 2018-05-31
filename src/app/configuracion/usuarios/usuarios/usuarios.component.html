@@ -29,5 +29,5 @@
   </mat-card-content>
 </mat-card>
 <app-usuarios-filtro *ngIf="viewFilter" (onToggleFiltro)="onToggleFiltro($event)" (onGoSearch)="onGoSearch($event)" [status]="status" ></app-usuarios-filtro>
-<app-usuarios-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)" [status]="status"></app-usuarios-result>
-<app-usuarios-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery" [email]="email"></app-usuarios-edit>
+<app-usuarios-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)" [status]="status" [path]="path"></app-usuarios-result>
+<app-usuarios-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery" [email]="email" [path]="path"></app-usuarios-edit>

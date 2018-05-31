@@ -18,6 +18,7 @@ export class MenuEditComponent {
   interval;
   
   @Input('id') id: string;
+  @Input('path') path: string; 
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
 
@@ -58,7 +59,7 @@ export class MenuEditComponent {
       }
     }
 
-    this.dialogsService.runWebservices("api/menu", model, 1)
+    this.dialogsService.runWebservices(this.path, model, 1)
     .then( data => {
       if (data != null ) {
         if (data.menu != undefined) {
@@ -106,14 +107,13 @@ export class MenuEditComponent {
 
   doUpdate() {
     var model;
-    var path = "api/menu";
     if (this.id == '0') {
       model = this.CreateUpdateModel(fuuidv4(), 3);
     }
     else {
       model = this.CreateUpdateModel(this.id, 4);
     }
-    this.dialogsService.runWebservices(path, model, 0)
+    this.dialogsService.runWebservices(this.path, model, 0)
     .then( data => {
       if (data == null) {
         this.doConsulta(model.update.id);

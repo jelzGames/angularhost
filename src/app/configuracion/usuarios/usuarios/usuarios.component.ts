@@ -8,7 +8,7 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
   styleUrls: ['./usuarios.component.scss']
 })
 export class UsuariosComponent  {
- 
+  path = "api/users";
   basicForm;
 
   title = "Búsqueda";
@@ -34,15 +34,17 @@ export class UsuariosComponent  {
   doSearch() {
     this.resultLst = [];
     var model = {
-      filter : this.basicForm.get('filter').value,
-      status : this.status
+      type : 1,
+      search : {
+        filter : this.basicForm.get('filter').value,
+        status : this.status
+      } 
     }
     
-    this.dialogsService.runWebservices("api/Users/SearchQuery", model, 1)
+    this.dialogsService.runWebservices(this.path, model, 1)
     .then( data => {
       if (data.error == undefined) {
         this.resultLst = data;
-        console.log(data);
       }
     });
    

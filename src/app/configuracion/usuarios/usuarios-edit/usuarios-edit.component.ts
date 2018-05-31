@@ -34,6 +34,7 @@ export class UsuariosEditComponent implements OnInit {
   needReload = false;
  
   @Input('id') id: string;
+  @Input('path') path: string; 
   @Input('editQuery') editQuery: number;
   @Input('email') email: string;
   @Output() onSearch = new EventEmitter<any>();
@@ -126,10 +127,13 @@ export class UsuariosEditComponent implements OnInit {
 
   getById() {
     var model = {
-        id : this.id,
+        type : 2,
+        byId : {
+          id : this.id,
+        }
     }
         
-    this.dialogsService.runWebservices("api/Users/ById", model, 1)
+    this.dialogsService.runWebservices(this.path, model, 1)
     .then( data => {
       if (data != null ) {
         if (data.email != undefined) {
@@ -226,46 +230,48 @@ export class UsuariosEditComponent implements OnInit {
 
   doUpdate() {
     var model;
-    var path;
     if (this.editQuery == 2) {
       model = {
-        id : this.id,
-        password : this.newForm.get("password").value 
+        type : 6,
+        changePassword : {
+          id : this.id,
+          password : this.newForm.get("password").value 
+        }
       }
-      path = "api/Users/ChangePassword";
     }
     else if (this.id == '0') {
-      model = this.CreateUpdateModel(fuuidv4());
-      path = "api/Users/New";
+      model = this.CreateUpdateModel(fuuidv4(), 3);
     }
     else {
-      model = this.CreateUpdateModel(this.id);
-      path = "api/Users/Update";
+      model = this.CreateUpdateModel(this.id, 4);
     }
-    this.runWebservices(path, model);
+    this.runWebservices(model);
   }
 
-  CreateUpdateModel(id) {
+  CreateUpdateModel(id, type) {
     var model = {
-      id : id,
-      email : this.newForm.get("email").value,
-      firstname : this.newForm.get("firstname").value,
-      lastname : this.newForm.get("lastname").value,
-      direccion : this.newForm.get("direccion").value,
-      colonia : this.newForm.get("colonia").value,
-      ciudad : this.newForm.get("ciudad").value,
-      tel : this.newForm.get("tel").value,
-      photo : this.file.replace(/data:image\/jpeg;base64,/g, ''),
-      menu : [],
-      roles : [],
-      groups : [],
+      type : type,
+      update : {
+        id : id,
+        email : this.newForm.get("email").value,
+        firstname : this.newForm.get("firstname").value,
+        lastname : this.newForm.get("lastname").value,
+        direccion : this.newForm.get("direccion").value,
+        colonia : this.newForm.get("colonia").value,
+        ciudad : this.newForm.get("ciudad").value,
+        tel : this.newForm.get("tel").value,
+        photo : this.file.replace(/data:image\/jpeg;base64,/g, ''),
+        menu : [],
+        roles : [],
+        groups : [],
+      }
     };
     if (this.id == "0") {
-      model["password"] = this.newForm.get("password").value;
+      model.update["password"] = this.newForm.get("password").value;
     }
     
-    this.needReload = this.menuRolesClass.pushDataModel(this.menuLst, model);
-    this.pushGroupsModel(model);
+    this.needReload = this.menuRolesClass.pushDataModel(this.menuLst, model.update);
+    this.pushGroupsModel(model.update);
 
     return model;
   }
@@ -285,16 +291,23 @@ export class UsuariosEditComponent implements OnInit {
     }
   }
 
-  runWebservices(path, model) {
-    this.dialogsService.runWebservices(path, model, 0)
+  runWebservices(model) {
+    this.dialogsService.runWebservices(this.path, model, 0)
     .then( data => {
       if (data != null && data.error != undefined) {
       }
       else {
-        if (this.id == "0") {
-          model.id = data.id;
+        var idvalue = 0;
+        if (this.editQuery == 2) {
+          idvalue = model.changePassword.id;
         }
-        this.doConsulta(model.id);
+        else if (this.id == "0") {
+          idvalue = data.id;
+        }
+        else {
+          idvalue = model.update.id;
+        }
+        this.doConsulta(idvalue);
       }
     });
   }

@@ -9,6 +9,7 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
 export class GroupsResultComponent {
 
   @Input('resultLst') resultLst: any;
+  @Input('path') path: string;
   @Output() onEditQuery = new EventEmitter<any>();
   @Input('status') status: number;
   
@@ -36,9 +37,9 @@ export class GroupsResultComponent {
         id : id,
         status : status
       }
-  };
+    };
    
-    this.dialogsService.runWebservices("api/groups", model, 1)
+    this.dialogsService.runWebservices(this.path, model, 1)
       .then( data => {
         if (data == null) {
           for (var x = 0; x < this.resultLst.length; x++) {

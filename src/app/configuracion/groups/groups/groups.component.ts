@@ -9,6 +9,7 @@ import * as jsPDF from 'jspdf'
   styleUrls: ['./groups.component.scss']
 })
 export class GroupsComponent {
+  path = "api/groups";
   basicForm;
 
   title = "Búsqueda";
@@ -40,7 +41,7 @@ export class GroupsComponent {
       }
     }
   
-    this.dialogsService.runWebservices("api/groups", model, 1)
+    this.dialogsService.runWebservices(this.path, model, 1)
     .then( data => {
       if (data.error == undefined) {
         this.resultLst = data;

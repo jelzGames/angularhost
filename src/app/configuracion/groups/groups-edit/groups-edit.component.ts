@@ -11,7 +11,6 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
   styleUrls: ['./groups-edit.component.scss']
 })
 export class GroupsEditComponent {
-
   newForm;
   title = "Nuevo";
   readonly = false;
@@ -26,6 +25,7 @@ export class GroupsEditComponent {
   menuRolesClass = new MenusRoles();
 
   @Input('id') id: string;
+  @Input('path') path: string;
   @Input('editQuery') editQuery: number;
   @Output() onSearch = new EventEmitter<any>();
 
@@ -65,7 +65,7 @@ export class GroupsEditComponent {
       }
     }
    
-    this.dialogsService.runWebservices("api/groups", model, 1)
+    this.dialogsService.runWebservices(this.path, model, 1)
     .then( data => {
       if (data != null ) {
         if (data.name != undefined) {
@@ -109,17 +109,16 @@ export class GroupsEditComponent {
 
   doUpdate() {
     var model;
-    var path = "api/groups";
     if (this.id == '0') {
       model = this.CreateUpdateModel(fuuidv4(), 3);
     }
     else {
       model = this.CreateUpdateModel(this.id, 4);
     }
-    this.dialogsService.runWebservices(path, model, 0)
+    this.dialogsService.runWebservices(this.path,model, 0)
     .then( data => {
       if (data == null) {
-        this.doConsulta(model.id);
+        this.doConsulta(model.update.id);
       }
     });
   }
@@ -134,7 +133,7 @@ export class GroupsEditComponent {
         roles : []
       }
     };
-    this.menuRolesClass.pushDataModel(this.menuLst, model);
+    this.menuRolesClass.pushDataModel(this.menuLst, model.update);
    
     return model;
   }

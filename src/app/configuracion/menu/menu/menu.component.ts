@@ -12,6 +12,8 @@ export class MenuComponent {
   //@ViewChild(MenuEditComponent)
   //private editQueryChild: MenuEditComponent;
 
+  path = "api/menu";
+  
   basicForm;
 
   title = "Búsqueda";
@@ -26,7 +28,7 @@ export class MenuComponent {
 
   id = '0';
   editQuery = 0;
-
+  
   constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
     this.basicForm = fb.group ({
       filter: ["",[] ],
@@ -51,7 +53,7 @@ export class MenuComponent {
       }
     }
 
-    this.dialogsService.runWebservices("api/Menu", model, 1)
+    this.dialogsService.runWebservices(this.path, model, 1)
     .then( data => {
       if (data.error == null) {
         this.resultLst = data;

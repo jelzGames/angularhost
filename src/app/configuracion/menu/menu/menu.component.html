@@ -29,8 +29,8 @@
   </mat-card-content>
 </mat-card>
 <app-menu-filtro *ngIf="viewFilter" (onToggleFiltro)="onToggleFiltro($event)" (onGoSearch)="onGoSearch($event)" [status]="status" ></app-menu-filtro>
-<app-menu-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)" [status]="status"></app-menu-result>
-<app-menu-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery"></app-menu-edit>
+<app-menu-result *ngIf="search" [resultLst]="resultLst" (onEditQuery)="onEditQuery($event)" [status]="status" [path]="path"></app-menu-result>
+<app-menu-edit *ngIf="edit" (onSearch)="onSearch($event)" [id]="id" [editQuery]="editQuery" [path]="path"></app-menu-edit>
 
 
 

@@ -8,6 +8,7 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
 })
 export class UsuariosResultComponent {
   @Input('resultLst') resultLst: any;
+  @Input('path') path: string; 
   @Output() onEditQuery = new EventEmitter<any>();
   @Input('status') status: number;
   
@@ -41,24 +42,27 @@ export class UsuariosResultComponent {
 
   lockUnlock(status, res) {
     var model = {
-      id : res.id,
-      status : status
+      type : 0,
+      isActive : {
+        id : res.id,
+        status : status
+      }
     };
     
-    this.dialogsService.runWebservices("api/Users/UpdateIsActive", model, 1)
+    this.dialogsService.runWebservices(this.path, model, 1)
     .then( data => {
       if (data == null) {
         for (var x = 0; x < this.resultLst.length; x++) {
           var tmp = this.resultLst[x] as any;
-          if (tmp.id == model.id) {
+          if (tmp.id == model.isActive.id) {
             if (this.status != 2 && res.status != 2) {
               this.resultLst.splice(x, 1);
             } 
             else {
-              if (model.status == 2) {
-                model.status = 0;
+              if (model.isActive.status == 2) {
+                model.isActive.status = 0;
               }
-              this.resultLst[x].status = model.status;
+              this.resultLst[x].status = model.isActive.status;
               
   
             }  

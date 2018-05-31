@@ -14,8 +14,7 @@ export class UsuariosResultComponent {
   
   isDelete = false;
   isUnLock = false;
-  //isLock = false;
-
+  
   constructor(private dialogsService : DialogsDataService) { }
 
   edicionConsulta(idValue, typeValue, email) {
@@ -33,52 +32,37 @@ export class UsuariosResultComponent {
 
   isGotoDelete() {
     this.isDelete = true;
-    //this.isLock = false;
   }
 
-  delete(res) {
-    this.lockUnlock(0, res);
+  delete(id) {
+    this.lockUnlock(1, id);
   }
 
-  lockUnlock(status, res) {
+  lockUnlock(status, id) {
     var model = {
-      type : 0,
+      type : 5,
       isActive : {
-        id : res.id,
+        id : id,
         status : status
       }
     };
-    
     this.dialogsService.runWebservices(this.path, model, 1)
     .then( data => {
       if (data == null) {
         for (var x = 0; x < this.resultLst.length; x++) {
           var tmp = this.resultLst[x] as any;
           if (tmp.id == model.isActive.id) {
-            if (this.status != 2 && res.status != 2) {
+            if (this.status != 2) {
               this.resultLst.splice(x, 1);
             } 
             else {
-              if (model.isActive.status == 2) {
-                model.isActive.status = 0;
-              }
               this.resultLst[x].status = model.isActive.status;
-              
+              this.isUnLock = false;
   
             }  
             break;
           } 
         }
-        if (res.needreload == 1) {
-          res.isReloadOriginal = res.needreload;
-          res.needreload = 0;
-        }
-        else  if (res.isReloadOriginal != undefined) {
-            res.isReloadOriginal = undefined;
-            res.needreload = 1;
-        } 
-        //this.isLock = false;
-        this.isUnLock = false;
         this.isDelete = true;
       }
     });
@@ -86,7 +70,6 @@ export class UsuariosResultComponent {
 
   undo() {
     this.isDelete = false;
-    //this.isLock = true;
   }
 
   undoUnlock() {
@@ -100,7 +83,7 @@ export class UsuariosResultComponent {
       this.isUnLock = true;
     }
     else {
-      this.lockUnlock(1, res)
+      this.lockUnlock(0, res)
     }
     
   }

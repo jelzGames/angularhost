@@ -8,9 +8,8 @@
             <mat-expansion-panel *ngFor="let res of resultLst" class="mat-expansion-panel-body-mat">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        <mat-icon *ngIf="res.status == 1 && res.needreload == 0" color="warn">lock_outline</mat-icon>
-                        <mat-icon *ngIf="(res.status == 1 || res.needreload == 1) || (res.status == 0 && res.needreload == 0)" color="primary">lock_open</mat-icon>
-                        <mat-icon *ngIf="res.needreload == 1" color="primary">lock_open</mat-icon>
+                        <mat-icon *ngIf="res.status == 1" color="warn">lock_outline</mat-icon>
+                        <mat-icon *ngIf="res.status == 0" color="primary">lock_open</mat-icon>
                         <table style="width: 100%; text-align:left;">
                           <tr>
                             <th style="width: 40%;font-weight: normal !important;">
@@ -23,7 +22,7 @@
                         </table>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <div *ngIf="(res.status == 1 || res.needreload == 1) || (res.status == 0 && res.needreload == 0)">
+                <div *ngIf="res.status == 0">
                     <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
                         <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 2, res.email)" class="mr-1 pull-right">
                             <mat-icon>vpn_key</mat-icon>
@@ -36,12 +35,12 @@
                     </div>
                     <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
                         <button type="button" mat-mini-fab color="accent" (click)="edicionConsulta(res.id, 1);" class="mr-1 pull-right">
-                          <mat-icon>edit</mat-icon>
+                            <mat-icon>edit</mat-icon>
                         </button>
                     </div>
                     <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
                         <button type="button" mat-mini-fab color="primary" (click)="edicionConsulta(res.id, 0)" class="mr-1 pull-right">
-                          <mat-icon>assessment</mat-icon>
+                            <mat-icon>assessment</mat-icon>
                         </button>
                     </div>
                     <div class="bottom-margin-2x-mat" *ngIf="isDelete">
@@ -55,7 +54,6 @@
                         </button>
                     </div>    
                 </div>
-                <!--
                 <div *ngIf="res.status == 1">
                     <div class="bottom-margin-2x-mat" *ngIf="isUnLock">
                         <button type="button" mat-mini-fab color="primary" (click)="undoUnlock()" class="mr-1 pull-right">
@@ -67,7 +65,7 @@
                             <mat-icon>lock_open</mat-icon>
                         </button>
                     </div>
-                </div>-->
+                </div>
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card-content>

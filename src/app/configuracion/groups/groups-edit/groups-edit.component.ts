@@ -98,7 +98,6 @@ export class GroupsEditComponent {
       data.users[x]['ischeckedOriginal'] = data.users[x].ischecked;
     }
     this.groupsLst = data.users;
-    console.log(data.users);
   }
 
   showConfirmacion() {
@@ -132,7 +131,7 @@ export class GroupsEditComponent {
       }
     });
   }
-
+ 
   CreateUpdateModel(id, type) {
     var model = {
       type : type,
@@ -144,8 +143,23 @@ export class GroupsEditComponent {
       }
     };
     this.menuRolesClass.pushDataModel(this.menuLst, model.update);
-   
+    this.pushGroupsModel(model.update);
+   console.log(model.update)
     return model;
+  }
+
+  pushGroupsModel(model) {
+    for (var x = 0; x < this.groupsLst.length; x++) {
+      if (this.groupsLst[x].ischecked != this.groupsLst[x].ischeckedOriginal) {
+        model.users.push( 
+          {
+            iduser : this.groupsLst[x].id,
+            ischecked : this.groupsLst[x].ischecked,
+            isedit : this.groupsLst[x].isEdit
+          }
+        );
+      }
+    }
   }
 
   doConsulta(id) {

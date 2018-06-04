@@ -166,7 +166,7 @@ export class UsuariosEditComponent implements OnInit {
           if (this.id != "0") {
             this.menuRolesClass.reorderModel(this.menuLst);
           }
-          this.addOriginalGroupValue(data);
+          this.groupsLst = this.menuRolesClass.addOriginalValue(data.groups);
         }
         else {
           this.readonly = true;
@@ -174,14 +174,7 @@ export class UsuariosEditComponent implements OnInit {
       }
     });
   }
-
-  addOriginalGroupValue(data) {
-    for (var x = 0; x < data.groups.length; x++ ) {
-      data.groups[x]['ischeckedOriginal'] = data.groups[x].ischecked;
-    }
-    this.groupsLst = data.groups;
-  }
-  
+ 
   matchingPassword() {
     return form => {
      if (form.controls["password"].value != form.controls["retry"].value) {
@@ -270,23 +263,9 @@ export class UsuariosEditComponent implements OnInit {
     }
     
     this.menuRolesClass.pushDataModel(this.menuLst, model.update);
-    this.pushGroupsModel(model.update);
+    this.menuRolesClass.pushValuesModel(model.update.groups, this.groupsLst, 1);
 
     return model;
-  }
-
-  pushGroupsModel(model) {
-    for (var x = 0; x < this.groupsLst.length; x++) {
-      if (this.groupsLst[x].ischecked != this.groupsLst[x].ischeckedOriginal) {
-        model.groups.push( 
-          {
-            idgroup : this.groupsLst[x].id,
-            ischecked : this.groupsLst[x].ischecked,
-            isedit : this.groupsLst[x].isEdit
-          }
-        );
-      }
-    }
   }
 
   runWebservices(model) {

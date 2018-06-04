@@ -170,4 +170,30 @@ export class MenusRoles {
             }
         }
     }
+
+    addOriginalValue(data) {
+        for (var x = 0; x < data.length; x++ ) {
+          data[x]['ischeckedOriginal'] = data[x].ischecked;
+        }
+        return data;
+    }
+
+    pushValuesModel(model, lst, type) {
+        for (var x = 0; x < lst.length; x++) {
+          if (lst[x].ischecked != lst[x].ischeckedOriginal) {
+            var modelTmp = {};
+            if (type == 0) 
+            {
+                modelTmp['iduser'] = lst[x].id;
+            }
+            else
+            {
+                modelTmp['idgroup'] = lst[x].id;
+            }
+            modelTmp['ischecked'] = lst[x].ischecked;
+            modelTmp['isedit'] = lst[x].isEdit;
+            model.push(modelTmp);
+          }
+        }
+      }
 }

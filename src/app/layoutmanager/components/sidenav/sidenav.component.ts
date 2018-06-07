@@ -1,9 +1,11 @@
 import { Component, OnInit, NgZone, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSidenav, MatCard } from '@angular/material';
+import { MatSidenav, MatCard, MatDialog } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
 import { BreadcumDirective } from './breadcum.directive';
 import { BreadcumComponent } from '../breadcum/breadcum.component';
+import { WebservicesService } from '../../../services/webservices.service';
+import { ModalspinnerComponent } from '../../../shared/modalspinner/modalspinner.component';
 
 const SMALL_WIDTH_BREAKPOINT = 720;
 
@@ -56,12 +58,38 @@ export class SidenavComponent implements OnInit {
     }
   ];
 
-  constructor(zone: NgZone, private router: Router, public auth: AuthService, private componentFactoryResolver: ComponentFactoryResolver) { 
+  constructor(zone: NgZone, private router: Router, public auth: AuthService, private componentFactoryResolver: ComponentFactoryResolver,
+    private webservices: WebservicesService, public dialog: MatDialog) { 
+
     this.mediaMatcher.addListener(mql => 
       zone.run(() => this.mediaMatcher = mql));
+
+      let dialogRef = this.dialog.open(ModalspinnerComponent,  {
+        width: '250px',
+        disableClose: true,
+        panelClass: 'spinner-dialog'
+        //data: { name: this.name, animal: this.animal }
+      });
+      
+      var model = 
+      {
+        type : 7
+      };
+      this.webservices.postMessage('api/menurightstoken', model)
+      .then( data => {
+          if (data != null) {
+            console.log(data);
+            this.createMenu();  
+          }
+          dialogRef.close();
+      }).catch( err => {
+        dialogRef.close();
+      });
+  
   }
 
   ngOnInit() {
+    
     this.router.events.subscribe(() => {
       if (this.isScreenSmall()) {
         this.sidenav.close();
@@ -69,6 +97,10 @@ export class SidenavComponent implements OnInit {
     });
     this.breadcum = "DashBoard";
     //this.loadComponent(true, "");
+  }
+
+  createMenu() {
+    
   }
 
   isScreenSmall() : boolean {

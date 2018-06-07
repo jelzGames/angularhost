@@ -58,12 +58,11 @@ export class UsuariosResultComponent {
             else {
               this.resultLst[x].status = model.isActive.status;
               this.isUnLock = false;
-  
             }  
             break;
           } 
         }
-        this.isDelete = true;
+        this.isDelete = false;
       }
     });
   }

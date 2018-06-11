@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { DialogsDataService } from '../../../services/dialogs.data.service';
 import * as jsPDF from 'jspdf'
+import { MenuItemsService } from '../../../services/menu.items.service';
 
 @Component({
   selector: 'app-groups',
@@ -9,6 +10,7 @@ import * as jsPDF from 'jspdf'
   styleUrls: ['./groups.component.scss']
 })
 export class GroupsComponent {
+  routingPath = 'Configuracion/Grupos';
   path = "api/groups";
   basicForm;
 
@@ -21,14 +23,18 @@ export class GroupsComponent {
   search = true;
   edit = false;
   viewFilter = false;
+  isnew = false;
 
   id = '0';
   editQuery = 0;
  
-  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService, private menurights : MenuItemsService) { 
     this.basicForm = this.fb.group ({
       filter: ["",[] ],
     });
+    if (menurights.menuItemsRights[this.routingPath].isnew == 1) {
+      this.isnew = true;
+    }
   }
 
   doSearch() {

@@ -23,11 +23,11 @@
                         <button type="button" mat-mini-fab color="primary" class="mr-1 pull-right" (click)="doSearch()">
                             <mat-icon>youtube_searched_for</mat-icon>
                         </button>
-                        <button type="button" mat-mini-fab color="warn" class="mr-1 pull-right" (click)='doNuevo()'>
-                        <mat-icon>add</mat-icon>
+                        <button type="button" *ngIf="isnew" mat-mini-fab color="warn" class="mr-1 pull-right" (click)='doNuevo()'>
+                            <mat-icon>add</mat-icon>
                         </button>
                         <button type="button" mat-mini-fab color="accent" class="mr-1 pull-right" (click)='toggleFiltro()'>
-                          <mat-icon>filter_list</mat-icon>
+                            <mat-icon>filter_list</mat-icon>
                         </button>
                     </div>
                 </div>

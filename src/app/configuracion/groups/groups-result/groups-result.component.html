@@ -14,12 +14,12 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div *ngIf="res.status == 1">
-                    <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
+                    <div class="bottom-margin-2x-mat" *ngIf="!isDelete && isdelete">
                         <button type="button" mat-mini-fab color="warn" (click)="isGotoDelete(res.id);" class="mr-1 pull-right">
                             <mat-icon>lock_outline</mat-icon>
                         </button>
                     </div>
-                    <div class="bottom-margin-2x-mat" *ngIf="!isDelete">
+                    <div class="bottom-margin-2x-mat" *ngIf="!isDelete && isedit">
                         <button type="button" mat-mini-fab color="accent" (click)="edicionConsulta(res.id, 1);" class="mr-1 pull-right">
                           <mat-icon>edit</mat-icon>
                         </button>

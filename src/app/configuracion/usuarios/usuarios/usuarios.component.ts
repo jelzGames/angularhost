@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { DialogsDataService } from '../../../services/dialogs.data.service';
+import { MenuItemsService } from '../../../services/menu.items.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -8,6 +9,7 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
   styleUrls: ['./usuarios.component.scss']
 })
 export class UsuariosComponent  {
+  routingPath = 'Configuracion/Usuarios';
   path = "api/users";
   basicForm;
 
@@ -20,15 +22,19 @@ export class UsuariosComponent  {
   search = true;
   edit = false;
   viewFilter = false;
+  isnew = false;
 
   id = '0';
   editQuery = 0;
   email = "";
  
-  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService) { 
+  constructor(private fb: FormBuilder, private dialogsService : DialogsDataService, private menurights : MenuItemsService) { 
     this.basicForm = this.fb.group ({
       filter: ["",[] ],
     });
+    if (menurights.menuItemsRights[this.routingPath].isnew == 1) {
+      this.isnew = true;
+    }
   }
 
   doSearch() {

@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DialogsDataService } from '../../../services/dialogs.data.service';
+import { MenuItemsService } from '../../../services/menu.items.service';
 
 @Component({
   selector: 'app-groups-result',
@@ -7,6 +8,7 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
   styleUrls: ['./groups-result.component.scss']
 })
 export class GroupsResultComponent {
+  routingPath = 'Configuracion/Grupos';
 
   @Input('resultLst') resultLst: any;
   @Input('path') path: string;
@@ -15,8 +17,17 @@ export class GroupsResultComponent {
   
   isDelete = false;
   isUnLock = false;
-
-  constructor(private dialogsService : DialogsDataService) { }
+  isedit = false;
+  isdelete = false;
+  
+  constructor(private dialogsService : DialogsDataService, private menurights : MenuItemsService) { 
+    if (menurights.menuItemsRights[this.routingPath].isdelete == 1) {
+      this.isdelete = true;
+    }
+    if (menurights.menuItemsRights[this.routingPath].isedit == 1) {
+      this.isedit = true;
+    }
+  }
 
   edicionConsulta(idValue, typeValue) {
     this.onEditQuery.emit({ id : idValue, editQuery : typeValue});

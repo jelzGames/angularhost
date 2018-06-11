@@ -13,6 +13,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { UpdateService } from './services/update.service';
 import { ConfigService } from './services/config.service';
+import { MenuItemsService } from './services/menu.items.service';
 
 const routes: Routes = [
   {
@@ -49,7 +50,7 @@ const routes: Routes = [
     }),
     RouterModule.forRoot(routes)
   ],
-  providers: [ AcessguardService, AuthService, WebservicesService, UpdateService, ConfigService ],
+  providers: [ AcessguardService, AuthService, WebservicesService, UpdateService, ConfigService, MenuItemsService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

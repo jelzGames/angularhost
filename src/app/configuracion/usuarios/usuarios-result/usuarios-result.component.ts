@@ -1,5 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { DialogsDataService } from '../../../services/dialogs.data.service';
+import { MenuItemsService } from '../../../services/menu.items.service';
 
 @Component({
   selector: 'app-usuarios-result',
@@ -7,6 +8,7 @@ import { DialogsDataService } from '../../../services/dialogs.data.service';
   styleUrls: ['./usuarios-result.component.scss']
 })
 export class UsuariosResultComponent {
+  routingPath = 'Configuracion/Usuarios';
   @Input('resultLst') resultLst: any;
   @Input('path') path: string; 
   @Output() onEditQuery = new EventEmitter<any>();
@@ -14,8 +16,17 @@ export class UsuariosResultComponent {
   
   isDelete = false;
   isUnLock = false;
+  isedit = false;
+  isdelete = false;
   
-  constructor(private dialogsService : DialogsDataService) { }
+  constructor(private dialogsService : DialogsDataService, private menurights : MenuItemsService) { 
+    if (menurights.menuItemsRights[this.routingPath].isdelete == 1) {
+      this.isdelete = true;
+    }
+    if (menurights.menuItemsRights[this.routingPath].isedit == 1) {
+      this.isedit = true;
+    }
+  }
 
   edicionConsulta(idValue, typeValue, email) {
     var model = { 

@@ -25,6 +25,7 @@ export class UsuariosEditComponent implements OnInit {
   interval;
  
   isAdmin = false;
+  isUserAdmin = false;
   imageRaw;
   file = "";
  
@@ -159,6 +160,7 @@ export class UsuariosEditComponent implements OnInit {
             this.newForm.controls['colonia'].disable();
             this.newForm.controls['ciudad'].disable();
             this.newForm.controls['tel'].disable();
+            this.newForm.controls['isAdmin'].disable();
             this.readonly = true;
           }
           else { 
@@ -169,6 +171,7 @@ export class UsuariosEditComponent implements OnInit {
             this.isAdmin = true;
             if (data.isadmin) { 
               this.newForm.controls['isAdmin'].setValue(true);
+              this.isUserAdmin = true;
             }
           }
           else { 
@@ -267,6 +270,7 @@ export class UsuariosEditComponent implements OnInit {
         ciudad : this.newForm.get("ciudad").value,
         tel : this.newForm.get("tel").value,
         photo : this.file.replace(/data:image\/jpeg;base64,/g, ''),
+        isUserAdmin : this.isUserAdmin,
         menu : [],
         roles : [],
         groups : [],
@@ -275,10 +279,11 @@ export class UsuariosEditComponent implements OnInit {
     if (this.id == "0") {
       model.update["password"] = this.newForm.get("password").value;
     }
+    if (!this.isUserAdmin) {
+      this.menuRolesClass.pushDataModel(this.menuLst, model.update);
+      this.menuRolesClass.pushValuesModel(model.update.groups, this.groupsLst, 1);
+    }
     
-    this.menuRolesClass.pushDataModel(this.menuLst, model.update);
-    this.menuRolesClass.pushValuesModel(model.update.groups, this.groupsLst, 1);
-
     return model;
   }
 
@@ -333,4 +338,8 @@ export class UsuariosEditComponent implements OnInit {
     reader.readAsDataURL(e.srcElement.files[0]);
   }
  
+  doToogle() {
+    this.isUserAdmin = !this.isUserAdmin; 
+  }
+
 }

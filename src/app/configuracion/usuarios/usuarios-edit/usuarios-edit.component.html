@@ -34,6 +34,9 @@
                         
                     </div>
                 </div>
+                 <div class="pb-1" *ngIf="this.isAdmin">
+                    <mat-checkbox formControlName="isAdmin">Administrador!</mat-checkbox>
+                </div>
                 <div *ngIf="this.radios == 0">
                     <div class="pb-1" *ngIf="this.id == '0' || this.editQuery !=2">
                         <img [src]="_DomSanitizer.bypassSecurityTrustUrl(file)" width="100" height="100" style="float: left;margin-bottom:20px;" />

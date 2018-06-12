@@ -24,6 +24,7 @@ export class UsuariosEditComponent implements OnInit {
   groupsLst = [];
   interval;
  
+  isAdmin = false;
   imageRaw;
   file = "";
  
@@ -59,6 +60,7 @@ export class UsuariosEditComponent implements OnInit {
         tel : new FormControl('', [ CharacterLimit(128)  ] ),
         password : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
         retry : new FormControl('', [ Validators.required, CharacterLimit(256), CharacterMinumun(this.minimunPasswordLength) ] ),
+        isAdmin : new FormControl('', ),
       },{ validator: this.matchingPassword()});
 
     }
@@ -83,6 +85,7 @@ export class UsuariosEditComponent implements OnInit {
           colonia : new FormControl('', [ CharacterLimit(256)  ] ),
           ciudad : new FormControl('', [ CharacterLimit(256)  ] ),
           tel : new FormControl('', [ CharacterLimit(128)  ] ),
+          isAdmin : new FormControl('', ),
         });
         if (this.editQuery == 1) {
           this.title = "Editar";
@@ -107,7 +110,7 @@ export class UsuariosEditComponent implements OnInit {
       this.newForm.get('password')['tagname'] = "contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
       this.newForm.get('retry')['tagname'] = "verifique contraseña, minimo " +  this.minimunPasswordLength + " caracteres";
     }
-
+    
     this.interval = setInterval( () => { 
       clearInterval(this.interval);
       this.getById();
@@ -161,6 +164,17 @@ export class UsuariosEditComponent implements OnInit {
           else { 
             this.readonly = false;
           }
+          this.newForm.controls['isAdmin'].setValue(false);
+          if (data.isrootadmin)  { 
+            this.isAdmin = true;
+            if (data.isadmin) { 
+              this.newForm.controls['isAdmin'].setValue(true);
+            }
+          }
+          else { 
+            this.newForm.controls['isAdmin'].disable();
+          }
+
           this.menuRolesClass.extractData(data.menu, this.menuLst, 0);
           this.menuRolesClass.extractData(data.roles, this.rolesLst, 1);
           if (this.id != "0") {

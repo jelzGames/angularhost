@@ -270,7 +270,6 @@ export class UsuariosEditComponent implements OnInit {
         ciudad : this.newForm.get("ciudad").value,
         tel : this.newForm.get("tel").value,
         photo : this.file.replace(/data:image\/jpeg;base64,/g, ''),
-        isUserAdmin : this.isUserAdmin,
         menu : [],
         roles : [],
         groups : [],
@@ -280,10 +279,13 @@ export class UsuariosEditComponent implements OnInit {
       model.update["password"] = this.newForm.get("password").value;
     }
     if (!this.isUserAdmin) {
+      model.update["isUserAdmin"] = 0;
       this.menuRolesClass.pushDataModel(this.menuLst, model.update);
       this.menuRolesClass.pushValuesModel(model.update.groups, this.groupsLst, 1);
     }
-    
+    else {
+      model.update["isUserAdmin"] = 1;
+    }
     return model;
   }
 
